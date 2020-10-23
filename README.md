@@ -4,7 +4,7 @@ This folder contains course materials (practicals, notes and datasets) for the t
 [Genomic Medicine and Statistics](https://www.well.ox.ac.uk/work-and-study/gms-dphil-programme) course at the Wellcome
 Centre for Human Genetics, University of Oxford.
 
-Content on this site is publicly available under the terms of the enclosed license.
+Content on this site is publicly available under the terms of the [enclosed license](LICENSE).
 
 ## Contributors ##
 
