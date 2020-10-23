@@ -1,0 +1,53 @@
+######### Load in the data, rename columns where relevant, align alleles across files, run test for sexual dismorphism and extract relevant SNPs
+######### NOTE: update paths and files names (lines 10, 12, 16 and 47)
+#########
+
+DEFINE --strMissing NA
+       --strSeparator WHITESPACE
+       --acolIn CHR;POS;SNP;Tested_Allele;Other_allele;Freq_Tested_Allele;BETA;SE;P;N;INFO
+       --acolInClasses numeric;numeric;character;character;character;numeric;numeric;numeric;numeric;numeric;numeric
+       --acolNewName chr;pos;SNP;A1;A2;frqA1;beta;se;pval;nmeta;info
+       --pathOut /path2data/
+
+EASYIN --fileIn /path2data/Whradjbmi.giant-ukbb.meta-analysis.females.23May2018.HapMap2_only.txt.gz
+       --fileInShortName whradjbmi.females
+       --fileInTag whradjbmi.females
+
+EASYIN --fileIn /path2data/Whradjbmi.giant-ukbb.meta-analysis.males.23May2018.HapMap2_only.txt.gz
+       --fileInShortName whradjbmi.males
+       --fileInTag whradjbmi.males
+
+########
+########
+START EASYSTRATA
+
+
+MERGEEASYIN --colInMarker SNP --blnMergeAll 0
+
+## align the alleles to keep things easy
+ADJUSTALLELES --colInA1 A1.whradjbmi.males
+	      --colInA2 A2.whradjbmi.males
+      	      --colInFreq frqA1.whradjbmi.males
+   	      --colInBeta beta.whradjbmi.males
+    	      --colRefA1 A1.whradjbmi.females
+	      --colRefA2 A2.whradjbmi.females
+	      	      	      	      	      		  
+	      	      	      	      	      		  
+## run the test for sexual dimorphism
+CALCPDIFF --acolBETAs beta.whradjbmi.males;beta.whradjbmi.females
+	  --acolSEs se.whradjbmi.males;se.whradjbmi.females
+	  --colOutPdiff psexdiff
+	  --blnCovCorrection 0
+
+
+## extract a list of important SNPs
+EXTRACTSNPS --colInMarker SNP
+	    --fileRef /path2data/snps.for.sexdiff.lst
+    	    --colRefMarker SNP
+	    --strTag indexSnps
+
+
+
+STOP EASYSTRATA
+
+

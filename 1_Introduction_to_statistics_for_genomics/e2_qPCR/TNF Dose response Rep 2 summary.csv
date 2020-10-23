@@ -1,0 +1,21 @@
+﻿cell_line,dose,TNF Cq 1,TNF Cq 2,b-actin Cq 1,b-actin Cq 2
+Intron enh C5,unstimulated,27.65,27.97,18.68,18.84
+Intron enh C5,1ng/ml,25.82,25.64,18.67,18.63
+Intron enh C5,10ng/ml,23.64,23.59,17.45,17.44
+Intron enh C5,100ng/ml,22.82,22.61,17.92,17.91
+Intron enh C5,1000ng/ml,23.29,23.02,17.19,17.09
+Intergenic enh C8.4,unstimulated,25.63,25.49,16.69,16.72
+Intergenic enh C8.4,1ng/ml,22.01,21.92,16.12,15.82
+Intergenic enh C8.4,10ng/ml,22.69,22.30,16.80,16.63
+Intergenic enh C8.4,100ng/ml,24.07,23.57,17.82,17.89
+Intergenic enh C8.4,1000ng/ml,24.43,24.24,18.43,18.31
+Intergenic enh G1,unstimulated,23.62,23.92,15.73,15.67
+Intergenic enh G1,1ng/ml,20.27,20.73,14.77,14.32
+Intergenic enh G1,10ng/ml,21.35,21.79,15.21,15.01
+Intergenic enh G1,100ng/ml,23.02,23.31,15.45,15.08
+Intergenic enh G1,1000ng/ml,24.63,25.02,16.45,16.52
+SFC840-03-03,unstimulated,26.92,26.96,18.18,17.88
+SFC840-03-03,1ng/ml,31.57,27.03,19.39,18.59
+SFC840-03-03,10ng/ml,27.30,27.57,20.45,19.67
+SFC840-03-03,100ng/ml,25.14,25.30,19.34,18.65
+SFC840-03-03,1000ng/ml,23.44,23.50,17.80,17.69
