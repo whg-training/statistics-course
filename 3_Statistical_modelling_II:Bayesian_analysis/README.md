@@ -1,16 +1,15 @@
-Statistical modelling II: Bayesian analysis
-=====================================
+# Statistical modelling II: Bayesian analysis #
 
 This session will introduce principles of Bayesian analysis and applications to genomic datasets.
 
-OVERALL MODULE LEARNING OUTCOMES:
+## Learning outcomes ##
 By the end of this module, students should be able to: 
 •	Understand and explain the components of Bayesian models - including the prior, likelihood and posterior distributions.
 •	Use R to build Bayesian models and perform Bayesian inference.
 •	Describe the necessary tools for model checking and comparison and be able to implement those in R.
 •	Describe the basics of simple parameter estimation procedures.
 
-PREREQUISITES:
+## PREREQUISITES ##
 
 * Students should have a basic knowledge of statistical models and likelihood inference
 
