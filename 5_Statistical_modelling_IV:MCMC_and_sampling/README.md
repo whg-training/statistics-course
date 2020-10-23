@@ -1,4 +1,4 @@
-GMS Statistical Modelling II - introduction to sampling
+Statistical modelling: MCMC and sampling
 ===========================
 
 Overview

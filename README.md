@@ -4,21 +4,23 @@ This folder contains course materials (practicals, notes and datasets) for the t
 [Genomic Medicine and Statistics](https://www.well.ox.ac.uk/work-and-study/gms-dphil-programme) course at the Wellcome
 Centre for Human Genetics, University of Oxford.
 
+Content on this site is publicly available under the terms of the [enclosed license](LICENSE).
+
 ## Contributors ##
 
 We are grateful to the following people who have contributed to the course content on this site:
 
-Azim Ansari
-Gavin Band
-Stefania Benonisdottir
-Daniel Crouch
-Valentina Iotchkova
-Augustine Kong
-Gerton Lunter
-Andre Python
-Teresa Ferreira
-Nilufer Rahmioglu
-Justin Whalley
-Ron Schwessinger
-Edward Sanders
-Laura Wittemans
+* Azim Ansari
+* Gavin Band
+* Stefania Benonisdottir
+* Daniel Crouch
+* Teresa Ferreira
+* Valentina Iotchkova
+* Augustine Kong
+* Gerton Lunter
+* Andre Python
+* Nilufer Rahmioglu
+* Edward Sanders
+* Ron Schwessinger
+* Justin Whalley
+* Laura Wittemans
