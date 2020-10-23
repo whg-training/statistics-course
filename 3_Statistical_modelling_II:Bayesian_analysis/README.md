@@ -1,4 +1,4 @@
-GMS Introduction to Bayesian analysis
+Statistical modelling: Introduction to Bayesian analysis
 =====================================
 
 MODULE AIM:
