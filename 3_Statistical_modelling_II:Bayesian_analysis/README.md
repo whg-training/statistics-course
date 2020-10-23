@@ -1,8 +1,7 @@
 Statistical modelling II: Bayesian analysis
 =====================================
 
-MODULE AIM:
-The aim of the module is to ensure that the students familiarise with the principles of Bayesian statistics and of Bayesian modelling and that they are able to apply such techniques on real data problems.
+This session will introduce principles of Bayesian analysis and applications to genomic datasets.
 
 OVERALL MODULE LEARNING OUTCOMES:
 By the end of this module, students should be able to: 
@@ -26,20 +25,6 @@ practical_nb.1.R: the R file corresponding to practical 1
 
 practical_nb.1_answers.R: the R file corresponding to practical 1 with answers
 
+# Suggested reading
 
-ASSESSMENT:
-There is no formal assessment for this course. However, an active participation is desired. 
-
-FORMATIVE FEEDBACK: 
-Practical sessions always offer great opportunity for receiving formative feedback from the tutors – weekly office hours will be available to those with further questions and remarks. Brief group discussions will be incorporated in some of the lectures to further evaluate students’ progress and insight. 
-
-Suggested reading
-----------------------
 Chapter 2 of Statistical Rethinking, A Bayesian Course with Examples in R and Stan, R. McElreath, CRC Press, 2016
-
-Timetable
----------
-4 November 9:30-12:00
-
-5 November 9:30-16:00
-
