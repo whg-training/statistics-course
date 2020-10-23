@@ -1,4 +1,4 @@
-Statistical modelling: Introduction to Bayesian analysis
+Statistical modelling II: Bayesian analysis
 =====================================
 
 MODULE AIM:
