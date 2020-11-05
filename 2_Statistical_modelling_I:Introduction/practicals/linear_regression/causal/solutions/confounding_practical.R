@@ -10,19 +10,24 @@ A = matrix( 0, nrow = 3, ncol = 3, dimnames = list( variable.names, variable.nam
 # A has effect on C
 # B either has effect on A or C or both (otherwise not interesting)
 # and 
+
 z01 = c(0,1)
 diagrams = expand.grid(
-    AA =   0, AB = z01, AC = z01,
-    BA = z01, BB =   0, BC = z01,
-    CA = z01, CB = z01, CC =   0
+    AA = z01, AB = z01, AC = z01,
+    BA = z01, BB = z01, BC = z01,
+    CA = z01, CB = z01, CC = z01
 )
 
-# Assume causation A->C
-diagrams = diagrams[ rowSums( diagrams ) == 2, ]
+# no loops
+diagrams = diagrams[ diagrams$AA == 0 & diagrams$BB == 0 & diagrams$CC == 0, ]
+diagrams = diagrams[ diagrams$BC + diagrams$CB < 2, ]
 diagrams = diagrams[ diagrams$AB + diagrams$BA < 2, ]
 diagrams = diagrams[ diagrams$AC + diagrams$CA < 2, ]
-diagrams = diagrams[ diagrams$BC + diagrams$CB < 2, ]
-diagrams = diagrams[ diagrams$BC + diagrams$CB < 2, ]
+diagrams = diagrams[ diagrams$AB + diagrams$BC + diagrams$CA < 3, ]
+diagrams = diagrams[ diagrams$AC + diagrams$CB + diagrams$BA < 3, ]
+
+# Assume causation A->C, possibly via B
+diagrams = diagrams[ diagrams$AC == 1 | diagrams$AB + diagrams$BC == 2, ]
 
 
 # Can print a diagram using graphviz:
@@ -42,13 +47,9 @@ diagram.to.graphviz <- function( diagram, graph.name = "G", variable.names = c( 
     return( str )
 }
 
-# Requires package DiagrammeR
-for( i in 1:nrow( diagrams )) {
-    print( grViz( diagram.to.graphviz( diagrams[i,] )) )
-    Sys.sleep(0.5) # be nice to browser window
-}
-
+# Convert the diagram (as a row) to a 3x3 matrix
 diagram.to.matrix <- function( diagram, variable.names = c( "A", "B", "C" ) ) {
+    D = length( variable.names )
     return(
         matrix(
             as.integer(diagram),
@@ -57,6 +58,14 @@ diagram.to.matrix <- function( diagram, variable.names = c( "A", "B", "C" ) ) {
             dimnames = list( variable.names, variable.names )
         )
     )
+}
+
+
+# Requires package DiagrammeR
+library( DiagrammeR )
+for( i in 1:nrow( diagrams )) {
+    print( grViz( diagram.to.graphviz( diagrams[i,] )) )
+    Sys.sleep(0.5) # be nice to browser window
 }
 
 simulate.from.diagram <- function( diagram, N = 1000, effect.size = 0.5, variable.names = c( "A", "B", "C" ) ) {
@@ -110,8 +119,8 @@ simulate.from.diagram <- function( diagram, N = 1000, effect.size = 0.5, variabl
     
     return(
         list(
-            diagram = diagram,
             simulated.data = epsilon %*% contributions,
+            diagram = diagram,
             covariance = t(contributions) %*% contributions,
             contributions = contributions
         )
