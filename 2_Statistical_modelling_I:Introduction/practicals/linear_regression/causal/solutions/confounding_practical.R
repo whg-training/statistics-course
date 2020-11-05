@@ -29,6 +29,14 @@ diagrams = diagrams[ diagrams$AC + diagrams$CB + diagrams$BA < 3, ]
 # Assume causation A->C, possibly via B
 diagrams = diagrams[ diagrams$AC == 1 | diagrams$AB + diagrams$BC == 2, ]
 
+# OR 2-arrow diagrams on "See also" line
+#diagrams = diagrams[
+#    (rowSums( diagrams ) == 2) & (
+#        (diagrams$AB == 1 & diagrams$BC == 1)
+#        | (diagrams$BA == 1 & diagrams$BC == 1)
+#        | (diagrams$AB == 1 & diagrams$CB == 1)
+#    ),
+#]
 
 # Can print a diagram using graphviz:
 diagram.to.graphviz <- function( diagram, graph.name = "G", variable.names = c( "A", "B", "C" ) ) {
