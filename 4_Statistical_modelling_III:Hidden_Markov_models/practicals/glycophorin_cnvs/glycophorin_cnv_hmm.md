@@ -284,7 +284,7 @@ plot.copy.numbers( result$expected.copy.number[,o], title = "Expected copy numbe
 
 ## Further directions
 
-There are lots of things we could do to improve this!
+Our model is getting better but there are lots of things we could do to improve this!
 
 First, there's variation between sites e.g. sequence coverage variation due to genome GC content or mapping performance.
 We could try to control for this by iteravely fitting per-site multipliers in the above (maybe using MCMC or another algorithm).
