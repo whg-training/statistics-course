@@ -10,7 +10,7 @@ In general CNVs are extremely important determinants of human disease - the ones
 But they are often also hard to access because they lie in 'difficult' regions of the genome, where paralogy (caused by ancestral duplications of DNA) makes analysis difficult.
 
 In this practical the plan is to try to genotype some CNVs in one such region - the region containing GYPA, which
-encodes one of the most abundant red cell surface proteins.  
+encodes one of the most abundant red cell surface proteins.  We got interested in this because these CNVs affect malaria susceptibility - the practical is based on data from this paper <https://dx.doi.org/10.1126/science.aam6393> where we investigated that.
 
 To do this we will look at *sequence coverage data* (i.e. how many reads aligned to each genomic location from
 short-read sequence data) and look for variation in coverage that might indicate loss or gain of DNA copies.
@@ -346,11 +346,3 @@ plot.copy.numbers( expected.posterior.state[,clustered.order], title = "Expected
 ## Future directions
 This is the end of this part of the practical.  However, this model still isn't good enough because it still only works marginally at each site and sample.  In fact, we know how copy number variants generally arise (unequal crossover leading to long runs of duplicated or deleted DNA) and we'd like to include that information in the model too, if only we could figure out how to put it in.  In the next session we will see how that can be done by linking this to a Hidden Markov Model.
 
-
-## References
-
-This practical is based on the results of this paper, which explores the effect of some of these CNVs on malaria susceptibility:
-
-<https://dx.doi.org/10.1126/science.aam6393>
-
-Please take a look if you want to know more!
