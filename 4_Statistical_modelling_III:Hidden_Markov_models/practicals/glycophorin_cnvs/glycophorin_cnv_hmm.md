@@ -170,7 +170,7 @@ It takes:
 * prior probabilities for each copy number state
 * and a lambda used to determine expected length of transition
 
-The last parameter can used to control for per-site variation (but we're not using it here.)
+It also takes a last parameter (`site.multipliers`) that can used to control for per-site variation, but we're not using it here.
 
 ```R
 # Function cnv.hmm()
