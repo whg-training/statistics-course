@@ -29,8 +29,9 @@ View(data)
 The data has position information in the first few columns, and samples in columns 4 onwards.
 Let's split these things out for easier handling.  We'll call the actual data `X`:
 ```R
-X = as.matrix( data[,4:ncol(data)] )
 sites = data[,1:3]
+X = as.matrix( data[,4:ncol(data)] )
+rownames(X) = sites$position
 samples = colnames( X )
 ```
 
@@ -41,12 +42,12 @@ image( X, x = 1:nrow(sites), y = 1:length(samples) )
 ```
 
 This is not all that edifying but a few features are evident. Clearly samples vary in coverage (some rows are more red
-than othgers). Also, some sites seem to have more coverage than others (some columns have more coverage than others).
-Also some sites have missing data! The reason for this is that the region contains paralogous gene copies which make
-read mapping difficult - we have excluded bins where mappability was poor.
+than others). Also, some sites seem to have more coverage than others (some columns are more red). Also some sites have
+missing data! (White columns). The reason for this is that the region contains paralogous gene copies which make read
+mapping difficult - we have excluded bins where mappability was poor.
 
-If you stare hard between bins 300-400, you'll see some samples seem to have something going on (long bands of more
-yellow or more red).  This is actually the signal we want to extract, and to do that we need a model.
+If you stare hard between bins 300-400, you may start to see some samples seem to have something going on (long
+horizontal bands of more yellow or more red). This is the signal we want to extract.  There are a few ways we could try this - for example, a dimension reduction method, like PCA, might work.  Feel free to try that!  Here we are going to explore a modelling approach.
 
 ## Using an empirical model to handle variation in the data
 
@@ -69,8 +70,8 @@ The data for each sample looks kind of uni-modal and sort of symmetrical-ish in 
 any CNVs might affect that, and that could explain some of the bumps - that's what we want to find out.
 
 For a practical approach we will assume that this binned coverage follows a Gaussian distribution. And for a first
-guess, we will fit the gaussian using all the data in the 1st 100 bins (which, as we will see, happen not to contain
-many CNVs). So let's go ahead and compute the parameters of these gaussians now:
+guess, we will fit the gaussian using all the data in the 1st 100 bins (which from the plot above don't obviously seem
+to contain many CNVs). So let's go ahead and compute the parameters of these gaussians now:
 
 ```
 coverage.parameters = data.frame(
@@ -78,10 +79,11 @@ coverage.parameters = data.frame(
     mean = sapply( 1:ncol( X ), function(i) { mean( X[1:100,i], na.rm = T ) }),
     variance = sapply( 1:ncol( X ), function(i) { var( X[1:100,i], na.rm = T ) })
 )
+View( coverage.parameters )
 ```
 
 We're going to use a Gaussian likelihood function to model sequence coverage data. Here's the function we wrote in the
-Statistical modelling session (here implemented using `dnorm`).
+stats modelling session (here implemented using `dnorm`).
 ```R
 gaussian.ll <- function(
     data,
@@ -124,30 +126,33 @@ for( i in 1:25 ) {
 }
 ```
 
-The fit looks ... ok.  Not perfect, but not bad, depending on the sample.
+The fit looks ... sort of ok.  Not perfect, but not bad, depending on the sample.
 
-*Exercise* feel free to look at other samples - you could also check model fit using a qq plot.
+**Exercise** feel free to see how this looks for other samples.  You could also make a qq-plot for each sample to see how well the model fits.
 
-Clearly this model is not perfect but it might be enough to work with - for the purposes of this practical we'll go with it.
+Clearly this model is not a perfect model of the data, but it might be enough to work with - for the purposes of this
+practical we'll go with it.
 
 ## Modelling copy number variation
 
 Our general model of the effect of CNVs on coverage is that coverage of a site with copy number c should be (c/2) times
 as large as the copy number at a diploid site - plus noise. If we think of sequence reads as being generated from each
 copy independently, a bit of thought shows that the same relationship happens for the variance as well. So our model
-for copy number c would be the *transformed Gaussian N( c * mean, c * variance )*.
+for copy number c would be that
 
-This is good because it provides the key link from copy number to coverage, with noise, that might allow us to infer
-copy numbers.
+         coverage ~ N( c * mean, c * variance )
 
-Let's try that now.  For simplicity:
+This is good because it provides a direct link from copy number to coverage (accounting for noise in the coverage
+values), that might allow us to infer copy numbers.
 
-- We will assume only copy numbers of 0 to 5 are possible (i.e. from a homozygous deletion up to a possible three extra copies).  Increase this if you want to!
-- We'll put the results in a giant multidimensional array of sites x samples x copy number states.
+Let's try that now. For simplicity:
 
-We start by computing the per-site likelihood of each the data given each copy number.
-Importantly as in the stats modelling session *we will work throughout in log space* to avoid any numerical issues.
-This makes some computation more difficult, but 
+- We will assume only copy numbers of 0 to 5 are possible (i.e. from a homozygous deletion up to a possible three extra copies).  Feel free to increase this if you want to!
+- We'll put the results in a giant multidimensional array of `sites` x `samples` x `copy number states`.
+
+We start by computing the per-site likelihood of each data point for each possible copy number. Importantly as in the
+stats modelling session *we will work throughout in log space* to avoid any numerical issues. This makes some
+computations more difficult, but is a generally good idea when more than a few data points are involved.  So we'll make our array *an array of log-likelihoods*:
 
 ```
 copy.numbers = 0:5 
@@ -171,12 +176,13 @@ Let's compute these lls:
 for( sample in 1:length(samples) ) {
     for( i in 1:length(copy.numbers) ) {
         copy.number = copy.numbers[i]
-        mutiplier = max( copy.number, 0.01 ) # explained later
+        mean.multiplier = copy.number/2
+        variance.multiplier = max( copy.number/2, 0.01 ) # this to be error tolerant, as explained below
         copy.number.lls[,sample,i] = gaussian.ll(
             X[,sample],
             params = list(
-                mean = coverage.parameters$mean[sample] * copy.number / 2,
-                variance = coverage.parameters$variance[sample] * copy.number / 2
+                mean = coverage.parameters$mean[sample] * mean.multiplier,
+                variance = coverage.parameters$variance[sample] * variance.multiplier
             )
         )
         # Handle the missing data sites.
@@ -188,16 +194,18 @@ for( sample in 1:length(samples) ) {
 
 Look at the top left of the output:
 ```
-print( copy.number.lls[1:10,1:10,]
+View( copy.number.lls[1:10,1:10,] )
 ```
 
-With any luck `copy.number.lls` captures some of the important signal in the data.  But how to plot it given it's 3-dimensional?  Here are two ways we could do it:
+**Note** In practice even sites with 0 "real" coverage might get some coverage, e.g. due to spurious read alignment or mis-alignment.  For that reason we used a `variance.multiplier` variable above.  It equals `copy.number / 2` except for copy number zero, where it allows a small amount of coverage to exist.
 
-1. for each sample and site, we could take the maximum likelihood copy number call and plot that.
-2. That's daft, as we're pretty sure most people are diploid at most sites. Instead let's apply our bayesian reasoning, and compute a posterior estimate of the copy number state, under a prior distribution that puts most weight on the diploid state.
+These copy number log-likelihoods should now capture some of the important signal in the data.  But how to plot it given it's 3-dimensional?  Here are two ways we could do it.
 
-The rest of this practical does both these things.  We will use this bit of code to actually make the plots:
+We could take the maximum likelihood copy number call and plot that (for each sample and each site).
 
+Or, we could recognise that the above is daft because it doesn't take into account what we know - that most people will be diploid at most sites.  Instead, we could use a Bayesian approach to build this information in.
+   
+The rest of this practical does both these things.  We'll use this function to plot the results:
 ```R
 plot.copy.numbers <- function(
     copy.number,
@@ -208,6 +216,7 @@ plot.copy.numbers <- function(
     if( !is.null( filename )) {
         pdf( file = filename, width = 6, height = 8 )
     } 
+    par(mfrow=c(1,1))
     par( mar = c( 4, 4, 2 + 2 *!is.null(title), 2 ) + 0.1 )
     image( copy.number, x = 1:nrow(copy.number), y = 1:ncol(copy.number), xlab = "sites", ylab = "samples", col = palette, zlim = c( 0, length(palette)-1 ), main = title )
     legend( "topleft", pch = 22, col = 'black', pt.bg = palette, legend = c( "hom deletion", "het deletion", "normal", "1 extra copy", "2 extra copies", "3 extra copies" ), bg = "white" )
@@ -219,7 +228,7 @@ plot.copy.numbers <- function(
 
 ## Copy number inference using MLEs
 
-Ok - let's compute the maximum likelihood copy number state for each individual at each site:
+Let's compute the maximum likelihood copy number state for each individual at each site:
 ```
 maximum.likelihood.state = array( NA, dim = c( nrow(X), ncol( X ) ), dimnames = list( sites$position, samples ))
 for( variant in 1:nrow( X )) {
@@ -237,15 +246,18 @@ That plot definitely looks cleaner!  Still lots of noise though, can we do bette
 
 ## Bayesian copy number inference
 
-Taking the maximum likelihood estimate is daft though.  We have prior information: most people will be diploid at most sites with a few CNVs sprinkled in.  Let's build that knowledge in by applying our bayesian reasoning.  Still working seperately for each sample and each site, we will take a prior distribution that puts most weight on diploid state, and estiamte copy number state by taking posterior expectations.
+Taking the maximum likelihood approach is daft because we have salient prior information: most people will be diploid
+at most sites, with possibly a few CNVs sprinkled in. Let's build that knowledge in by applying our bayesian reasoning.
+Still working seperately for each sample and each site, we will take a prior distribution that puts most weight on
+diploid state, and estiamte copy number state by taking posterior expectations.
 
 ```R
 # our prior - note this should sum to one
 prior = c(
     `cn=0` = 0.02,
     `cn=1` = 0.02,
-    `cn=2` = 0.9,       # I put 90% weight on diploid state - you can try different values
-    `cn=3` = 0.02,
+    `cn=2` = 0.9,       # I put 90% weight on diploid state...
+    `cn=3` = 0.02,      # ...and 2% weight on everything else - feel free to try different values (make it sum to 1)
     `cn=4` = 0.02, 
     `cn=5` = 0.02
 ) 
@@ -265,12 +277,16 @@ expected.posterior.state = array(
 
 Now let's compute it.
 
-But wait! Here a technical problem occurs.  To compute the normalisation factor in Bayes rule we need to sum
-over the possible copy numbers.  (Just like with the fair/unfair dice example fom the stats modelling session.)
-But we are working in log space, so all values are log probabilities.
-One way to do this would be to write `sum(exp(log.probs))` (and then take logs again to get back to log space).  However, a more numerically stable computation is to use the "log-sum-exp" formula.
-This computes the same thing but avoids numerical errors by processing the largest value seperately.
-Here is a fairly robust implementation:
+Here a small potential technical problem occurs. To compute the normalisation factor in Bayes rule we need to sum over
+the possible copy numbers. (Just like with the fair/unfair dice example fom the stats modelling session.) The
+probabilities for different copy numbers vary widely in magnitude (from close to -Inf to > 1) and this is a classic
+case that causes numerical difficulties. To solve that we are working in log space.
+
+But to compute expectations we now need to compute a sum over probabilities. A direct approach would use `log( sum(
+exp( values )))` but this runs the risk of the above numerical problems. Instead, a more numerically stable computation
+uses the "log-sum-exp" formula, which computes the same value but avoids numerical errors by separating out the largest
+value. Here is a fairly robust implementation:
+
 ```R
 log.sum.exp <- function(
     x,
@@ -300,7 +316,7 @@ for( variant in 1:nrow( sites )) {
 
         # These three lines implement Bayes rule, but working in log space
         log.unnormalised.posterior = copy.number.lls[variant,sample,] + log(prior)
-        log.normalisation.constant = log.sum.exp( log.unnormalised.posterior )
+        log.normalisation.constant = log.sum.exp( log.unnormalised.posterior )      # equivalent to: log( sum( exp( log.unnormalised.posterior )))
         log.posterior = log.unnormalised.posterior - log.normalisation.constant
         
         # Now compute expected copy number given the posterior distribution
@@ -311,11 +327,10 @@ for( variant in 1:nrow( sites )) {
 plot.copy.numbers( expected.posterior.state, title = "Expected posterior copy number" )
 ```
 
-Compare this with the maximum likelihood copy number calls above - the posterior version is much cleaner.
+Compare this with the maximum likelihood copy number calls above - the posterior version is much much cleaner.
 
-It's clear now there is something goin on in that region - a number of samples have clear runs of deleted or sometimes apparently duplicated bins.
-
-To draw out the signal we can cluster samples - here using hierarchical clustering:
+It's clear now that there is something goin on in that region - a number of samples have clear runs of deleted or
+apparently duplicated bins. To draw out this signal we can cluster samples - here using hierarchical clustering:
 
 ```
 clustered.order = hclust(
@@ -325,4 +340,7 @@ clustered.order = hclust(
 
 plot.copy.numbers( expected.posterior.state[,clustered.order], title = "Expected posterior copy number (clustered)" )
 ```
+
+## Future directions
+This is the end of this part of the practical.  However, this model still isn't good enough because it still only works marginally at each site and sample.  In fact, we know how copy number variants generally arise (unequal crossover leading to long runs of duplicated or deleted DNA) and we'd like to include that information in the model too, if only we could figure out how to put it in.  In the next session we will see how that can be done by linking this to a Hidden Markov Model.
 
