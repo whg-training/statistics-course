@@ -346,3 +346,11 @@ plot.copy.numbers( expected.posterior.state[,clustered.order], title = "Expected
 ## Future directions
 This is the end of this part of the practical.  However, this model still isn't good enough because it still only works marginally at each site and sample.  In fact, we know how copy number variants generally arise (unequal crossover leading to long runs of duplicated or deleted DNA) and we'd like to include that information in the model too, if only we could figure out how to put it in.  In the next session we will see how that can be done by linking this to a Hidden Markov Model.
 
+
+## References
+
+This practical is based on the results of this paper, which explores the effect of some of these CNVs on malaria susceptibility:
+
+<https://dx.doi.org/10.1126/science.aam6393>
+
+Please take a look if you want to know more!
