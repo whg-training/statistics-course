@@ -24,10 +24,9 @@ These computations and notation are all as in the Rabiner HMM tutorial:
 <https://web.ece.ucsb.edu/Faculty/Rabiner/ece259/Reprints/tutorial%20on%20hmm%20and%20applications.pdf>
 
 The only complication is that to avoid numerical over/underflow we work in log space, so have to change expressions
-accordingly. In particular multiplications get converted to additions in log space. These are best computed by the
-log-sum-exp formula that should already be loaded (`log.sum.exp` ). 
-
-To avoid problems with under/overflow, this function works in log space.
+accordingly. Multiplications get converted to additions in log space.  But to avoid numerical issues, *additions* of
+probabilities are best converted by using the `log.sum.exp()` function (that should already be loaded), rather than
+using `log( sum( exp()))` directly.
 
 ```R
 # a generally useful function:
