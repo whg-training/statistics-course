@@ -37,7 +37,7 @@ echo <- function( message, ... ) {
 
 forward.backward <- function(
     emissions,              # matrix of emission log-probabilities (LxD)
-    transitions,
+    transitions,	   # (L-1)xDxD array of transition probabilities into each bin
     prior                  # vector of prior state probabilities
 ) {
     # FORWARD ALGORITHM
