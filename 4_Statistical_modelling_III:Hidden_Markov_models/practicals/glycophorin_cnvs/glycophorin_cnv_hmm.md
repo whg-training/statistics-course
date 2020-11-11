@@ -273,12 +273,14 @@ result = cnv.hmm(
 plot.copy.numbers( result$expected.copy.number, title = "Expected copy number (HMM model)" )
 ```
 
-Compare this with the previous plot based only on per-site coverage values for each sample - the new plot is much cleaner.  Also let's now cluster samples:
+Compare this with the previous plot based only on per-site coverage values for each sample - the new plot is much cleaner.  Also let's cluster samples again:
 
+```R
 o = hclust( # hierarchical clustering
 	    dist( t(result$expected.copy.number) ) # of Euclidean distance matrix between samples
 )$order
 plot.copy.numbers( result$expected.copy.number[,o], title = "Expected copy number (HMM model, clustered)" )
+```
 
 ## Further directions
 
