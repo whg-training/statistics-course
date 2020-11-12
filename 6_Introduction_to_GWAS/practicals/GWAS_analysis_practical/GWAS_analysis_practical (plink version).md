@@ -91,7 +91,7 @@ If we look in the assoc file we will see that this SNP, rs8135996, is associated
 ## Forest plotting
 If you followed the Statistical modelling module earlier, we argued that what you want is to summarise the likelihood by its maximum (here the log odds ratio) and its standard error - thus approximating the likelihood by a gaussian function.  How can you get this out of plink's output? Can you figure this out from the [documentation for --logistic](https://www.cog-genomics.org/plink/1.9/assoc#linear)?
 
-Here's my take: using `--logistic beta` makes plink output the regression estimate (log odds ratio) instead of the odds ratio.  Plink also outputs what turns out to be a Wald test P-value.  (See [the notes](https://github.com/jpwhalley/GMS_Stats_Course/blob/master/2_Statistical_Modelling/1_Introduction/notes/computing_pvalues.md) from Statistical Modelling I for a definition).
+Here's my take: using `--logistic beta` makes plink output the regression estimate (log odds ratio) instead of the odds ratio.  Plink also outputs what turns out to be a Wald test P-value.  (See [the notes](https://github.com/whg-gms/statistics-course/blob/main/2_Statistical_modelling_I:Introduction/notes/computing_pvalues.md) on computing P-values for a definition of this).
 
 If you know this, you can use it to work out the standard error.  For example:
 
