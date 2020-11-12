@@ -388,7 +388,7 @@ data <- data[data$TEST == "ADD",]
 
 *Q.* Produce Q-Q plots, genome-wide p-value plots and a summary of your results.
 
-**When you've reached this part of the practical, please email your qq plot to me (Gavin).**
+**When you've reached this part of the practical, please email your qq plot to me (gavin.band@well).**
 
 ## Making a regional association plot
 
@@ -561,7 +561,7 @@ hitplot( 'rs112820994', data, genes, ld, margin = 200000 )
 dev.off()
 ```
 
-**Please email your plot to me (Gavin) when you've reached this part of the practical.**.
+**Please email your plot to me (gavin.band@well) when you've reached this part of the practical.**.
 
 *Q.* What gene is rs112820994 in?  Is it in an exon?  Are other top SNPs in the region also in genes?   (You may need to play around with the margin argument to zoom in or out of the plot.  You can cross-check using genome browsers such as the [UCSC Genome Browser](https://genome.ucsc.edu/cgi-bin/hgGateway) - note that we are using GRCh37/hg19 coordinates).
 
