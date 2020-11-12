@@ -347,7 +347,7 @@ The expected median p-value is 0.5. The diagonal line shows where the points sho
 
 
 ## Population Structure Practical
-We have seen how applying appropriate quality control filters to our data eliminated many false positives, but a systematic inflation remained. The most common source of test statistic inflation is population stratification, as you have already been taught. We can use principal component analysis to measure the genetic structure within the dataset, and use these estimated components as covariates in the association analysis. You have already learned about PCA in your previous practical, and have already created PCs for these samples.
+We have seen how applying appropriate quality control filters to our data eliminated many false positives, but a systematic inflation remained. The most common source of test statistic inflation is population stratification, as this can act as a confounder. We can use principal component analysis to measure the genetic structure within the dataset, and use these estimated components as covariates in the association analysis. You have already learned about PCA in your previous practical, and have already created PCs for these samples.
 
 The file `chr19-example.pca` contains the principal components for this dataset (calculated in the previous practical), and the following command will carry out an association analysis controlling for these:
 
