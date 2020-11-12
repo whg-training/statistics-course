@@ -18,7 +18,7 @@ If stuck you can email the gms-stats list.  This goes to all the students and te
 
 ## Getting set up
 
-In this practical we will run command-line programs to perform the analyses, and R to interpret them.  You have two options for running this.  The simplest way is to log in to the WHG compute cluster and run the practical there.  If you have a linux or Mac OS X laptop, you may instead be able to run the practical on your laptop - but be prepared for a bit of setup.
+In this practical we will run command-line programs to perform the analyses, and R to interpret them.  You have two options for running this.  The simplest way is to log in to the WHG compute cluster and run the practical there.  If you have a linux or Mac OS X laptop, you should instead be able to run the practical on your laptop - but be prepared for a bit of setup.  **It essential you have access to a suitable UNIX command-line environment** - if you have problems getting this set up, please let me know as soon as possible.
 
 In this practical, commands to run are shown like this:
 ```sh
@@ -39,7 +39,7 @@ $ cd /path/to/working/folder/
 
 If you are using one of the workshop training logins, the path will be `/well/workshop/workshop<N>` if you are logged in as `workshop<N>`.
 
-The practical dataset is available in the `4_Introduction_to_GWAS/GWAS_practical` folder in the github site: https://github.com/jpwhalley/GMS_Stats_Course/tree/master/4_Introduction_to_GWAS/GWAS_analysis_practical.
+The practical dataset is available along side this file on the github site.
 You'll need to download everything, including the `.vcf` and `.samples` files, and the `scripts/` and `resources/` folders.
 
 Second, let's get the plink program we need.  Navigate to `https://www.cog-genomics.org/plink/1.9/` and download the appropriate version.  Then move the plink executable into the top-level folder:
