@@ -9,7 +9,7 @@ malaria-exposed populations (Africans).                 707        17
 ```
 
 It can be loaded in R like this:
-```
+```R
 theTable = matrix(
     c(
         1965, 1,
@@ -22,6 +22,13 @@ theTable = matrix(
         c( "G", "C" )
     )
 )
+```
+
+```R
+> theTable
+               G  C
+non-exposed 1965  1
+exposed      707 17
 ```
 
 The odds ratio computed from this table is 47 - implying the frequencies of this variant are very different in European and African populations.
