@@ -98,7 +98,7 @@ inspect.ll(
 (The rows are independent here so really we are just plotting two binomial log-likelihoods).
 
 It should be immediately obvious that our nice, gaussian, asymptotic behaviour described in the stats modelling session, is not really working for this table.
-Especially the first row looks pretty skewed.  This is an important point which is described further in [when asymptotics go wrong.md] - please go and read that now if you are interested.
+Especially the first row looks pretty skewed.  This is an important point which is described further in [[when asymptotics go wrong.md]].  However, there's amore serious problem with this table that we'll get to below.
 
 # A better model via a log odds ratio
 
