@@ -8,7 +8,17 @@ unexposed populations (Europeans)                      1965        1
 malaria-exposed populations (Africans).                 707        17
 ```
 
-It can be loaded in R like this:
+It shows counts, taken from the 1000 Genomes Project data (<https://www.internationalgenome.org>), of the reference and non-reference allele of `rs60822373` in two groups of populations: European-ancestry individuals, and individuals from sub-Saharan Africa.
+
+The implication of above paper is that rs60822373 is likely under natural selection due to malaria.  The table above is consistent with this, because (although some forms of malaria have been widespread) the highest burden of mortality due to malaria is found in sub-Saharan Africa.  If rs60822373 were malaria-protective, this might lead to the pattern above.
+
+But how much evidence for natural selection does this table provide?
+
+*QN.* How much evidence do you think the table provides?  (For example, a chi-squared test of a Fisher's exact test will give you some sense of the *statistical* strength of the data.
+
+# Modelling a 2x2 table #
+
+Let's load the table into R:
 ```R
 theTable = matrix(
     c(
@@ -24,6 +34,22 @@ theTable = matrix(
 )
 ```
 
+How should we model this table?
+
+One way to think of this is that individuals in the 1000 Genomes Project were sampled based on their ancestry.
+Essentially this means the row sums in the above table were determined beforehand.  A reasonable model for the data is therefore *that the rows are binomially distributed*.  If θ stands for
+
+```
+row1  
+row2 
+```
+
+We can therefore model the tbale like so:
+```R
+```
+
+
+
 ```R
 > theTable
                G  C
@@ -31,6 +57,7 @@ non-exposed 1965  1
 exposed      707 17
 ```
 
+The allele frequencies in the top and bottom row are very different - the C allele has almost zero frequency in the top row, but around 
 The odds ratio computed from this table is 47 - implying the frequencies of this variant are very different in European and African populations.
 The Egan et al paper suggests this is evidence for malaria-driven natural selection of this allele.
 
