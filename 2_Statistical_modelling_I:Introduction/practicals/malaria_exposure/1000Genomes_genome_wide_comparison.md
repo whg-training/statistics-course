@@ -97,7 +97,7 @@ inspect.ll(
 
 (The rows are independent here so really we are just plotting two binomial log-likelihoods).
 
-## Aside: do the asymptotics work?
+## When asymptotics goes wrong
 
 Look at the top row of the plot.  This picture is typical for binomial likelhoods when the frequency is low or there's not much data - the asymptotic approximation does not work well.  The likelihood becomes skewed, and the normal approximation starts to fail (here overstating the amount of uncertainty on the left, and understating it on the right.)
 
