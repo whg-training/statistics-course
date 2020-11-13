@@ -10,7 +10,7 @@ malaria-exposed populations (Africans).                 707        17
 
 It shows counts, taken from the 1000 Genomes Project data (<https://www.internationalgenome.org>), of the reference and non-reference allele of `rs60822373` in two groups of populations: European-ancestry individuals, and individuals from sub-Saharan Africa.
 
-The implication of above paper is that rs60822373 is likely under natural selection due to malaria.  The table above is consistent with this, because (although some forms of malaria have been widespread) the highest burden of mortality due to malaria is found in sub-Saharan Africa.  If rs60822373 were malaria-protective, this might lead to the pattern above.
+The implication of above paper, which was published in the journal Science, is that rs60822373 is likely under natural selection due to malaria.  The table above is consistent with this, because (although some forms of malaria have been widespread) the highest burden of mortality due to malaria is found in sub-Saharan Africa.  If rs60822373 were malaria-protective, this might lead to the pattern above.
 
 But how much evidence for natural selection does this table provide?
 
