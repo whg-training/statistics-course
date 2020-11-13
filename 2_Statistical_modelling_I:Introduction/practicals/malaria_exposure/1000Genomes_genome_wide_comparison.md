@@ -97,6 +97,29 @@ inspect.ll(
 
 (The rows are independent here so really we are just plotting two binomial log-likelihoods).
 
+It should be immediately obvious that our nice, gaussian, asymptotic behaviour described in the stats modelling session, is not really working for this table.
+Especially the first row looks pretty skewed.  This is an important point which is described further in [when asymptotics go wrong.md] - please go and read that now if you are interested.
+
+# A better model via a log odds ratio
+
+A problem with the parameterisation above is that none of the parameters captures what we are really interested in - the difference in frequency between the two rows. 
+
+Another problem is that the parameters live in a slightly awkward space - they are in the unit interval [0,1] but are very close over the boundary.
+This makes them kind of difficult to work with, both in code and mathematically.  (If you recall, the `binomial.ll()` function we wrote contains special code to make it give sensible answers if you accidentally try a value outside the interval).
+
+A better parameterisation of the table for our problem works by making two changes as follows.
+
+First, we replace the frequencies ϑ₁ and ϑ₂ with **log odds** parameters as follows:
+
+![\gamma_i = log \left(\frac{\theta_i}{1-\theta_i}\right)](https://render.githubusercontent.com/render/math?math=%5Ctextstyle+%5Cgamma_i+%3D+log+%5Cleft%28%5Cfrac%7B%5Ctheta_i%7D%7B1-%5Ctheta_i%7D%5Cright%29)
+
+Why the log odds?  
+
+The quintessential way of doing this is to reparameterise in terms of a **baseline log odds** (representing the frequency of C in the first row) and a **log odds ratio** (
+
+To fix that we are going to reparameterise in terms of two other parameters - a **baseline** parameter that
+
+
 ## When asymptotics goes wrong
 
 Look at the top row of the plot.  This picture is typical for binomial likelhoods when the frequency is low or there's not much data - the asymptotic approximation does not work well.  The likelihood becomes skewed, and the normal approximation starts to fail (here overstating the amount of uncertainty on the left, and understating it on the right.)
