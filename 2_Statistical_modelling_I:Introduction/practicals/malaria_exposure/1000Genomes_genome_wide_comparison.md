@@ -1,13 +1,14 @@
-## Calibration / model checking for the O blood group finding
+## Model checking the malaria exposure finding
 
-In class we analysed this table:
+Consider the following table from [https://science.sciencemag.org/content/348/6235/711](Egan et al Science 2015):
 
 ```
-                     rs60822373 G allele        rs60822373 C allele
-non-exposed populations             1965        1
-malaria-exposed populations          707        17
+                                        rs60822373 G allele        rs60822373 C allele
+unexposed populations (Europeans)                      1965        1
+malaria-exposed populations (Africans).                 707        17
 ```
 
+It can be loaded in R like this:
 ```
 theTable = matrix(
     c(
@@ -17,21 +18,33 @@ theTable = matrix(
     ncol = 2,
     byrow = T,
     dimnames = list(
-        c( "controls", "cases" ),
-        c( "non-O", "O" )
+        c( "non-exposed", "exposed" ),
+        c( "G", "C" )
     )
 )
 ```
 
-The odds ratio computed from this table is 47 - implying the frequencies are completely different.  And a test of this table using `chisq.test()` or `fisher.test()` shows that this is highly statistically significant.  That means:
+The odds ratio computed from this table is 47 - implying the frequencies of this variant are very different in European and African populations.
+The Egan et al paper suggests this is evidence for malaria-driven natural selection of this allele.
+
+
+
+
+How could we test that?  Well one way is 
+
+
+And a test of this table ( `chisq.test()` or `fisher.test()` shows that this is highly statistically significant.  That means:
 
 * *If* the data were truly sampled from a binomial distribution with given frequency in each row.
 * and *if* the true odds ratio was zero.
 * *then* a table with such a large odds ratio would almost never occur.
 
-Does this table provide evidence that the malaria-exposed population allele frequency is higher because of natural selection due to malaria?  (That isn't actually stated in [https://science.sciencemag.org/content/348/6235/711](Egan et al Science 2015) as far as I can tell, but I think it is implicit).
+(*NB.* The assumptions of Fisher's exact test and of the chi-squared test, which corresponds to 'binomial sampling in rows', are slightly different.
+Fisher's exact test is actually conditional on both row and column sums, which reduces things to one parameter.  This doesn't matter much for most tables in practice because the row and column sums are not usually very informative about the odds ratio itself.)
 
-One of the advantages of genome-wide analysis is that we have a lot of data to work with. Suppose
+Does this table provide evidence that the malaria-exposed population allele frequency is higher because of natural selection due to malaria?  (That's the implicit message of this part of the original paper: [https://science.sciencemag.org/content/348/6235/711](Egan et al Science 2015) ).
+
+One of the advantages of genome-wide analysis is that we have a lot of data to work with - and this can be used for model checking. Suppose
 we compare our finding with all other 'similar' variants in the genome. They have all been
 genotyped on the same set of samples, and as such they represent the same sampling biases (if any) and the same demography. However, due to recombination they also represent many independent draws from the genealogical history of the sample.
 
