@@ -73,9 +73,9 @@ table.ll <- function(
             )
         )
         + binomial.ll(
-            data[2,2],
+            x = data[2,2],
             params = list(
-                n = sum( data[2,] ),
+                n = rowSums( data )[2],
                 p = params$theta[2]
             )
         )
