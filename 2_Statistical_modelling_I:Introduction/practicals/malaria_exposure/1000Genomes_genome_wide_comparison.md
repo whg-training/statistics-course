@@ -118,7 +118,7 @@ probability of success
 
 ```
 
-The estimate is `0.000508647` (which is 1/1966) and the 95% confidence interval is reported as `1.287774e-05` to `2.830707e-03`.  On the other hand the asymptotic method above computes the standard error as `0.0005093123` (see the function output) so we can compute asymptotically estimted confidence intervals as:
+The estimate is `0.000508647` (which is 1/1966) and the 95% confidence interval is reported as `1.287774e-05` to `2.830707e-03`.  On the other hand the asymptotic method above computes the standard error as `0.0005093123` (see the function output) so we can compute asymptotic estimated confidence intervals as:
 ```R
 theta = 1/1966
 se = 0.0005093123
