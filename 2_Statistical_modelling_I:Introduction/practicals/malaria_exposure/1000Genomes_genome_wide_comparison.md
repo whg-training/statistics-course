@@ -1,6 +1,6 @@
 ## Model checking the malaria exposure finding
 
-Consider the following table from (https://science.sciencemag.org/content/348/6235/711)[Egan et al Science 2015]:
+Consider the following table from <https://science.sciencemag.org/content/348/6235/711>:
 
 ```
                                         rs60822373 G allele        rs60822373 C allele
