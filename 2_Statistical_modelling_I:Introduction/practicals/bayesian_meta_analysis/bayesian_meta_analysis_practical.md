@@ -9,7 +9,7 @@ Using Bayes factors allows us to make nice computations of posterior weights.
 
 ## Loading the data
 
-We load the data and get the reported effect size estimates (betas), standard errors, and P-values as follows:
+Let's load the data and extract the reported effect size estimates (betas), standard errors, and P-values as follows:
 ```R
 cotsapas = load( "practicals/cotsapas_data.RData")
 rownames( cotsapas ) = cotsapas$SNP
@@ -21,11 +21,9 @@ phenotypes = gsub( ".beta", "", grep( ".beta", colnames( cotsapas ), value = T )
 
 ## Computing Bayes factors
 
-According to the 'Crucial Lemma' for multivariate normals shown in lectures (see [here](https://github.com/jpwhalley/GMS_Stats_Course/blob/master/2_Statistical_Modelling/1_Introduction/notes/Computing%20BFs%20using%20the%20normal%20approximation.pdf)), the product of an MVN
-prior and an MVN likelihood is equal to an MVN multiplied by a constant. And the constant is itself
-computable by MVN evaluated at the effect size estimate.
+According to the lemma about multiplying multivariate normals (MVNs) - see ["Normal times normal is normal"](../../notes/Normal times normal is normal.pdf), the product of an MVN prior and an MVN likelihood is equal to an MVN multiplied by a constant. And the constant is itself computable by an MVN evaluated at the effect size estimate.
 
-We use the `mvtnorm` package to compute this for any given model, specificed as a 7x7 prior covariance matrix, against the null model under which all true effects are zero.
+We can use the `mvtnorm` package to compute this for any given model, specificed as a 7x7 prior covariance matrix, against the null model under which all true effects are zero.
 
 (This function additionally deals with missing beta estimates).
 
