@@ -8,10 +8,10 @@ published papers about genetic variants that affect malaria susceptibility:
 <https://science.sciencemag.org/content/348/6235/711>.
 
 ```R
-                       non-O         O                                                   rs60822373     rs60822373
-                       blood group   blood group                                         G allele       C allele
-            controls:  3420          3233                        unexposed populations:  1965           1
-severe malaria cases:  3925          2738                  malaria-exposed populations:  707            17
+                       non-O      O                                          rs60822373   rs60822373
+                       blood gp.  blood gp.                                  G allele     C allele
+            controls:  3420       3233               unexposed populations:  1965         1
+severe malaria cases:  3925       2738         malaria-exposed populations:  707          17
 ```
 
 The left table purports to show evidence that O blood group is associated with protection against
