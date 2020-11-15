@@ -18,7 +18,7 @@ If stuck you can email the gms-stats list.  This goes to all the students and te
 
 ## Getting set up
 
-In this practical we will run command-line programs to perform the analyses, and R to interpret them.  You have two options for running this.  The simplest way is to log in to the WHG compute cluster and run the practical there.  If you have a linux or Mac OS X laptop, you may instead be able to run the practical on your laptop - but be prepared for a bit of setup.
+In this practical we will run command-line programs to perform the analyses, and R to interpret them.  You have two options for running this.  The simplest way is to log in to the WHG compute cluster and run the practical there.  If you have a linux or Mac OS X laptop, you should instead be able to run the practical on your laptop - but be prepared for a bit of setup.  **It essential you have access to a suitable UNIX command-line environment** - if you have problems getting this set up, please let me know as soon as possible.
 
 In this practical, commands to run are shown like this:
 ```sh
@@ -39,7 +39,7 @@ $ cd /path/to/working/folder/
 
 If you are using one of the workshop training logins, the path will be `/well/workshop/workshop<N>` if you are logged in as `workshop<N>`.
 
-The practical dataset is available in the `4_Introduction_to_GWAS/GWAS_practical` folder in the github site: https://github.com/jpwhalley/GMS_Stats_Course/tree/master/4_Introduction_to_GWAS/GWAS_analysis_practical.
+The practical dataset is available along side this file on the github site.
 You'll need to download everything, including the `.vcf` and `.samples` files, and the `scripts/` and `resources/` folders.
 
 Second, let's get the plink program we need.  Navigate to `https://www.cog-genomics.org/plink/1.9/` and download the appropriate version.  Then move the plink executable into the top-level folder:
@@ -91,7 +91,7 @@ If we look in the assoc file we will see that this SNP, rs8135996, is associated
 ## Forest plotting
 If you followed the Statistical modelling module earlier, we argued that what you want is to summarise the likelihood by its maximum (here the log odds ratio) and its standard error - thus approximating the likelihood by a gaussian function.  How can you get this out of plink's output? Can you figure this out from the [documentation for --logistic](https://www.cog-genomics.org/plink/1.9/assoc#linear)?
 
-Here's my take: using `--logistic beta` makes plink output the regression estimate (log odds ratio) instead of the odds ratio.  Plink also outputs what turns out to be a Wald test P-value.  (See [the notes](https://github.com/jpwhalley/GMS_Stats_Course/blob/master/2_Statistical_Modelling/1_Introduction/notes/computing_pvalues.md) from Statistical Modelling I for a definition).
+Here's my take: using `--logistic beta` makes plink output the regression estimate (log odds ratio) instead of the odds ratio.  Plink also outputs what turns out to be a Wald test P-value.  (See [the notes](https://github.com/whg-gms/statistics-course/blob/main/2_Statistical_modelling_I:Introduction/notes/computing_pvalues.md) on computing P-values for a definition of this).
 
 If you know this, you can use it to work out the standard error.  For example:
 
@@ -347,7 +347,7 @@ The expected median p-value is 0.5. The diagonal line shows where the points sho
 
 
 ## Population Structure Practical
-We have seen how applying appropriate quality control filters to our data eliminated many false positives, but a systematic inflation remained. The most common source of test statistic inflation is population stratification, as you have already been taught. We can use principal component analysis to measure the genetic structure within the dataset, and use these estimated components as covariates in the association analysis. You have already learned about PCA in your previous practical, and have already created PCs for these samples.
+We have seen how applying appropriate quality control filters to our data eliminated many false positives, but a systematic inflation remained. The most common source of test statistic inflation is population stratification, as this can act as a confounder. We can use principal component analysis to measure the genetic structure within the dataset, and use these estimated components as covariates in the association analysis. You have already learned about PCA in your previous practical, and have already created PCs for these samples.
 
 The file `chr19-example.pca` contains the principal components for this dataset (calculated in the previous practical), and the following command will carry out an association analysis controlling for these:
 
@@ -388,7 +388,7 @@ data <- data[data$TEST == "ADD",]
 
 *Q.* Produce Q-Q plots, genome-wide p-value plots and a summary of your results.
 
-**When you've reached this part of the practical, please email your qq plot to me (Gavin).**
+**When you've reached this part of the practical, please email your qq plot to me (gavin.band@well).**
 
 ## Making a regional association plot
 
@@ -561,7 +561,7 @@ hitplot( 'rs112820994', data, genes, ld, margin = 200000 )
 dev.off()
 ```
 
-**Please email your plot to me (Gavin) when you've reached this part of the practical.**.
+**Please email your plot to me (gavin.band@well) when you've reached this part of the practical.**.
 
 *Q.* What gene is rs112820994 in?  Is it in an exon?  Are other top SNPs in the region also in genes?   (You may need to play around with the margin argument to zoom in or out of the plot.  You can cross-check using genome browsers such as the [UCSC Genome Browser](https://genome.ucsc.edu/cgi-bin/hgGateway) - note that we are using GRCh37/hg19 coordinates).
 
