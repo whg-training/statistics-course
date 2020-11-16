@@ -169,7 +169,9 @@ fit1 = inspect.ll( reparameterised.table.ll, data = tables[[1]], params = list( 
 fit2 = inspect.ll( reparameterised.table.ll, data = tables[[2]], params = list( theta = 0.5, log.or = 0 ) )
 ```
 
-Look at both these plots.
+Look at both these plots.  For the first table:
+
+![Table 1 likelihood](solutions/table_1_ll.png)
 
 The plot for the first table is about as good as this plot could look.  It estimates a log odds-ratio of -0.30, which is an odds ratio of ~0.74.  Also, the Gaussian fit to the likelihood is about as good as it could possibly be.  We could get a reasonable interval as:
 ```R
@@ -181,9 +183,26 @@ The plot for the first table is about as good as this plot could look.  It estim
    [1] "0.74 ( 0.70 - 0.77)"
 ```
 
-As discussed in class, you can interpret this in one of two ways.  The bayesian interpretation is that our uncertainty in the true odds ratio, given this particular data table, is well expressed by a small interval around 0.74.  The above interval is a 95% bayesian *credible interval* for the parameter - meaning an interval that contains 95% of the posterior mass.  (In principle this interpretation depends on assuming a flat prior, so that the posterior is proportional to the likelihood.  But because the data is so strong here, the prior won't affect this much as long as the prior is relatively spread out).
+As discussed in class, you can interpret this in one of two ways. The bayesian interpretation is that our uncertainty
+in the true odds ratio, given this particular data table, is well expressed by a small interval around 0.74. The above
+interval is a 95% bayesian *credible interval* for the parameter - meaning an interval that contains 95% of the
+posterior mass. (In principle this interpretation depends on assuming a flat prior, so that the posterior is
+proportional to the likelihood. But because the data is so strong here, the prior won't affect this much as long as the
+prior is relatively spread out). The posterior is pretty much Gaussian, so the probability that the parameter was
+actually zero, or something above zero, can be computed from the quantiles of the Gaussian distribution:
+```R
+> pnorm( 0, mean = fit1$mle$log.or, sd = fit1$standard.errors[2], lower.tail = F )
+[1] 1.711726e-18
+```
+meaning that (assuming the model holds) it's vanishingly unlikely we have got the sign of this effect wrong.
 
-Alternatively, we discussed in lectures how this can be interpreted as a frequentist statement about the parameter.  In this setting we think of *replicates of the table from the same sampling process* and interpret the above interval as a frequentist confidence interval.  To state this specifically, it means:
+*Note* this is a bit daft because we shouldn't be allowed a 'flat prior' here (there's no function that integrates to 1 over the whole real line).  And in any case a 'flat prior' would place most of its mass outside any finite interval so this prior really claims that the effect is huge.  Adding a *proper prior* here is not hard - 
+
+*Exercise* add a proper prior here (e.g. Gaussian with mean 0 and standard deviation sigma) - how does this change the above?
+
+Alternatively, we discussed in lectures how this can be interpreted as a frequentist statement about the parameter. In
+this setting we think of *replicates of the table from the same sampling process* and interpret the above interval as a
+*confidence interval*. To state this specifically, it means:
 
 * Imagine an infinite number of replicates of the data with some 'true' parameters
 * Imagine for each such data table we used the above procedure to compute a confidence interval
@@ -192,5 +211,32 @@ Alternatively, we discussed in lectures how this can be interpreted as a frequen
 If this strikes you as a complicated interpretation - it is! My general advice is to interpret this interval as a
 statement about our uncertainty in the parameter given the model - i.e. as a bayesian credible interval. In more
 general situations with less informative data you should think carefully about what prior is appropriate. Where the
-frequentist approach becomes useful is in *calibrating* or *model checking* our model against reality.
+frequentist approach becomes useful is in *calibrating* or *model checking* our model against reality.  In this case it's useful to know that *if the true log-odds were zero*, then the estimate would be distributed like
 
+![\hat{\beta}~N(0,\text{se}^2)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Chat%7B%5Cbeta%7D%7EN%280%2C%5Ctext%7Bse%7D%5E2%29)
+
+so that a one-tailed P-value can be computed from quantiles of this normal distribution:
+
+```R
+> pnorm( abs(fit1$mle$log.or), mean = 0, sd = fit1$standard.errors[2], lower.tail = F )
+[1] 1.711726e-18
+```
+
+*Exercise* This number is of course exactly equal to the Bayesian probability of getting the sign wrong above - satisfy yourself why this is true.
+
+## When asymptotics go wrong 
+
+On the other hand, look at the plot for the 2nd table:
+
+![Table 2 likelihood](solutions/table_2_ll.png)
+
+Clearly something goes wrong with the asymptotics for this table.  The Gaussian approximation is not great.  Focussing on the log-odds ratio parameter, the approximation puts *too little weight* on small odds ratios, and it puts *too much weight* on larger odds ratios.  If we again compute a P-value
+
+```R
+> pnorm( abs(fit2$mle$log.or), mean = 0, sd = fit2$standard.errors[2], lower.tail = F )
+[1] 9.020974e-05
+```
+
+it is still statistically significant - but we should be cautious because the gaussian approximation is not great.
+
+Here are two ways to deal with this.  First, we could use *Fisher's exact test* intead.  Fisher's exact test deals with this situation by additionally conditioning on the column sums of the table.  This is like saying we knew what the frequency of the variant was beforehand
