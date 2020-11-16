@@ -77,7 +77,9 @@ grid()
 
 You can see that the logistic function maps the real line (log-odds space, x axis) to the unit interval (y axis, probability space).  It is smooth and tails off to being essentially flat outside around [-10,10].
 
-*Exercise* prove that `logistic()` is the inverse of the log odds (hint: substitute one expression into the other and simplify). Alternatively, prove this to yourself by implementing both function in R.
+*Exercise* prove that `logistic()` is the inverse of the log odds (substitute one expression into the other and simplify). Alternatively, prove this to yourself by implementing both function in R.
+
+*Exercise* (advanced) what is the slope of the logistic function at x=0?  (Hint: you need to compute the derivative.)
 
 Now that we are working in log-odds space (on the real line), this frees us up to express our log odds as a *baseline log odds* (applying to both rows of the table) plus an *additional log odds conferred by the second row*.  Let's call these parameters μ and β.  We are thus writing:
 
@@ -110,5 +112,18 @@ The reparameterised model for our table is now:
 1-\text{logistic}(\mu+\beta) & \text{logistic}(\mu+\beta)
 \end{matrix}
 \right)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cleft%28%0A%5Cbegin%7Bmatrix%7D%0A1-%5Ctext%7Blogistic%7D%28%5Cmu%29+%26+%5Ctext%7Blogistic%7D%28%5Cmu%29+%5C%5C%0A1-%5Ctext%7Blogistic%7D%28%5Cmu%2B%5Cbeta%29+%26+%5Ctext%7Blogistic%7D%28%5Cmu%2B%5Cbeta%29%0A%5Cend%7Bmatrix%7D%0A%5Cright%29)
+
+or fully expanded:
+![\left(
+\begin{matrix}
+\frac{1}{1+e^\mu}
+&
+\frac{e^\mu}{1+e^\mu}
+\\
+\frac{1}{1+e^{\mu+\beta}}
+&
+\frac{e^{\mu+\beta}}{1+e^{\mu+\beta}}
+\end{matrix}
+\right)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cleft%28%0A%5Cbegin%7Bmatrix%7D%0A%5Cfrac%7B1%7D%7B1%2Be%5E%5Cmu%7D%0A%26%0A%5Cfrac%7Be%5E%5Cmu%7D%7B1%2Be%5E%5Cmu%7D%0A%5C%5C%0A%5Cfrac%7B1%7D%7B1%2Be%5E%7B%5Cmu%2B%5Cbeta%7D%7D%0A%26%0A%5Cfrac%7Be%5E%7B%5Cmu%2B%5Cbeta%7D%7D%7B1%2Be%5E%7B%5Cmu%2B%5Cbeta%7D%7D%0A%5Cend%7Bmatrix%7D%0A%5Cright%29)
 
 Summarising, the log-odds ratio β is a real number which encodes the difference in frequency between the two rows of the table.
