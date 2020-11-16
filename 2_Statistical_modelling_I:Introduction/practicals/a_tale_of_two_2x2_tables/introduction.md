@@ -73,6 +73,8 @@ plot( x, logistic(x), type = 'l', bty = 'n' )
 grid()
 ```
 
+![logistic function](solutions/logistic.png)
+
 You can see that the logistic function maps the real line (log-odds space, x axis) to the unit interval (y axis, probability space).  It is smooth and tails off to being essentially flat outside around [-10,10].
 
 *Exercise* prove that `logistic()` is the inverse of the log odds (hint: substitute one expression into the other and simplify). Alternatively, prove this to yourself by implementing both function in R.
