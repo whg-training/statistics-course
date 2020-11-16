@@ -97,3 +97,100 @@ Or equivalently:
 
 such that β is the log odds ratio.
 
+How does this look in practice?  Lets implement it:
+
+```R
+# Requires binomial.ll first!
+table.ll <- function( data, params = list( theta = c( 0.5, 0.5 )) ) {
+    # For a 2x2 table we assume binomial sampling in rows
+    # So sum the lls over the rows
+    return (
+        binomial.ll(
+            x = data[1,2],
+            params = list(
+                n = rowSums( data )[1],
+                p = params$theta[1]
+            )
+        )
+        + binomial.ll(
+            data[2,2],
+            params = list(
+                n = sum( data[2,] ),
+                p = params$theta[2]
+            )
+        )
+    )
+}
+
+logistic <- function( x ) {
+	exp(x) / ( 1 + exp(x) )
+}
+
+reparameterised.table.ll <- function( data, params = list( theta = 0.5, log.or = 0 )) {
+	# params[1] is log-odds of baseline frequency
+	# params[2] is log odds ratio
+	theta = c(
+		logistic( params$theta ),
+		logistic( params$theta + params$log.or )
+	)
+	return( table.ll( data, params = list( theta = theta )))
+}
+
+```
+
+(These functions rely on [binomial.ll](../loglikelihoods/binomial.ll)).
+
+Let's load up the tables:
+
+```
+tables = list(
+	case_control = matrix(
+		c( 3420, 3233, 3925, 2738 ),
+		byrow = T, ncol = 2,
+		dimnames = list(
+			c( "non-O", "O" ),
+			c( "controls", "cases" )
+		)
+	),
+	exposure = matrix(
+		c( 1965, 1, 707, 17 ),
+		byrow = T, ncol = 2,
+		dimnames = list(
+			c( "G", "C" ),
+			c( "unexposed", "exposed" )
+		)
+	)
+)
+```
+
+And plot the likelihood (this uses [inspect.ll](../loglikelihoods/inspect.ll)).)
+```
+fit1 = inspect.ll( reparameterised.table.ll, data = tables[[1]], params = list( theta = 0.5, log.or = 0 ) )
+fit2 = inspect.ll( reparameterised.table.ll, data = tables[[2]], params = list( theta = 0.5, log.or = 0 ) )
+```
+
+Look at both these plots.
+
+The plot for the first table is about as good as this plot could look.  It estimates a log odds-ratio of -0.30, which is an odds ratio of ~0.74.  Also, the Gaussian fit to the likelihood is about as good as it could possibly be.  We could get a reasonable interval as:
+```R
+   > sprintf(
+       "%.2f ( %.2f - %.2f)",
+       exp( fit1$mle$log.or ),
+       exp( fit1$mle$log.or - 1.96 * fit1$standard.errors[1] ), exp( fit1$mle$log.or + 1.96 * fit1$standard.errors[1] )
+   )
+   [1] "0.74 ( 0.70 - 0.77)"
+```
+
+As discussed in class, you can interpret this in one of two ways.  The bayesian interpretation is that our uncertainty in the true odds ratio, given this particular data table, is well expressed by a small interval around 0.74.  The above interval is a 95% bayesian *credible interval* for the parameter - meaning an interval that contains 95% of the posterior mass.  (In principle this interpretation depends on assuming a flat prior, so that the posterior is proportional to the likelihood.  But because the data is so strong here, the prior won't affect this much as long as the prior is relatively spread out).
+
+Alternatively, we discussed in lectures how this can be interpreted as a frequentist statement about the parameter.  In this setting we think of *replicates of the table from the same sampling process* and interpret the above interval as a frequentist confidence interval.  To state this specifically, it means:
+
+* Imagine an infinite number of replicates of the data with some 'true' parameters
+* Imagine for each such data table we used the above procedure to compute a confidence interval
+* *Then* the true parameter would be in the computed interval 95% of the time.
+
+If this strikes you as a complicated interpretation - it is! My general advice is to interpret this interval as a
+statement about our uncertainty in the parameter given the model - i.e. as a bayesian credible interval. In more
+general situations with less informative data you should think carefully about what prior is appropriate. Where the
+frequentist approach becomes useful is in *calibrating* or *model checking* our model against reality.
+
