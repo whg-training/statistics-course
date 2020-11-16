@@ -83,47 +83,17 @@ You can see that the logistic function maps the real line (log-odds space, x axi
 
 Now that we are working in log-odds space (on the real line), this frees us up to express our log odds as a *baseline log odds* (applying to both rows of the table) plus an *additional log odds conferred by the second row*.  Let's call these parameters μ and β.  We are thus writing:
 
-![\text{log} \text{odds}(\theta_1)=\mu
-\quad\text{and}\quad
-\text{log} \text{odds}\left(\theta_2\right) = \mu+\beta
-](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Ctext%7Blog%7D+%5Ctext%7Bodds%7D%28%5Ctheta_1%29%3D%5Cmu%0A%5Cquad%5Ctext%7Band%7D%5Cquad%0A%5Ctext%7Blog%7D+%5Ctext%7Bodds%7D%5Cleft%28%5Ctheta_2%5Cright%29+%3D+%5Cmu%2B%5Cbeta%0A)
-
-Or equivalently:
-
 ![\theta_1 = \text{logistic}(\mu)
 \quad\text{and}\quad
 \theta_2 = \text{logistic}(\mu+\beta)
 ](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Ctheta_1+%3D+%5Ctext%7Blogistic%7D%28%5Cmu%29%0A%5Cquad%5Ctext%7Band%7D%5Cquad%0A%5Ctheta_2+%3D+%5Ctext%7Blogistic%7D%28%5Cmu%2B%5Cbeta%29%0A)
 
-If you follow this maths through you will see the essential fact: parameter β is equal to the log odds ratio, 
+Or equivalently:
 
-![\beta = \log \left(
-\frac{\theta_1}{1-\theta_1}
-/
-\frac{\theta_2}{1-\theta_2}
-\right)
-](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cbeta+%3D+%5Clog+%5Cleft%28%0A%5Cfrac%7B%5Ctheta_1%7D%7B1-%5Ctheta_1%7D%0A%2F%0A%5Cfrac%7B%5Ctheta_2%7D%7B1-%5Ctheta_2%7D%0A%5Cright%29%0A)
+![\text{log} \text{odds}(\theta_1)=\mu
+\quad\text{and}\quad
+\text{log} \text{odds}\left(\theta_2\right) = \mu+\beta
+](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Ctext%7Blog%7D+%5Ctext%7Bodds%7D%28%5Ctheta_1%29%3D%5Cmu%0A%5Cquad%5Ctext%7Band%7D%5Cquad%0A%5Ctext%7Blog%7D+%5Ctext%7Bodds%7D%5Cleft%28%5Ctheta_2%5Cright%29+%3D+%5Cmu%2B%5Cbeta%0A)
 
-The reparameterised model for our table is now:
+such that β is the log odds ratio.
 
-![\left(
-\begin{matrix}
-1-\text{logistic}(\mu) & \text{logistic}(\mu) \\
-1-\text{logistic}(\mu+\beta) & \text{logistic}(\mu+\beta)
-\end{matrix}
-\right)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cleft%28%0A%5Cbegin%7Bmatrix%7D%0A1-%5Ctext%7Blogistic%7D%28%5Cmu%29+%26+%5Ctext%7Blogistic%7D%28%5Cmu%29+%5C%5C%0A1-%5Ctext%7Blogistic%7D%28%5Cmu%2B%5Cbeta%29+%26+%5Ctext%7Blogistic%7D%28%5Cmu%2B%5Cbeta%29%0A%5Cend%7Bmatrix%7D%0A%5Cright%29)
-
-or fully expanded:
-![\left(
-\begin{matrix}
-\frac{1}{1+e^\mu}
-&
-\frac{e^\mu}{1+e^\mu}
-\\
-\frac{1}{1+e^{\mu+\beta}}
-&
-\frac{e^{\mu+\beta}}{1+e^{\mu+\beta}}
-\end{matrix}
-\right)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cleft%28%0A%5Cbegin%7Bmatrix%7D%0A%5Cfrac%7B1%7D%7B1%2Be%5E%5Cmu%7D%0A%26%0A%5Cfrac%7Be%5E%5Cmu%7D%7B1%2Be%5E%5Cmu%7D%0A%5C%5C%0A%5Cfrac%7B1%7D%7B1%2Be%5E%7B%5Cmu%2B%5Cbeta%7D%7D%0A%26%0A%5Cfrac%7Be%5E%7B%5Cmu%2B%5Cbeta%7D%7D%7B1%2Be%5E%7B%5Cmu%2B%5Cbeta%7D%7D%0A%5Cend%7Bmatrix%7D%0A%5Cright%29)
-
-Summarising, the log-odds ratio β is a real number which encodes the difference in frequency between the two rows of the table.
