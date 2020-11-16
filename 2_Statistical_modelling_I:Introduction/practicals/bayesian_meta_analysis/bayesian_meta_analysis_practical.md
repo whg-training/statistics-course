@@ -21,7 +21,7 @@ phenotypes = gsub( ".beta", "", grep( ".beta", colnames( cotsapas ), value = T )
 
 ## Computing Bayes factors
 
-According to the lemma about multiplying multivariate normals (MVNs) - see ["Normal times normal is normal"](../../notes/Normal times normal is normal.pdf), the product of an MVN prior and an MVN likelihood is equal to an MVN multiplied by a constant. And the constant is itself computable by an MVN evaluated at the effect size estimate.
+According to the lemma about multiplying multivariate normals (MVNs) - see the [Normal times normal is normal](../../notes/Normal times normal is normal.pdf) document, the product of an MVN prior and an MVN likelihood is equal to an MVN multiplied by a constant. And the constant is itself computable by an MVN evaluated at the effect size estimate.
 
 We can use the `mvtnorm` package to compute this for any given model, specificed as a 7x7 prior covariance matrix, against the null model under which all true effects are zero.
 
