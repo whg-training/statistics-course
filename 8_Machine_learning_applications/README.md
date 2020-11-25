@@ -19,7 +19,7 @@ Timetable
 |          | 12 - 13     |                  | Lunch                                |
 |          | 13 - 14     |                  | Neural networks in genomics          |
 |          | 14 - 15     | Lance Hentges    | Appl: CNNs for peak classification   |
-|          | 15 - 16     | Lance Hentges    | NN applications in genomics          |
+|          | 15 - 16     | Ron Schwessinger | NN applications in genomics          |
 | Fri 4/12 | 10 - 12     | Ron Schwessinger | CNN tutorial                         |
 |          | 12 - 13     |                  | Lunch                                |
 |          | 13 - 14     | Edward Sanders   | Appl: CNNs for splicing              |
