@@ -27,10 +27,10 @@ binomial.ll <- function( y, n, p ) {
   return( result )
 }
 
-table.ll <- function( data, params ) {
+table.ll <- function( data, params = list( ) ) {
 	return (
-		binomial.ll( data[1,2], sum( data[1,] ), params[1] )
-		+ binomial.ll( data[2,2], sum( data[2,] ), params[2] )
+		binomial.ll( data[1,2], params = list( n = sum( data[1,] ), p = params[1] ))
+		+ binomial.ll( data[2,2], params = list( n = sum( data[2,] ), p = params[2] ))
 	)
 }
 
