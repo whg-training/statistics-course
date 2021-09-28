@@ -35,10 +35,10 @@ But we're also going to also focus on ways to write 'good code'. There are lots 
 of ways to write it. But here are some simple things we could aim for:
 
 - it ought to work
-- it ought to be obvious what it does
 - it ought to not take too long to do it
+- it ought to be obvious what it does
 
-Arguably the second point is the most important one here. Because if you can figure out what the code does, then you
+Arguably the third point is the most important one here. Because if you can figure out what the code does, then you
 can fix any problems with it and work to speed it up. And it will be easy to write about it. But if you can't figure it
 out, you'll end up throwing it away and starting again.
 
@@ -47,7 +47,7 @@ Here are some useful principles to keep in mind as we try to write readable code
 1. *Keep it simple.*
 2. *Keep related things together.*
 3. *Don't repeat yourself.*
-4. *Write testable code.*
+4. *Write easily testable code.*
 5. *Write tests.*
 6. *Write short functions.*
 7. *Give things good names.*
