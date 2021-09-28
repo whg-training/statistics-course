@@ -50,7 +50,11 @@ find.mle <- function(
     if( is.null( bounds )) {
         fn = function(p) {
             params = restructure.params( p, destructured$structure )
-            return( sum(ll( data, params, ... )))
+            if( "X" %in% names( dot.args )) {
+                return( sum(ll( data, params, X = dot.args$X )))
+            } else {
+                return( sum(ll( data, params )))
+            }
         }
     } else {
         fn = function(p) {
@@ -170,7 +174,8 @@ inspect.ll <- function(
             se = sqrt(I[i,i])
             if( is.null( bounds ) || !name %in% names(bounds)) {
                 if( !is.na( se )) {
-                    parameter.bounds = c( mle[i] - 3 * se, mle[i] + 3 * se )
+                    size = min( 3*se, 100 )
+                    parameter.bounds = c( mle[i] - size, mle[i] + size )
                 } else {
                     parameter.bounds = c( mle[i] * 0.25, mle[i] * 4 )
                 }
@@ -231,7 +236,25 @@ inspect.ll <- function(
             }
             grid()
             abline( v = mle[i], col = 'red', lty = 2 )
-        
+
+            if( asymptotic.approximation ) {
+                legend(
+                    "topleft",
+                    legend = c( "ll", "approx." ),
+                    lty = c( 1, 2 ),
+                    col = c( "black", "gold3" ),
+                    bty = 'n'
+                )
+            } else {
+                legend(
+                    "topleft",
+                    legend = c( "ll" ),
+                    lty = c( 1 ),
+                    col = c( "black" ),
+                    bty = 'n'
+                )
+            }
+                    
             plot(
                 xvalues, fn.values,
                 type = 'l',
@@ -249,25 +272,10 @@ inspect.ll <- function(
                 font = 3,
                 xpd = NA
             )
-            
             if( asymptotic.approximation ) {
                 points( xvalues, gaussian.approximation, type = 'l', lty = 2, col = 'gold3' )
-                legend(
-                    "bottom",
-                    legend = c( "ll", "normal approx." ),
-                    lty = c( 1, 2 ),
-                    col = c( "black", "gold3" ),
-                    bg = "white"
-                )
-            } else {
-                legend(
-                    "bottomright",
-                    legend = c( "ll" ),
-                    lty = c( 1 ),
-                    col = c( "black" ),
-                    bg = "white"
-                )
             }
+
             grid()
             abline( v = mle[i], col = 'red', lty = 2 )
         }
@@ -290,15 +298,43 @@ restrict <- function( ll, to ) {
 }
 
 # EXAMPLES
+
+# Gaussian example, 2 observations
 inspect.ll(
-    gaussian.ll, c( 1, 2 ),
+    gaussian.ll,
+    data = c( 1, 2 ),                       # 2 observations
     params = list( mean = 1, sigma2 = 0.2 ) # starting values
 )
 
+# Gaussian with fixed variance
 inspect.ll(
     restrict( gaussian.ll, to = list( sigma2 = 1 )),
     data = c( 1, 2 ),
     params = list( mean = 1 )
+)
+
+# 2x2 table example
+source("binomial.ll.R" )
+source("table.ll.R" )
+table.ll( TBL, params = list(
+    theta = c( 0.5, 0.5 )
+))
+A = matrix( c( 2, 5, 7, 8 ), byrow = T, ncol = 2 )
+inspect.ll(
+    table.ll,
+    A,
+    params = list(
+        theta = c( 0.5, 0.5 )
+    )
+)
+
+A = matrix( c( 1, 100, 0, 10 ), byrow = T, nrow = 2 )
+inspect.ll(
+    reparameterised.table.ll,
+    A,
+    params = list(
+        mu = 0.5, log.or = 0.5
+    )
 )
 
 
@@ -312,7 +348,10 @@ inspect.ll(
 )
 
 inspect.ll(
-    binomial.ll, 5, params = list( n = 10, p = 0.2 )
+    restrict( binomial.ll, to = list( n = 1 )),
+    c( 1, 1, 0 ),
+    params = list( p = 0.2 ),
+    bounds = list( p = c( 0, 1 ))
 )
 
 inspect.ll(

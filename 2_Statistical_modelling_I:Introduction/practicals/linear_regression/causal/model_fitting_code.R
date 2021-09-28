@@ -1,6 +1,5 @@
-n = 1
+n = 7
 data = read.table( sprintf( "diagram%d_simulated_data.tsv", n ), hea=T, as.is=T, sep ="\t" )
-
 
 # Fit model without B
 l = lm( C ~ A, data = data ); summary(l)$coeff
