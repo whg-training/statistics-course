@@ -12,14 +12,18 @@ Timetable
 
 | Day      | Time        | Who              | What                                 |
 | -------- | ----------- | ---------------- | ------------------------------------ |
-| Tue 3/12 | 9:30 - 10   | Gerton Lunter    | Welcome                              |
-|          | 10 - 12     | Ron Schwessinger | Deep Neural Networks in Genomics     |
+| Thu 3/12 | 9:30 -      | Ron Schwessinger | Welcome                              |
+|          |             |                  | Introduction to ML in genomics       |
+|          |             |                  | A tour of ML algorithms              |
+|          |    - 12     |                  | Introduction to deep neural networks |
 |          | 12 - 13     |                  | Lunch                                |
-|          | 13 - 15     | Ron Schwessinger | Tutorial 1                           |
-| Thu 5/12 | 10 - 12     | Gerton Lunter    | Diving into Deep Neural Networks     |
+|          | 13 - 14     |                  | Neural networks in genomics          |
+|          | 14 - 15     | Lance Hentges    | Appl: CNNs for peak classification   |
+|          | 15 - 16     | Ron Schwessinger | NN applications in genomics          |
+| Fri 4/12 | 10 - 12     | Ron Schwessinger | CNN tutorial                         |
 |          | 12 - 13     |                  | Lunch                                |
-|          | 13 - 13.30  | Ron Schwessinger | Application - Chromatin conformation |
-|          | 13.30 - 14  | Edward Sanders   | Application - Splicing               |
-|          | 14 - 16     | Gerton Lunter    | Tutorial 2                           |
+|          | 13 - 14     | Edward Sanders   | Appl: CNNs for splicing              |
+|          | 14 - 15     | Chris Cole       | Appl: ....                           |
+|          | 14 - 16     | Ron Schwessinger | Finalise tutorial and wrap-up        |
 
 
