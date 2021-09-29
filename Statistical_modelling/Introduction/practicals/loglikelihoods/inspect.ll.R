@@ -289,41 +289,4 @@ restrict <- function( ll, to ) {
     return( result )
 }
 
-# EXAMPLES
-inspect.ll(
-    gaussian.ll, c( 1, 2 ),
-    params = list( mean = 1, sigma2 = 0.2 ) # starting values
-)
 
-inspect.ll(
-    restrict( gaussian.ll, to = list( sigma2 = 1 )),
-    data = c( 1, 2 ),
-    params = list( mean = 1 )
-)
-
-
-inspect.ll(
-    reparameterised.table.ll,
-    TBL,
-    params = list(
-        theta = 0.5,
-        log.or = 0
-    )
-)
-
-inspect.ll(
-    binomial.ll, 5, params = list( n = 10, p = 0.2 )
-)
-
-inspect.ll(
-    restrict( binomial.ll, to = list( n = 10 )),
-    rep(1,100),
-    params = list( p = 0.2 )
-)
-
-inspect.ll(
-    restrict( binomial.ll, to = list( n = 10 )),
-    rep(1,100),
-    params = list( p = 0.2 ),
-    bounds = list( p = c( 0, 0.4 ) )
-)
