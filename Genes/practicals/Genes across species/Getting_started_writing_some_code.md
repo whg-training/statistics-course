@@ -100,7 +100,7 @@ This leads us to a:
 
 **Challenge:** write `parse_gff3_to_dataframe()`. Can you write this so all the tests pass?  Or at least some of them?
 
-**High-level hints:** This test does have a few complexities to it.  Here are some points to think about that might be helpful:
+**Hints:** This test does have a few complexities to it.  Here are some points to think about that might be helpful:
 
 - pandas has a [`read_table` function](https://pandas.pydata.org/docs/reference/api/pandas.read_table.html) that is a
   good way to get the data in.  It has many arguments that control how the data gets in there.
@@ -158,6 +158,16 @@ value = None if value == "." else int(value)
 a comparison it also implements a similar pure python version called `parse_gff3_to_list()`. (There are lots of other
 ways to write this - for ecample, gathering the code into a class might be sensible - but I've gone with functions for
 simplicity.)
+
+### A note on writing tests first
+
+I'd hazard a guess that not many people writing scientific code (including me) actually write their tests first in the
+way we did above. It is however a very useful approach, mainly because it forces you to think about how your code will
+be used before you spend the effort of writing it. So by definition it tends to produce functions etc. that are easy to
+use.
+
+Also, if you do this you'll find all your code is tested - for free! (If this sounds like I'm convincing myself, it's
+because I hardly ever do this - but I wish I did.)
 
 ### Using the code
 
