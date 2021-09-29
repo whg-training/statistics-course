@@ -54,7 +54,105 @@ def parse_arguments():
 args = parse_arguments()
 ```
 
-If you put this in a file called `gff_to_sqlite.py` then you can run it like this:
+If you put this in a file called `gff_to_sqlite.py` then you can run it from your shell like this:
 ```
-````
+$ python3 gff_to_sqlite.py 
+usage: gff_to_sqlite.py [-h] --input INPUT
+gff_to_sqlite.py: error: the following arguments are required: --input
+```
 
+I'll leave you to fill in the other needed arguments here. You will want an output file, and (because sqlite files can
+contain several tables) maybe a `--table` option to specify the output table name. (If you specify, say, `default =
+"genes"` for this, instead of `required=True`, the argument will have a default value.)
+
+### Parsing the data
+
+This is easy right?
+
+```
+data = gff.parse_gff_to_dataframe( args.input)
+```
+
+### Outputting to sqlite
+
+This turns out to be easy too! Pandas dataframes have a [`.to_sql()`
+function](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html) that does it for
+you.  To make this work, you open the database and then run it:
+
+```
+db = sqlite3.connect( args.output )
+data.to_sql( args.table, db, index = False )
+```
+
+Finally we can add an index on the ID so lookups are quick:
+```
+db.execute( "CREATE INDEX IF NOT EXISTS `%s_ID_index` ON `%s`( ID )" % (args.table, args.table ))
+```
+
+Job done!  Run it in your shell like this:
+```
+$ python gff_to_sqlite.py --input ../PlasmoDB-54_Pfalciparum3D7.head.gff --output genes.sqlite
+```
+
+You can now use the [sqlite3 command-line client]() to look at the data:
+```
+$ sqlite3 -header -column genes.sqlite "SELECT COUNT(*) FROM genes WHERE type == 'gene'"
+$ sqlite3 -header -csv genes.sqlite "SELECT * FROM genes WHERE type == 'gene'"
+$ sqlite3 -line genes.sqlite "SELECT * FROM genes WHERE attributs LIKE '%Name=ABO%'"
+```
+
+Or load it back into python:
+```
+>>> import pandas, sqlite3
+>>> db = sqlite3.connect( "genes.sqlite" )
+>>> pandas.read_sql( "SELECT Parent, COUNT(*) AS number_of_transcripts FROM gff WHERE type == 'mRNA' GROUP BY Parent", db )
+```
+
+Or load it into R:
+```
+library( RSQLite )
+db = dbConnect( dbDriver( "SQLite" ), "genes.sqlite" )
+dbGetQuery( db, "SELECT Parent, COUNT(*) AS number_of_transcripts FROM gff WHERE type == 'mRNA' GROUP BY Parent" )
+```
+
+etc.
+
+This combination of between-language interoperability and flexible querying are the main reasons to write this
+script in the first place. If you're happy always working in one language (e.g. python), then you might well never
+bother with this.
+
+**Warning:** Also check the output file size.  For big organisms it can get quite big quite fast.
+
+## Job not done yet
+
+To make this genuinely useful there are a few things still to do.
+
+1. You don't really want to leave your users hanging while your script processes stuff. It will take about 10
+minutes of your time to add a load of print statements to the script to say what it is doing, so you should do this. It
+will ook professional.
+
+2. Your script is not great at the moment if you want to process several files into the same database - say
+several different organisms from [Ensembl](http://ftp.ensembl.org/pub/current_gff3/). (Try running the above twice and
+you'll see what I mean.) For one thing, you don't really know if the user wants to *append* the data to the same table,
+or *overwrite* the table with the new one (this is a good candidate for another command-line argument.). For another
+thing, if you did run it twice it would be difficult to figure out which record came from which input file. Because of
+this I find it helps a lot to give each analysis a name that distinguishes it. (This could either be another
+command-line argument, or taken from the input filename.)
+
+3. The script can take a while (minutes) to process some of the larger files. It would be very worthwhile
+to profile it to figure out if there are obvious slow bits that can be sped up. Profiling is beyond the scope of this
+tutorial, but at some point you're going to need to make code fast. [Here's how you can profile code in
+python](https://docs.python.org/3/library/profile.html).)
+
+4. How much memory does the script use?  (I don't know.  Try running it and watching `top`).
+
+My version of this code implements some of this - it is in `solutions/gff_to_sqlite_dataframe_version.py`. 
+
+If I read the profiling output right, it
+is taking 60% of its time inside `parse_attributes()`. This means I could probably make it quite a bit faster with some
+simple changes to `parse_gff3_to_dataframe()`.
+
+
+## Back to the task
+
+Now let's get [back to learning about genes](Gathering_statistics.md).

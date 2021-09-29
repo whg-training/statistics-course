@@ -20,405 +20,145 @@ We're not writing this code for it's own sake but to answer our questions like t
 
 How to write this code?  Well there are a few ways:
 
-
 **Do it yourself.**. It may well be that you already have a good idea how to go about this. If so,
 feel free to dive straight in. You're free to use any language or system you like for this -
 standard options might be [python](https://www.python.org) or [R](https://cran.r-project.org), but
 you could also use [julia](https://julialang.org), or even
-[C++](https://en.wikipedia.org/wiki/C%2B%2B) or another compiled language. 
+[C++](https://en.wikipedia.org/wiki/C%2B%2B) or another compiled language.
 
-**Use a package.** You are also free to use whatever packages you like. Chances are you will find a
-package that will parse this data for you. And that's fine.
+**Use a package.** The [pandas library](https://pandas.pydata.org) is an obvious one to try here. The GFF3 data is
+basically a tabular data format (many rows x 9 named columns, at least if we don't unpack `attributes`) and that's a
+good fit for a dataframe (which is what pandas provides).  
 
-**Follow this tutorial.** For top marks you have to write your own code! This tutorial will do it
-in python, either relying on `pandas` data frame library, or writing it by hand.
+**Use raw python.** This works fine as well, and it has some advantages in flexibility.
 
-## Diving straight in
+In this tutorial we'll focus on the pandas version, as it gives us lots of tools for analysis. We'll develop a little
+python module that carries out the task.
 
-If you [looked at the gene annotation data](What_gene_annotation_data_looks_like.md), you'll know
-that it comes in rows of data that are tab-delimited, but that it is also kind of *relational*
-(meaning that the records refer to each other, via the `Parent` attribute). Somehow we have to get
-this into a data structure that we can work with.
+## Diving straight in - parsing data
 
-According to [our principles](Introduction.md), we should keep it simple. So let's do the simplest
-thing possible and start with the bit that parses the data (ignoring the hierarchical structure for
-now.) That should be easy right?  Here's a python function that does it:
+If you [looked at the gene annotation data](What_gene_annotation_data_looks_like.md), you'll know that it comes in rows
+of data that are tab-delimited, but that it is also relational (meaning that the records refer to each other, via the
+`Parent` attribute. Moreover since exons are associated with transcripts, which are in turn associated with genes,
+we'll have to build some form of data hierarchical data structure for this.
+
+That sounds complex, but we can break off a manageable bit of the job by just focussing on getting the data in (c.f.
+"keep it simple"). So let's do the simplest thing possible and start by writing a function:
 
 ```
-def readGFF3( data ):
-    """Read GFF3 data, output (something)"""
-    result = <something here>
-    # do some work.
-    return( result )
-````
-
-**Note:** If you are not familiar with python syntax, now would be a good time to refresh via any of the available tutorials.
-The above code defines a function, and currently contains a documentation comment (the `"""..."""` bit) and also a code
-comment (starting with `#`.). The `pass` is just there to make this a valid python function that does nothing at the
-moment.  I'll paste equivalents in other languages below.
-
-Right away however we must make some choices. What should `readGFF3()` return? And what argument should it take?
-
-If you want to fully test-driven, you could now write a test that specifies this - even before we've written any code.
-For example we could write this:
+def parse_gff3_to_dataframe( data ):
+    """Parse data in GFF3 format, and return a pandas dataframe"""
+    result = (do some work here)
+    # more code here to add to result
+    return (result )
 ```
-testData = """##gff-version 3
+
+**Note:** If you are not familiar with python syntax, now would be a good time to refresh via any of the available
+tutorials. The above code defines a function, and shows a documentation comment (the `"""..."""` bit) and also has code
+comments (starting with `#`).
+
+The function above already illustrates a couple of things that might be helpful if you're not used to writing code.
+First, the name is very clear what this function does - indeed the documentation comment is pretty useless at the
+moment.  Second, even before we've written it, the function follows a very simple pattern: it creates a new thing (the
+result of the function, so it is called `result`) and the last line returns it. All the function has to do is build
+`result` - simple!
+
+The other thing is that this function is already reasonably testable.  Look, here is a test:
+
+```
+hello
+```
+
+```
+test_data = """##gff-version 3
 #description: test data
-chr1	me	gene	1	1000	.	+	.	ID=my_test_gene;gene_id=my_test_gene.5;gene_type=transcribed_unprocessed_pseudogene;gene_name=DDX11L1;level=2;hgnc_id=HGNC:37102;havana_gene=OTTHUMG00000000961.2
-chr1	me	exon	1	1000	.	+	.	ID=my_test_exon;gene_id=my_test_exon
+chr1\tme\tgene\t1\t1000\t.\t+\t.\tID=gene1;other_data=stuff
+chr1\tme\texon\t10\t900\t.\t+\t.\tID=gene1.1;Parent=gene1
 """
-result = readGFF3( testData )
-assert result[0].type == 'gene'
-assert result[0].start == 1
-assert result[1].attributes['ID'] == 'my_test_exon'
-```
-This dictates that the function had better be able to take in a string of data, and it had better
-return an array of objects that have properties we can access.
+import io, math
+data = parse_gff3_to_dataframe( io.StringIO( test_data ))
 
-On the other hand - it's often better to think of datasets in terms of data frames - i.e. as great
-big tables of data, with many rows and a fixed number of columns that have particular names and
-data types. The GFF3 format is like this - it's just a big table with N rows and 9 columns
-(although one of them is that awkward `attributes` list of key/value pairs.) So this view would say
-that `readGFF3()` should return a data frame:
+assert data['seqid'][0] == 'chr1'
+assert data['strand'][0] == '+'
+assert data['attributes'][0] == 'ID=gene1;other_data=stuff'
 
-```
-result = readGFF3( testData )
-assert result.shape == (2,11)
-assert result['type'][0] == 'gene'
-assert result['start']0] == 1
+assert data['start'][1] == 10 # an integer
+
+assert math.isnan( data['score'][1] ) # Because a "." should be missing data in GFF spec
+
+assert data['ID'][0] == 'gene1'
+assert data['ID'][1] == 'gene1.1'
+assert data['Parent'][1] == 'gene1'
+# etc.
 ```
 
-This looks pretty similar to the above but now we think of the function as returning a
-2-dimensional data frame with a definite shape (i.e. 2 rows and 9 columns).
+(**Note:** In an ideal world we could pass in the data directly. However it is a bit annoying to write a function that
+works both with a file and a string. The `io.StringIO()` bit above just turns the input data into a file-like object -
+you can pretty much ignore it.
 
+This leads us to a:
 
+**Challenge:** write `parse_gff3_to_dataframe()`. Can you write this so all the tests pass?  Or at least some of them?
 
+**High-level hints:** This test does have a few complexities to it.  Here are some points to think about that might be helpful:
 
-Can you write this function?
+- pandas has a [`read_table` function](https://pandas.pydata.org/docs/reference/api/pandas.read_table.html) that is a
+  good way to get the data in.  It has many arguments that control how the data gets in there.
 
-But hang on... *Should* you write this? As the comment indicates, there're already a couple of issues to deal with:
+- The data itself doesn't have column names in. But the test requires them - you have to get them in somehow.
 
-**Issue 1.** What should `readGFF3()` take in as a parameter?
+- To pass the tests you have to pay attention to missing data! Check the [GFF
+  spec](https://m.ensembl.org/info/website/upload/gff3.html) for how these are represnted.
 
-The best way to figure this out is to think about how you will call it from other code. The seemingly obvious choice is
-to make it take in a filename, so we would call it like this:
+- Also, some of the columns [have different data types](https://m.ensembl.org/info/website/upload/gff3.html) - to pass
+  the tests you also have to get the types right.
 
-```
-readGFF3( "/path/to/gff/file.gff" )
-```
-
-That looks sensible. But wait, our principles say we should make our code easy to test. To test the above function
-above we'd have to first put test data into a file on the filesystem, and pass the path in - which is complicated. Or
-else to somehow trick the function into thinking it has a file.  This is of course doable
-Instead this principle suggests we should write
-our function to take in some data instead - let's say, an array of lines of data. So then we can test it easily:
-
-```
-testData = """##gff-version 3
-#description: test data
-chr1	me	gene	1	1000	.	+	.	ID=my_test_gene;gene_id=my_test_gene.5;gene_type=transcribed_unprocessed_pseudogene;gene_name=DDX11L1;level=2;hgnc_id=HGNC:37102;havana_gene=OTTHUMG00000000961.2
-chr1	me	exon	1	1000	.	+	.	ID=my_test_exon;gene_id=my_test_exon
-"""
-result = readGFF3( testData )
-
-# Check it was right here...
-```
-
-Going a bit further, if we're not actually *reading* the data (from a file) in the function then the function name is wrong. It is only parsing
-the data, so we should rename it:
-```
-def parseGFF3Data( data ):
-    """read GFF3-formatted data, output (something)"""
-    ...
-```
-
-**Conclusion:** we shouldn't write `readGFF3()`.  We should write `parseGFF3Data()` instead.
-
-**Consideration 2.** What should `parseGFF3Data()` output?
-
-There are basically two approaches we could take here. The first and probably easiest is to treat the data as a data
-frame. This means we get to use all of the data frame apparatus (i.e. the `pandas` library in python) which makes life
-easy. Our function is:
-
-```
-def parseGFF3Data( data ):
-    """read GFF3-formatted data, output a data frame of the parsed data"""
-    ...
-```
-
-If you explore [pandas](https://pandas.pydata.org/docs/) a little you'll find the `read_table` function which does most
-of the work for us:
-
-```
-def readGFFFile( filename ):
-    import pandas
-    return pandas.read_table(
-        filename,
-        comment = '#',
-        names = [ 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'attributes']
-    )
-
-def parseGFF3Data( data ):
-    """read GFF3-formatted data, output a data frame of the parsed data"""
-    readGFFFile( data )
-    return result
-```
-
-However, this isn't good enough for a couple of reasons:
-
-- The data contains missing values that appear in the data as `.`.  They should come out as missing values (`None`) in python.
-- The rows contain important `ID` and `Parent` columns that are buried in the `attributes` column.  We would like these as first-class 
-
- input data is basically rectangular (many rows by 9
-columns). This is what a *data frame* exists to model. Therefore the function should return a data frame. This is what
-most people want to do because (as long as you don't mind using the `pandas` library it gives an easy-to-use solution.)
-
-## A lower-level appraoch
-
-There's no particular need to use data frames or `pandas` here, and actually the GFF3 file format more or less dictates what the
-function could do:
-
-- The GFF file is made up of multiple data rows - this says we should return an array (that is, a python `list`) of
-  rows.
+- The last three rows of the test use the `ID` and `Parent` fields. If you [examine the data]() you'll see these aren't
+  columns in GFF3 but live inside the complicated `attributes` column. The test above is asking that you pull these out
+  into new columns.
   
-- The [GFF spec](https://m.ensembl.org/info/website/upload/gff3.html) makes it pretty clear that each row has 9
-  columns.
-  
-- The first 8 are single values that contain either a string, an integer (`start`, `stop`), or a floating-point number
-  (`score`). These map to python datatypes.
+**More hints:**
 
-- The last column (`attributes`) is a kind of catch-all that contains key-value pairs. The
-  simplest way to represent a set of key-value pairs in python is a `dict`.
+- Be careful about whitespace. Python really cares about your indentation. In particular, you should decide at the
+  start if you are going to indent with spaces or tabs and stick with it (otherwise you will get all sorts of strange syntax
+  errors).
 
-This suggests the following structure:
+- It is very worth looking around for an editor you like. On the Mac, [Textmate](https://macromates.com) or
+  [Sublime](https://www.sublimetext.com) or [github Atom](https://atom.io) might be good choices. On Windows I'm less
+  sure - [Notepad++](https://notepad-plus-plus.org) or [Atom](https://atom.io) might work. Sublime and Atom also work
+  on linux.  Of course there are also many others you can use.
 
+- It's a good idea to write little helper functions to do bits of the task. (For example, it might be useful to write
+ a `parse_attributes()` function that parses a semi-colon-separated list of key=value pairs and return a dict, e.g. like this:
 ```
-class GFFRecord:
-    def __init__( self ): # This is a python 'constructor'
-        self.seqid = None
-        self.source = None
-        self.type = None
-        self.start = None
-        self.end = None
-        self.score = None
-        self.strand = none
-        self.phase = None
-        self.attributes = {}  # a python dict
+> parse_attributes( 'ID=gene1;other_data=stuff' )
+{
+    "ID": "gene1",
+    "other_data": "stuff"
+}
 ```
 
-And now we can write our function:
+- `.split()` can be used to split strings.  For example `"Hello;world".split( ";" ) == [ "hello", "world" ]``
+
+- If you want to apply a function to every row of a data frame - the [pandas `.apply()`
+  method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html) is the ticket.
+  For example, `int` is a function, so you could do:
 ```
-def parseGFF3Data( data ):
-    """Given an array of lines of GFF3-formatted data,
-    parses the data and outputs an array of GFFRecord structs."""
-    result = []
-    # fill in result here
-    return result
-```
-
-*Note.* Arguably, an even simpler way is to forget the above class and just return a dict (or even an array, that
-wouldn't have any column names) for each row. I've gone with the above because I think it makes *using* the rows
-simpler (as opposed to parsing them).
-
-### Thoughts ###
-
-We haven't written any code that does anything yet. But a bit of reasoning has led us to code that is better
-than the code we would have written (or at least the code *I* would have written) in a couple of ways:
-
-- `parseGFF3Data()` will be shorter and simpler to write than `readGFF3()` - since it doesn't have to worry about opening files etc.
-- `parseGFF3Data()` is easier to test than `readGFF3()`, since we can pass data directly in.
-- `parseGFF3Data()` is arguably easier to understand (because it is better named.
-- It's clear what `parseGFF3Data()` is supposed to return.
-
-**Note.** It's never that easy in practice, and you probably won't reach the nicely-testable-well-written code first
-time in a real problem. However, you can get there by rewriting (or 'refactoring') your code each time you visit it
-with an eye principles like the ones above.
-
-We can test it now using our test data above:
-
-```
-testData = [
-    "##gff-version 3",
-    "#description: test data",
-    "chr1	me	gene	1	1000	.	+	.	ID=my_test_gene;gene_id=my_test_gene.5;gene_type=transcribed_unprocessed_pseudogene;gene_name=DDX11L1;level=2;hgnc_id=HGNC:37102;havana_gene=OTTHUMG00000000961.2",
-    "chr1	me	exon	1	1000	.	+	.	ID=my_test_exon;gene_id=my_test_exon"
-]
-
-result = parseGFF3Data( testData )
-assert result.length == 2
-assert result[0].seqid == 'chr1'
-assert result[0].type == 'gene'
-assert result[0].attributes['ID'] == 'my_test_gene'
-assert result[1].attributes['ID'] == 'my_test_exon'
-# ... etc.
+    df['start'].apply( int )
 ```
 
-Go test-driven development!  You can run this code right now, but of course it fails because we haven't written the actual code.
-
-## Writing `parseGFF3Data()`
-
-If you follow the same appraoch as above, it's now pretty easy to write `parseGFF3Data()`. The data comes in rows, so
-we should iterate over them and parse them one by one:
-
-def parseGFF3Data( data ):
-    """Given an array of lines of GFF3-formatted data,
-    parses the data and outputs an array of GFFRecord structs."""
-    result = []
-    for line in data:
-        result.append( parseGFF3Record( line ))
-    return result
-
+- How do handle missing data?  One way is to use the python [syntax for conditional expressions](https://mail.python.org/pipermail/python-dev/2005-September/056846.html):
 ```
-Solved!
-
-
-
-If you get here
-
-To make it work, you need to to [write the parseGFF3Data function][Writing_the_parseGFF3Data_function.md].
-
-We could certainly start by ignoring the difficult bits and just reading / parsing the file, ignoring the complicated
-relationship-between-record-y bits. That should be easy right? Something like this:
-
+# convert value to an int
+value = None if value == "." else int(value)
 ```
-def readGFF3( filename ):
-    """Read a GFF3-formatted file, output (something)"""
-    # do something
-    pass
-````
+(But for this task an easier way may be to exploit the `na_values` argument of `pandas.read_table`.)
 
-**Note: ** If you are not familiar with python syntax, now would be a good time to refresh via any of the available tutorials.
-The above code defines a function, and currently contains a documentation comment (the `"""..."""` bit) and also a code
-comment (starting with `#`.). The `pass` is just there to make this a valid python function that does nothing at the
-moment.  I'll paste equivalents in other languages below.
+**Yet more hints:** The `solutions/gff.py` file contains my solution to this. Feel free to have a look / steal code. As
+a comparison it also implements a similar pure python version called `parse_gff3_to_list()`. (There are lots of other
+ways to write this - for ecample, gathering the code into a class might be sensible - but I've gone with functions for
+simplicity.)
 
-Can you write this? 
+### Using the code
 
-But hang on... *Should* you write this? As the comment indicates, there're already a couple of issues to deal with
-
-### Loading the data
-
-If you are a glutton for punishment you could try doing this [the low-level way](parsing_gff3_the_low_level_way.md).
-However, like many bioinformatics data formats, these files are basically 2x2 tables, with a number of rows each with a
-fixed number of columns (that have names).  In other words it is a **dataframe**.  So we want something like this:
-
-```
-def readGFF3( filename ):
-    """Read GFF3-formatted data from the given filename, return a dataframe"
-```
-
-This is what data frames were invented for. The simplest way to load in
-python is to use the `pandas` data frame library:
-```
-import pandas
-gffData = pandas.read_table(
-    "/path/to/gff/file.gff",
-    comment = '#',
-    names = [ 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'attributes']
-)
-print(gffData)
-```
-
-Who wants to type that every time?  Not me, so let's wrap it into a function:
-```
-def readGFF3FileToDataframe( filename ):
-    import pandas
-    return pandas.read_table(
-        filename,
-        comment = '#',
-        names = [ 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'attributes']
-    )
-```
-
-Go ahead and try it:
-```
-readGFF3FileToDataframe(
-    "PlasmoDB-54_Pfalciparum3D7.head.gff"
-)
-```
-
-**Note.** Pandas takes a do-everything-for-you approach, which can be quite helpful. (On the other hand
-arguably goes against the coding principles I was suggesting). For example, it will happily take a URL:
-```
-    readGFF3FileToDataframe(
-        "http://plasmodb.org/common/downloads/Current_Release/Pfalciparum3D7/gff/data/PlasmoDB-54_Pfalciparum3D7.gff"
-    )
-```
-When I try this I get an error to do with https and certificates, though.
-
-
-But wait, this isn't good enough for a few reasons:
-
-- the rows have `ID` and `Parent` fields that are important!  But they're wrapped up in that `attributes` column.
-- some rows have missing data that is represented by `.`.  But it should be parsed as a missing value.
-
-What we need is a function:
-
-```
-def readGFF3File( filename ):
-    """Read the GFF3 file with the given filename.  Return a dataframe
-    wih ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns"
-    result = # something
-    # (populate result here)
-    return result
-```
-
-This function higlights a few of our principles:
-
-- it does one thing (keeping it simple)
-- it is named for what it does.  (Function names should be verbs.)
-
-**Question.** Can you write the above function?
-
-
-**Note**. From a coding point of view it's a bit annoying that this function reads in a filename. Why should this code
-be fussed with opening files? Also what if I wanted to send it data from somewhere else? We're doing it this way here
-because that's what `pandas.read_table()` is expecting, but we will have to jump through some hoops to test it below.
-
-**Note.** I tend to write functions this way a lot: specifically the result of the function is always called `result`,
-the first line typically declares `result` and the last line is `return result`. The function's job is then to create
-`result`.  This keeps things as simple as possible within the function.
-
-Here's my attempt:
-
-````
-def readGFF3File( filename ):
-    """Read the GFF3 file with the given filename.  Return a dataframe
-    wih ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns"
-    result = pandas.read_table(
-        filename,
-        comment = '#',
-        names = [ 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'attributes' ]
-    )
-
-    def parseAttributes( string ):
-        """Parse a GFF3 attributes column (semi-colon separated key=value pairs)
-        Return a dict of key/value pairs"""
-        result = {}
-        parts = string.split( ";" )
-        for part in parts:
-            keyValue = part.split( "=" )
-            result[keyValue[0]] = keyValue[1]
-        return result
-    
-    # do something here
-    return result
-
-
-
-
-
-
-
-
-Following 'keep it simple' let's focus on bits we can do first. It is a fixed format with multiple rows and 9 columns
-that have names. This is what *data frames* were created to solve. In python, data frames are implemented in the
-`pandas` package, so we can read in the data like this:
-
-```
-import pandas
-
-```
-
-
-
+Do you have a working function `parse_gff3_to_dataframe()`?  Then let's [turn this into a useful program](Converting_gff_to_sqlite.md).
