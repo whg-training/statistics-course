@@ -129,7 +129,7 @@ To make this genuinely useful there are a few things still to do.
 
 1. You don't really want to leave your users hanging while your script processes stuff. It will take about 10
 minutes of your time to add a load of print statements to the script to say what it is doing, so you should do this. It
-will ook professional.
+will look professional.
 
 2. Your script is not great at the moment if you want to process several files into the same database - say
 several different organisms from [Ensembl](http://ftp.ensembl.org/pub/current_gff3/). (Try running the above twice and
