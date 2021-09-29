@@ -24,12 +24,12 @@ logistic <- function( x ) {
 	exp(x) / ( 1 + exp(x) )
 }
 
-reparameterised.table.ll <- function( data, params = list( theta = 0.5, log.or = 0 )) {
+reparameterised.table.ll <- function( data, params = list( mu = 0.5, log.or = 0 )) {
 	# params[1] is log-odds of baseline frequency
 	# params[2] is log odds ratio
 	theta = c(
-		logistic( params$theta ),
-		logistic( params$theta + params$log.or )
+		logistic( params$mu ),
+		logistic( params$mu + params$log.or )
 	)
 	return( table.ll( data, params = list( theta = theta )))
 }

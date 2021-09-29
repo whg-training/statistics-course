@@ -9,6 +9,9 @@ plot( X$A, X$outcome, pch = 19, bty = 'n' )
 abline( l, col = 'red' )
 grid()
 
+# How to diagnose?
+# 
+
 sigma = sigma(l)  # get residual standard deviation
 # get equally spaced quantiles of the normal distribution
 expected = qnorm(
