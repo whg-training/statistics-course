@@ -146,7 +146,8 @@ python](https://docs.python.org/3/library/profile.html).)
 
 4. How much memory does the script use?  (I don't know.  Try running it and watching `top`).
 
-My version of this code implements some of this - it is in `solutions/gff_to_sqlite_dataframe_version.py`. 
+My version of this code implements some of this - it is in
+[`solutions/gff_to_sqlite_dataframe_version.py`](solutions/gff_to_sqlite_dataframe_version.py).
 
 If I read the profiling output right, it
 is taking 60% of its time inside `parse_attributes()`. This means I could probably make it quite a bit faster with some
