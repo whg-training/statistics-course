@@ -71,9 +71,13 @@ test_data = """##gff-version 3
 chr1\tme\tgene\t1\t1000\t.\t+\t.\tID=gene1;other_data=stuff
 chr1\tme\texon\t10\t900\t.\t+\t.\tID=gene1.1;Parent=gene1
 """
+
 import io, math
+
+# run the function:
 data = parse_gff3_to_dataframe( io.StringIO( test_data ))
 
+# test it:
 assert data['seqid'][0] == 'chr1'
 assert data['strand'][0] == '+'
 assert data['attributes'][0] == 'ID=gene1;other_data=stuff'
