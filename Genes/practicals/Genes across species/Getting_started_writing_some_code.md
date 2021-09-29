@@ -1,12 +1,13 @@
 ## Writing some code to process GFF files
 
-Your task, if you choose to accept it, is to write some code that processes GFF files, make sense of them, and then
-gathers statistics. You will then apply it to GFF files from multiple species to hopefully learn something about gene content of
-the world's organisms.
+Your task, if you choose to accept it, is to write some reuseable code that processes a GFF file,
+make sense of the data, and gathers some statistics. And then to apply it to analyse genes from
+multiple species, to hopefully learn something about the genome biology  of the world's organisms.
 
-We are planning to run this in the following way: during the course of this week, you work (on your own or in a group -
-whatever works best) to develop some code to analyse a GFF file - and then to apply it to one or more GFF files to gain
-some understanding of gene content across species. 
+We would like **you** to write the code that does this - you can either do this on your own or
+working together in a group if you prefer. There will be lots of support, and this tutorial will
+also guide you through one way to do it. We'll then talk about both the results and the code itself
+in the discussion session.
 
 We're not writing this code for it's own sake but to answer our questions like the ones in our introduction:
 
@@ -17,58 +18,81 @@ We're not writing this code for it's own sake but to answer our questions like t
 - How much of genes is actually protein-coding sequence - and how much is untranslated?
 - How much do these patterns differ across species?
 
-Your code will have to parse the file and process it to extract meaning. And then you'll have figure out how to give
-sensible quantitative answer to the above. We'll then discuss both the results and the code in the discussion session.
-
-### Getting started
+How to write this code?  Well there are a few ways:
 
 
-**Going your own way.**. It may well be that you already have a good idea how to go about this. If so, feel free to dive straight in. You're free
-to use any language or system you like for this - standard options might be [python](https://www.python.org) or
-[R](https://cran.r-project.org), but you could also use [julia](https://julialang.org), or even
-[C++](https://en.wikipedia.org/wiki/C%2B%2B) or another compiled language. You are also free to use packages.
+**Do it yourself.**. It may well be that you already have a good idea how to go about this. If so,
+feel free to dive straight in. You're free to use any language or system you like for this -
+standard options might be [python](https://www.python.org) or [R](https://cran.r-project.org), but
+you could also use [julia](https://julialang.org), or even
+[C++](https://en.wikipedia.org/wiki/C%2B%2B) or another compiled language. 
 
-However, for the rest of this tutorial we'll use [python](https://www.python.org) and [sqlite](https://www.sqlite.org)
-to develop one way to solve this that keeps an eye on our coding principles from [the introduction](introduction.md).
-They were:
+**Use a package.** You are also free to use whatever packages you like. Chances are you will find a
+package that will parse this data for you. And that's fine.
 
-1. *Keep it simple.*
-2. *Keep related things together.*
-3. *Don't repeat yourself.*
-4. *Write easily testable code.*
-5. *Write tests.*
-6. *Write short functions.*
-7. *Give things good names.*
-
-and we want code that:
-
-- ought to work
-- ought to not take too long
-- ought to be obvious what it does
+**Follow this tutorial.** For top marks you have to write your own code! This tutorial will do it
+in python, either relying on `pandas` data frame library, or writing it by hand.
 
 ## Diving straight in
 
-If you [looked at the gene annotation data](What_gene_annotation_data_looks_like.md), you'll know that it comes in rows
-of data that are tab-delimited. But it is also kind of *relational* (some records refer to others through the `parent`
-attribute). This makes it a bit complicated. We need to parse the data, build some form of data structure that keeps
-track of the links between objects, and then calculate some statistics.
+If you [looked at the gene annotation data](What_gene_annotation_data_looks_like.md), you'll know
+that it comes in rows of data that are tab-delimited, but that it is also kind of *relational*
+(meaning that the records refer to each other, via the `Parent` attribute). Somehow we have to get
+this into a data structure that we can work with.
 
-## A basic approach
-
-We could certainly start by reading parsing the file, ignoring all the complicated relationship-between-records. That
-should be easy right? Something like this:
+According to [our principles](Introduction.md), we should keep it simple. So let's do the simplest
+thing possible and start with the bit that parses the data (ignoring the hierarchical structure for
+now.) That should be easy right?  Here's a python function that does it:
 
 ```
 def readGFF3( data ):
     """Read GFF3 data, output (something)"""
-    # do something
-    pass
+    result = <something here>
+    # do some work.
+    return( result )
 ````
 
-**Note: ** If you are not familiar with python syntax, now would be a good time to refresh via any of the available tutorials.
+**Note:** If you are not familiar with python syntax, now would be a good time to refresh via any of the available tutorials.
 The above code defines a function, and currently contains a documentation comment (the `"""..."""` bit) and also a code
 comment (starting with `#`.). The `pass` is just there to make this a valid python function that does nothing at the
 moment.  I'll paste equivalents in other languages below.
+
+Right away however we must make some choices. What should `readGFF3()` return? And what argument should it take?
+
+If you want to fully test-driven, you could now write a test that specifies this - even before we've written any code.
+For example we could write this:
+```
+testData = """##gff-version 3
+#description: test data
+chr1	me	gene	1	1000	.	+	.	ID=my_test_gene;gene_id=my_test_gene.5;gene_type=transcribed_unprocessed_pseudogene;gene_name=DDX11L1;level=2;hgnc_id=HGNC:37102;havana_gene=OTTHUMG00000000961.2
+chr1	me	exon	1	1000	.	+	.	ID=my_test_exon;gene_id=my_test_exon
+"""
+result = readGFF3( testData )
+assert result[0].type == 'gene'
+assert result[0].start == 1
+assert result[1].attributes['ID'] == 'my_test_exon'
+```
+This dictates that the function had better be able to take in a string of data, and it had better
+return an array of objects that have properties we can access.
+
+On the other hand - it's often better to think of datasets in terms of data frames - i.e. as great
+big tables of data, with many rows and a fixed number of columns that have particular names and
+data types. The GFF3 format is like this - it's just a big table with N rows and 9 columns
+(although one of them is that awkward `attributes` list of key/value pairs.) So this view would say
+that `readGFF3()` should return a data frame:
+
+```
+result = readGFF3( testData )
+assert result.shape == (2,11)
+assert result['type'][0] == 'gene'
+assert result['start']0] == 1
+```
+
+This looks pretty similar to the above but now we think of the function as returning a
+2-dimensional data frame with a definite shape (i.e. 2 rows and 9 columns).
+
+
+
 
 Can you write this function?
 
