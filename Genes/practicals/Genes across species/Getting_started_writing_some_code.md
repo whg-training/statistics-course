@@ -66,10 +66,6 @@ result of the function, so it is called `result`) and the last line returns it. 
 The other thing is that this function is already reasonably testable.  Look, here is a test:
 
 ```
-hello
-```
-
-```
 test_data = """##gff-version 3
 #description: test data
 chr1\tme\tgene\t1\t1000\t.\t+\t.\tID=gene1;other_data=stuff
