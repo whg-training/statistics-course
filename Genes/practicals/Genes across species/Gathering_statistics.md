@@ -1,6 +1,7 @@
-## Gathering statistics
+[Up to table of contents](Introduction.md)
+[Back to the previous page](Converting_gff_to_sqlite.md)
 
-### 
+## Gathering some first statistics
 
 Let's start to attack our scientific questions. From simplicty, from here on in we will work with the GFF3 files
 from the [Ensembl ftp site](http://ftp.ensembl.org/pub/current_gff3/) - also those from
@@ -74,7 +75,5 @@ My version of that is in the [`solutions/part2`](solutions/part2/) folder.  Now 
 sqlite> SELECT analysis, biotype, COUNT(*) FROM genes WHERE type=='gene' GROUP BY analysis, biotype
 ```
 which gives
-
-
 
 What about protein coding

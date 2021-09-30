@@ -1,3 +1,6 @@
+[Up to table of contents](Introduction.md)
+[Back to the previous page](What_gene_annotation_data_looks_like.md)
+
 ## Writing some code to process GFF files
 
 Your task, if you choose to accept it, is to write some reuseable code that processes a GFF file,

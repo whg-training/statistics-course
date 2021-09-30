@@ -1,3 +1,5 @@
+[Up to table of contents](Introduction.md)
+
 # Coding warm-up - analysing genes across species.
 
 One of the most amazing scientific acheivements in the last 100 years has been the mapping of genes - DNA

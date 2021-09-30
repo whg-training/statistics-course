@@ -1,4 +1,5 @@
-[Go back to the introduction](Introduction.md)
+[Up to table of contents](Introduction.md)
+[Back to the introduction](Introduction.md)
 
 ## What gene annotation data looks like
 
