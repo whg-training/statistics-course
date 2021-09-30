@@ -120,11 +120,12 @@ dbGetQuery( db, "SELECT Parent, COUNT(*) AS number_of_transcripts FROM gff WHERE
 
 etc.
 
-This combination of between-language interoperability and flexible querying are the main reasons to write this
-script in the first place. If you're happy always working in one language (e.g. python), then you might well never
-bother with this.
+This combination of between-language interoperability and flexible querying are the main reasons to write this script
+in the first place. There's another advantage which has to do with controlling memory and that we'll [come back to
+later](Counting_genes_2.md). Still, you might find you are happy to keep working in python, in which case you might not
+need this.
 
-**Warning:** Also check the output file size.  For big organisms it can get quite big quite fast.
+**Warning:** Do check the output file size. For big organisms it can get quite big quite fast.
 
 ## Job not done yet
 
@@ -147,17 +148,16 @@ to profile it to figure out if there are obvious slow bits that can be sped up. 
 tutorial, but at some point you're going to need to make code fast. [Here's how you can profile code in
 python](https://docs.python.org/3/library/profile.html).)
 
-4. How much memory does the script use?  (I don't know.  Try running it and watching `top`).
+4. How much memory does the script use?  (Try running it and watching `top`).
 
 My version of this code implements some of this - it is in
 [`solutions/part1/gff_to_sqlite_dataframe_version.py`](solutions/part1/gff_to_sqlite_dataframe_version.py). There is also [a
 version that does not rely on pandas](solutions/part1/gff_to_sqlite_python_version.py).
 
-(I tried profiling this on a human gff file. If I read the profiling output right, it is taking 60% of its time inside
-`parse_attributes()`. This means I could probably make it quite a bit faster with some simple changes to
+(I also tried profiling this code on a human gff file. If I read the profiling output right, it is taking 60% of its
+time inside `parse_attributes()`. This means I could probably make it quite a bit faster with some simple changes to
 `parse_gff3_to_dataframe()`.)
-
 
 ## Back to the task
 
-Now let's get [back to learning about genes](Gathering_statistics.md).
+Now let's get [back to learning about genes](Counting_genes_1.md).
