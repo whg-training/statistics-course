@@ -96,13 +96,24 @@ which prints:
 
 (**Note:**  you might need to first run `pandas.set_option('display.max_rows', 20 )` to see all the rows above.)
 
-### Memory pain
+### Memory issues
 
 Unfortunately we are starting to run into a major problem: **we are running out of memory**.
 
 When I run the above three lines with the [rewritten gff.py](solutions/part2/gff.py) in a freshly-started python instance,
 the process uses lots of memory - about 4Gb.  And my computer has only 16Gb in total!  If you were to try to
 analyse large data - say multiple species at once - you'd quickly find all your memory used up.
+
+If you have hit this problem - you're not alone
+
+The main ways to do this problem are:
+
+- work with data subsets (genome regions, specific record types, smaller organisms).
+- use memory-efficient data structures (like the sqlite database we are using).
+- use things like sqlite that allow efficient access to on-disk data.
+- write code more carefully to control memory usage.
+
+[The next section](Memory_issues_and_how_to_solve_them.md) describes some of these issues for our code and suggests ways of solving it.
 
 This type of problem is actually quite typical for bioinformatics analyses - they always get larger until we hit some
 limit. High-level approaches like the one we've taken (which loads all the data into memory and then processes it) seem
