@@ -154,7 +154,7 @@ value = None if value == "." else int(value)
 ```
 (But for this task an easier way may be to exploit the `na_values` argument of `pandas.read_table`.)
 
-**Yet more hints:** The `solutions/gff.py` file contains my solution to this. Feel free to have a look / steal code. As
+**Yet more hints:** The `solutions/part1/gff.py` file contains my solution to this. Feel free to have a look / steal code. As
 a comparison it also implements a similar pure python version called `parse_gff3_to_list()`. (There are lots of other
 ways to write this - for ecample, gathering the code into a class might be sensible - but I've gone with functions for
 simplicity.)

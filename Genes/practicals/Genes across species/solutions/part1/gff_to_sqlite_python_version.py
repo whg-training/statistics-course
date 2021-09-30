@@ -3,7 +3,7 @@ gff_to_sqlite.py
 This program reads data in GFF3 format and stores it in a table in a sqlite file, indexed by the ID.
 Use it like this:
 
-    python gff_to_sqlite_dataframe_version.py --input <path to gff file> --output <path to output file> --analysis <name>
+    python gff_to_sqlite_python_version.py --input <path to gff file> --output <path to output file> --analysis <name>
 
 """
 import argparse, gff, sqlite3
@@ -30,11 +30,6 @@ def parse_arguments():
         required = True
     )
     parser.add_argument(
-        '--table',
-        default = "gff",
-        help ='The table name to use in the output sqlite3 file.'
-    )
-    parser.add_argument(
         '--overwrite',
         action = "store_true",
         help ='If specified, overwrite the table with this data.  Otherwise data will be appended.'
@@ -43,18 +38,37 @@ def parse_arguments():
 
 def process( args ):
     print( "++ Loading genes data from %s...\n" % args.input )
-    data = gff.parse_gff3_to_dataframe( open( args.input ))
-    print( "++ ok, %d records loaded, they look like:\n" % data.shape[0] )
-    print( data )
+    data = gff.parse_gff3_to_list( open( args.input ))
+    print( "++ ok, %d records loaded, first few look like:\n" % len(data))
+    print( data[0:min(10,len(data))] )
 
     print( "++ Writing records to %s:%s...\n" % ( args.output, args.table ))
     db = sqlite3.connect( args.output )
 
-    # Pandas has a handy to_sql method for this.
-    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html
-    # First we add the 'analysis' column 
-    data.insert( 0, 'analysis', args.analysis )
-    data.to_sql( args.table, db, index = False, if_exists = 'replace' if args.overwrite else 'append' )
+    if args.overwrite:
+        db.execute( "DROP TABLE IF EXISTS `%s`" % args.table )
+
+    db.execute( """CREATE TABLE IF NOT EXISTS `%s` (
+        `analysis` TEXT NOT NULL,
+        `ID` TEXT,
+        `Parent` TEXT,
+        `seqid` TEXT,
+        `source` TEXT,
+        `type` TEXT,
+        `start` INTEGER,
+        `end` INTEGER,
+        `score` REAL,
+        `strand` TEXT,
+        `phase` TEXT,
+        `attributes` TEXT
+    ) ;""" % args.table )
+    
+    db.executemany(
+        "INSERT INTO `%s` VALUES( '%s', :ID, :Parent, :seqid, :source, :type, :start, :end, :score, :strand, :phase, :attributes_string )" % ( args.table, args.analysis ),
+        data
+    )
+    db.commit()
+    print( "++ Indexing...\n" )
     #print( "++ Indexing ID field...\n" )
     # Indexing is a good idea.  But if we are doing multiple datasets
     # it is faster to index them after, by running this SQL on the db:
@@ -66,8 +80,8 @@ def process( args ):
 # Both to confirm we're doing what they want, and because some of the steps
 # can take some time (so we want to give them confidence it's still working).
 # So we print out lots of messages!
-print( "++ gff_to_sqlite_dataframe_version.py" )
+print( "++ gff_to_sqlite_python_version.py" )
 args = parse_arguments()
 print( "++ Converting %s to %s:%s...\n" % ( args.input, args.output, args.table ))
 process( args )
-print( "++ Thank you for using gff_to_sqlite_dataframe_version.py" )
+print( "++ Thank you for using gff_to_sqlite_python_version.py" )
