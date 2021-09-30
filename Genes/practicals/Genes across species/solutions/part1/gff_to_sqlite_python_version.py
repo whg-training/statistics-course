@@ -30,6 +30,11 @@ def parse_arguments():
         required = True
     )
     parser.add_argument(
+        '--table',
+        default = "genes",
+        help ='The table name to use in the output sqlite3 file.'
+    )
+    parser.add_argument(
         '--overwrite',
         action = "store_true",
         help ='If specified, overwrite the table with this data.  Otherwise data will be appended.'
