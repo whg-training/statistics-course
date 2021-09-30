@@ -60,15 +60,15 @@ You can also do this pretty easily in python:
 (21451, 11)
 ```
 
-*Warning.* When I do this the process is using up 1Gb of memory (as reported by `top`).  That's second only to Microsoft Word!
+**Warning.** When I do this the process is using up 1Gb of memory (as reported by `top`).  That's second only to Microsoft Word!
 
 The above counts all "genes" - not all of these code for proteins though.  
 
-*Question.* How do we count protein-coding genes?
+**Question:** How do we count protein-coding genes?
 
-*Challenge:* Can you update your `gff.py` code to extract other useful fields from the `attributes` column? In
-particular - the `biotype` field gives us information about whether a gene is coding or not. (And the `Name` field
-gives us the gene name.).
+**Challenge:** Can you update your `gff.py` code to extract other useful fields from the `attributes` column? In
+particular - the `biotype` field is relevant. (And why don't we also get the `Name` field, so we can easily see the
+gene name).
 
 My version of that is in the [`solutions/part2`](solutions/part2/) folder.  Now we can do:
 ```
