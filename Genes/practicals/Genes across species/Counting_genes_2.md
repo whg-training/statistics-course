@@ -1,4 +1,4 @@
-[Up to table of contents](Introduction.md)
+[Up to table of contents](README.md)
 [Back to the previous page](Counting_genes_1.md)
 
 ## How many protein-coding genes are there?
@@ -54,22 +54,26 @@ which gives
 In other words [house mice](https://en.wikipedia.org/wiki/House_mouse) have about 10% more (annotated) protein-coding
 genes than humans, and [spiny chromis](https://en.wikipedia.org/wiki/Spiny_chromis) have about 10% more again. 
 
-*Note:* The various biotypes [used by Ensembl are [documented
-here](https://m.ensembl.org/info/genome/genebuild/biotypes.html). The `IG_` and TR_` categories are particularly
-interesting because they encode the 'constant', 'joining', and 'variable' gene segments of immunuglobulin and T cell
-receptors. They do encode proteins, but via a yet more complex process that involves somatic recombination to assemble
-the mature genes in B and T cells. If you want to learn about the complexity of these regions, check out [this recent
-paper by Jia-Yuan Zhang](https://doi.org/10.1371/journal.pcbi.1009254). (But we will focus on protein-coding genes here.)
+*Note:* The various biotypes used by Ensembl are [documented
+here](https://m.ensembl.org/info/genome/genebuild/biotypes.html). The `IG_` and TR_` categories are
+interesting: they are the 'constant', 'joining', and 'variable' gene segments of immunuglobulin and
+T cell receptors. They do encode proteins, but via a yet more [complex process that involves
+somatic recombination to assemble the mature genes in B and T
+cells](https://en.wikipedia.org/wiki/V(D)J_recombination). These gene segments also lie in regions
+that are [especially complex](https://doi.org/10.1371/journal.pcbi.1009254). (But we will focus on
+regular protein-coding genes in this tutorual.)
 
-*Note:* Does the above query work with the [*P.falciparum* data from PlasmoDB]()?  How many protein-coding genes does *P.falciparum* have?
+*Note:* Does the above query work with the [*P.falciparum* data from PlasmoDB]()? How many
+protein-coding genes does *P.falciparum* have?
 
 ### Grouping data in python
 
-The code above showed a grouping operation using SQL code. It works well and one of its key advantages is that
-it doesn't use much memory.
+The code above showed a grouping operation using SQL code. It works well. One of its key advantages
+is that it doesn't use much memory.
 
-We could also do this in python. In fact pandas has filtering and *group by* operations (see [the pandas page on
-grouping](https://pandas.pydata.org/docs/user_guide/groupby.html)), just like the above SQL code, so it is pretty easy:
+We could also do this in python. In fact pandas has similar filtering and *group by* operations
+(see [the pandas page on grouping](https://pandas.pydata.org/docs/user_guide/groupby.html)), just
+like the above SQL code, so it is pretty easy:
 
 ```
 import gff
@@ -94,78 +98,21 @@ which prints:
     dtype: int64
 ````
 
-(**Note:**  you might need to first run `pandas.set_option('display.max_rows', 20 )` to see all the rows above.)
+Unfortunately however at this point we are starting to run into a possible problem: **we are using
+a lot of memory**.
 
-### Memory issues
+Whether or not you actually run out of memory will depend on exactly how you've written your code,
+and also on how much memory your machine has. Mine has 16Gb and the above uses about 4Gb of it.
+This turns out to be because my [modified version of gff.py](solutions/part2/gff.py) processes the
+attributes column in a way that (although it seemed a good idea at the time) uses masses of memory.
 
-Unfortunately we are starting to run into a major problem: **we are running out of memory**.
+This problem is not unusual. Because genomics data is so large, it's very easy to write code that
+seems sensible and works on test data, but turns out to be a memory hog when used with real data.
 
-When I run the above three lines with the [rewritten gff.py](solutions/part2/gff.py) in a freshly-started python instance,
-the process uses lots of memory - about 4Gb.  And my computer has only 16Gb in total!  If you were to try to
-analyse large data - say multiple species at once - you'd quickly find all your memory used up.
-
-If you have hit this problem - you're not alone
-
-The main ways to do this problem are:
-
-- work with data subsets (genome regions, specific record types, smaller organisms).
-- use memory-efficient data structures (like the sqlite database we are using).
-- use things like sqlite that allow efficient access to on-disk data.
-- write code more carefully to control memory usage.
-
-[The next section](Memory_issues_and_how_to_solve_them.md) describes some of these issues for our code and suggests ways of solving it.
-
-This type of problem is actually quite typical for bioinformatics analyses - they always get larger until we hit some
-limit. High-level approaches like the one we've taken (which loads all the data into memory and then processes it) seem
-good at first, but they do not control memory usage.  And that rapidly becomes a problem as data volumes grow.
-
-What's more, with these data volumes, seemingly innocuous changes to this type of code can start to make a huge
-difference. My two versions of `gff.py` - [version 1](solutions/part1/gff.py) and [version 2](solutions/part2/gff.py) -
-do almost the same thing. The second one just adds a couple of columns. But it turns out to use about 4 times the
-memory.
-
-Not surprisingly, in our program this is all to do with attribute parsing. They key difference between the two versions
-is that the original version of `parse_gff3_to_dataframe()` **never stored the parsed/unpacked attributes strings**.
-(Instead - [as profiling revealed](Converting_gff_to_sqlite.md) - it was wasting time by parsing them twice). But the
-second version does do this: on line 25 it says:
-
-```
-    attributes = result['attributes'].apply( parse_attributes )
-```
-This one line turns out to use up about 2.5Gb of memory!
-
-Considerations like this mean we need to add an additional aim when we are coding:
-
-- it ought to work
-- it ought to not take too long to do it
-- it ought to be obvious what it does
-- **it ought not to waste memory**
-
-**Question.** How much memory is your version of the code using?
-
-The main approaches to solve this problem are:
-
-- work with data subsets (genome regions, specific record types, smaller organisms)
-- use memory-efficient data structures (like the sqlite database we are using)
-- write code more carefully to control memory usage
-
-**Advanced challenge:** write a version of `gff_to_sqlite.py` that has low memory usage.
-
-**Hints**:
-
-- There's really no need for `gff_to_sqlite.py` to use any memory at all! It could process rows one at a time instead
-  of loading them all in.
-
-- The [the pure python version](gff_to_sqlite_python_version.py) is a good place to look for the needed sql statements.
-
-- To make this slick, you should aim to commit the rows to the database in chunks (say of 10,000 rows). Then call
-  `db.commit()` to write the data to the file after every chunk.
-
-- Don't forget to commit the last chunk.
-
-## Grouping data in python - revisited
-
-As an example of working with subsets - let's just load the subset of records we need:
+[The next section](Memory_issues_and_how_to_solve_them.md) dicsusses this problem in more detail
+and suggests ways to fix it. For now let's solve this by the simple step of not loading so much
+data. I'm going to assume you have successfully created your sqlite file with some data from
+different species. If so you can load just the data you need like this:
 
 ```
 import pandas, sqlite3

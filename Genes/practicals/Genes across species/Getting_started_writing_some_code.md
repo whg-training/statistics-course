@@ -1,4 +1,4 @@
-[Up to table of contents](Introduction.md)
+[Up to table of contents](README.md)
 [Back to the previous page](What_gene_annotation_data_looks_like.md)
 
 ## Writing some code to process GFF files
@@ -29,14 +29,23 @@ standard options might be [python](https://www.python.org) or [R](https://cran.r
 you could also use [julia](https://julialang.org), or even
 [C++](https://en.wikipedia.org/wiki/C%2B%2B) or another compiled language.
 
-**Use a package.** The [pandas library](https://pandas.pydata.org) is an obvious one to try here. The GFF3 data is
-basically a tabular data format (many rows x 9 named columns, at least if we don't unpack `attributes`) and that's a
-good fit for a dataframe (which is what pandas provides).  
+**Use a package.** I bet you can find an existing GFF parser for your chosen language. Now, using
+that would to some extent defeat the purpose of the exercise, but on the other hand what we're
+really interested in is genes rather than the coding itself. So if that gets you to better answers
+quicker, go ahead and see where it gets you.
 
-**Use raw python.** This works fine as well, and it has some advantages in flexibility.
+**Use no packages.** It's quite possible to do this task in (say) base python, without any
+libraries - in fact that would be a good way to it because it gives you control, and (as we'll see
+later) you might need control over things like performance and memory usage.
 
-In this tutorial we'll focus on the pandas version, as it gives us lots of tools for analysis. We'll develop a little
-python module that carries out the task.
+This tutorial will take a middle way. We will use python with the popular [pandas
+library](https://pandas.pydata.org) library to begin reading and manipulating the data. pandas
+seems a natural fit here because the GFF3 data is basically tabular (many rows x 9 named columns,
+at least if we don't unpack the `attributes`) and that fits a dataframe (which is what pandas
+provides). This works well but, as we'll see, it comes with some tradeoffs as well. 
+
+In the course of the tutorial we'll develop a little python module to help us answer the above
+questions.
 
 ## Diving straight in - parsing data
 

@@ -1,4 +1,4 @@
-[Up to table of contents](Introduction.md)
+[Up to table of contents](README.md)
 [Back to the previous page](Converting_gff_to_sqlite.md)
 
 ## Gathering some first statistics

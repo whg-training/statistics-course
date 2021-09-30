@@ -1,4 +1,4 @@
-[Up to table of contents](Introduction.md)
+[Up to table of contents](README.md)
 [Back to the previous page](Counting_genes_2.md)
 
 ## Memory issues - and how to solve them
@@ -67,7 +67,7 @@ about), this version uses [regular expressions](https://en.wikipedia.org/wiki/Re
 fields of interest. And then uses the same regular expression to remove the field from the
 attributes. The crucial point here, however, is not the regular expressions themselves (which are
 just a tool to do the parsing) but the fact that the data is never copied around. This version is
-back down to < 2Gb of memory - still a lot of memory, but much less.
+back down to < 2Gb of memory.
 
 ### Memory vs. performance
 
@@ -105,4 +105,4 @@ an additional challenge, try this one:
   
 - Don't forget to `db.commit()` after the last chunk
   
-How fast can you make this go?
+Is this version faster or slower than the original?

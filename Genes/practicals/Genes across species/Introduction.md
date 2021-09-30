@@ -1,4 +1,4 @@
-[Up to table of contents](Introduction.md)
+[Up to table of contents](README.md)
 
 # Coding warm-up - analysing genes across species.
 
