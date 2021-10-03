@@ -30,7 +30,7 @@ We're actually in a good shape for many of [our scientific questions](Introducti
 Let's start with counting genes - easy!  One way is to use sqlite.  For example using the sqlite file you created in the last step:
 
 ```
-sqlite> SELECT COUNT(*) FROM genes WHERE type==`gene` ;
+sqlite> SELECT COUNT(*) FROM gff_data WHERE type==`gene` ;
 ```
 
 *Note.* I ran the above command interactively in sqlite3 - you get there by typing `sqlite3 genes.sqlite` in the shell.
@@ -42,7 +42,7 @@ lets you differentiate species.  So you can make these counts for multiple speci
 ```
 sqlite> .mode column
 sqlite> .header on
-sqlite> SELECT analysis, COUNT(*) FROM genes WHERE type=='gene' GROUP BY analysis ;
+sqlite> SELECT analysis, COUNT(*) FROM gff_data WHERE type=='gene' GROUP BY analysis ;
 ```
 
 Which gives:
@@ -62,13 +62,17 @@ You can also do this pretty easily in python:
 (21451, 11)
 ```
 
-**Warning.** When I do this the process is using up 1Gb of memory (as reported by `top`).  That's second only to Microsoft Word!
+**Warning.** When I do this the process is using up 1Gb of memory (as reported by `top`). Only
+Microsoft Word is using more! We'll come back to memory issues [later in the
+tutorial](Memory_issues_and_how_to_solve_them.md).
 
-**Question:** how could you best replicate the above across-species query in python?
+**Question:** how could you carry out the above across-species query in python?
 
-The above counts all "genes" - not all of these code for proteins though.  
+### How many protein-coding genes are there?
 
-**Question:** How do we count protein-coding genes?
+The above counts all "genes" - however, not all of these code for proteins though.  
+
+**Question:** How do we count just the protein-coding genes?
 
 **Challenge:** Can you update your `gff.py` code to make it easy to get this information out?
 
@@ -80,6 +84,6 @@ The above counts all "genes" - not all of these code for proteins though.
 
 **More hints:** My solution is in [`solutions/part2`](solutions/part2/) if you want to take a look.
 
-**Challenge:** make a table of counts of genes by type across several species.
+**Challenge:** make a table of counts of genes by type across several species of your choosing.
 
 My attempt at this is described [on the next page](Counting_genes_2.md).

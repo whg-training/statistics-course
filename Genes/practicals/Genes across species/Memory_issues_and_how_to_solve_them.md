@@ -43,7 +43,7 @@ course assumes your `gff_to_sqlite.py` program didn't run out of memory.)  That 
 ```
 import pandas, sqlite3
 db = sqlite3.connect( "genes.sqlite" )
-data = pandas.read_sql( "SELECT * FROM genes WHERE type == 'gene'", db )
+data = pandas.read_sql( "SELECT * FROM gff_data WHERE type == 'gene'", db )
 ```
 
 Because this loads only the 'genes' records, it uses much less memory.
