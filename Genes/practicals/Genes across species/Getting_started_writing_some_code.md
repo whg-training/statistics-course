@@ -1,4 +1,4 @@
-[Up to table of contents](Introduction.md)
+[Up to table of contents](README.md)
 [Back to the previous page](What_gene_annotation_data_looks_like.md)
 
 ## Writing some code to process GFF files
@@ -23,30 +23,42 @@ We're not writing this code for it's own sake but to answer our questions like t
 
 How to write this code?  Well there are a few ways:
 
-**Do it yourself.**. It may well be that you already have a good idea how to go about this. If so,
+**Do it yourself.** It may well be that you already have a good idea how to go about this. If so,
 feel free to dive straight in. You're free to use any language or system you like for this -
 standard options might be [python](https://www.python.org) or [R](https://cran.r-project.org), but
 you could also use [julia](https://julialang.org), or even
 [C++](https://en.wikipedia.org/wiki/C%2B%2B) or another compiled language.
 
-**Use a package.** The [pandas library](https://pandas.pydata.org) is an obvious one to try here. The GFF3 data is
-basically a tabular data format (many rows x 9 named columns, at least if we don't unpack `attributes`) and that's a
-good fit for a dataframe (which is what pandas provides).  
+**Use a package.** I bet you can find an existing GFF3 parser for your chosen language, or perhaps
+a library that processes gene annotations at a higher level. Now, using that would to some extent
+defeat the purpose of the exercise, but on the other hand what we're really interested in is genes
+rather than the coding itself. So if that gets you to better answers quicker, go ahead!
 
-**Use raw python.** This works fine as well, and it has some advantages in flexibility.
+**Use nothing but raw code.** It's quite possible to do this task in (say) base python without
+using any existing libraries. In fact that might be a good way to it because it gives you lots of
+control over how it works, and (as we'll see later) you might need control over things like
+performance and memory usage.
 
-In this tutorial we'll focus on the pandas version, as it gives us lots of tools for analysis. We'll develop a little
-python module that carries out the task.
+This tutorial will take a middle way. We will use python with the popular [pandas
+library](https://pandas.pydata.org) library to begin reading and manipulating the data. pandas
+seems a natural fit here because the GFF3 data is basically tabular (many rows x 9 named columns,
+at least if we don't unpack the `attributes`) and that fits a dataframe (which is what pandas
+provides). This works well but, as we'll see, it comes with some tradeoffs as well. 
+
+In the course of the tutorial we'll develop a little python module to help us answer the above
+questions.
 
 ## Diving straight in - parsing data
 
-If you [looked at the gene annotation data](What_gene_annotation_data_looks_like.md), you'll know that it comes in rows
-of data that are tab-delimited, but that it is also relational (meaning that the records refer to each other, via the
-`Parent` attribute. Moreover since exons are associated with transcripts, which are in turn associated with genes,
-we'll have to build some form of data hierarchical data structure for this.
+If you [looked at the gene annotation data](What_gene_annotation_data_looks_like.md), you'll know
+that it comes in rows of data that are tab-delimited, but that it is also relational (meaning that
+the records refer to each other, via the `Parent` attribute). Moreover, since exons are associated
+with transcripts, which are in turn associated with genes, we ultimately have to build some form of
+hierarchical data structure to capture this.
 
-That sounds complex, but we can break off a manageable bit of the job by just focussing on getting the data in (c.f.
-"keep it simple"). So let's do the simplest thing possible and start by writing a function:
+That sounds complex, but we can break off a manageable first bit of the job by just focussing on
+getting the data in (c.f. "keep it simple"). So let's do the simplest thing possible and start by
+writing a function:
 
 ```
 def parse_gff3_to_dataframe( data ):
@@ -56,38 +68,41 @@ def parse_gff3_to_dataframe( data ):
     return (result )
 ```
 
-**Note:** If you are not familiar with python syntax, now would be a good time to refresh via any of the available
-tutorials. The above code defines a function, and shows a documentation comment (the `"""..."""` bit) and also has code
-comments (starting with `#`).
+**Note:** If you are not familiar with python syntax, now would be a good time to refresh via any
+of the available tutorials. The above code defines a function, and shows a documentation comment
+(the `"""..."""` bit) and also has code comments (starting with `#`).
 
-The function above already illustrates a couple of things that might be helpful if you're not used to writing code.
-First, the name is very clear what this function does - indeed the documentation comment is pretty useless at the
-moment.  Second, even before we've written it, the function follows a very simple pattern: it creates a new thing (the
-result of the function, so it is called `result`) and the last line returns it. All the function has to do is build
-`result` - simple!
+This function also illustrates a couple of things that might be helpful if you're not used to
+writing code. First, the name is very clear about what this function does (indeed it makes the
+documentation comment pretty useless at the moment). I spent quite a while deciding on that name!
+Second, even before we've written it, we can see the function is going to follow a very simple
+pattern: it creates a new thing (the result of the function, so it is called `result`) and returns
+it on the last line. All the function has to do is build `result` - simple!
 
-The other thing is that this function is already reasonably testable.  Look, here is a test:
+The other thing to see is that this function is already reasonably testable. Look, here is a test:
 
 ```
+import io, math
+
+# Note \t means a tab character, so this is valid GFF3-format data.
 test_data = """##gff-version 3
 #description: test data
 chr1\tme\tgene\t1\t1000\t.\t+\t.\tID=gene1;other_data=stuff
 chr1\tme\texon\t10\t900\t.\t+\t.\tID=gene1.1;Parent=gene1
 """
 
-import io, math
-
-# run the function:
+# 1. run our function:
 data = parse_gff3_to_dataframe( io.StringIO( test_data ))
 
-# test it:
+# 2. test it:
 assert data['seqid'][0] == 'chr1'
 assert data['strand'][0] == '+'
 assert data['attributes'][0] == 'ID=gene1;other_data=stuff'
 
-assert data['start'][1] == 10 # an integer
+assert data['start'][1] == 10 # start and end are integers
+assert data['end'][0] == 1000
 
-assert math.isnan( data['score'][1] ) # Because a "." should be missing data in GFF spec
+assert math.isnan( data['score'][1] ) # "." indicates missing data in the GFF spec
 
 assert data['ID'][0] == 'gene1'
 assert data['ID'][1] == 'gene1.1'
@@ -95,30 +110,34 @@ assert data['Parent'][1] == 'gene1'
 # etc.
 ```
 
-(**Note:** In an ideal world we could pass in the data directly. However it is a bit annoying to write a function that
-works both with a file and a string. The `io.StringIO()` bit above just turns the input data into a file-like object -
-you can pretty much ignore it.
+(**Note:** In an ideal world we could pass in the data directly. However it is a bit annoying to
+make our function work both with a file and a string. The `io.StringIO()` bit above just turns the
+input data into a file-like object - you can pretty much ignore it.)
 
 This leads us to a:
 
 **Challenge:** write `parse_gff3_to_dataframe()`. Can you write this so all the tests pass?  Or at least some of them?
 
-**Hints:** This test does have a few complexities to it.  Here are some points to think about that might be helpful:
+**Hints:** This challenge does have a few complexities to it.  Here are some points to think about that might be helpful:
 
 - pandas has a [`read_table` function](https://pandas.pydata.org/docs/reference/api/pandas.read_table.html) that is a
-  good way to get the data in.  It has many arguments that control how the data gets in there.
+  good way to get the data in.  It has many arguments that control how the data is parsed.
 
-- The data itself doesn't have column names in. But the test requires them - you have to get them in somehow.
+- The data itself doesn't have column names in. But the test clearly requires them - you have to
+  add them in somehow.
 
 - To pass the tests you have to pay attention to missing data! Check the [GFF
-  spec](https://m.ensembl.org/info/website/upload/gff3.html) for how these are represnted.
+  spec](https://m.ensembl.org/info/website/upload/gff3.html) for how these are represented. See
+  below for a couple of possible ways of dealing with it.
 
-- Also, some of the columns [have different data types](https://m.ensembl.org/info/website/upload/gff3.html) - to pass
+- Also, some of the columns [have different data
+  types](https://m.ensembl.org/info/website/upload/gff3.html) like integers and floats - to pass
   the tests you also have to get the types right.
 
-- The last three rows of the test use the `ID` and `Parent` fields. If you [examine the data]() you'll see these aren't
-  columns in GFF3 but live inside the complicated `attributes` column. The test above is asking that you pull these out
-  into new columns.
+- The last three rows of the test use the `ID` and `Parent` fields. If you [examine the
+  data](What_gene_annotation_data_looks_like.md) you'll see these aren't columns in GFF3, but
+  instead live inside the complicated `attributes` column. The test above is asking that you pull
+  these out into new columns.
   
 **More hints:**
 
@@ -126,22 +145,24 @@ This leads us to a:
   start if you are going to indent with spaces or tabs and stick with it (otherwise you will get all sorts of strange syntax
   errors).
 
-- It is very worth looking around for an editor you like. On the Mac, [Textmate](https://macromates.com) or
-  [Sublime](https://www.sublimetext.com) or [github Atom](https://atom.io) might be good choices. On Windows I'm less
-  sure - [Notepad++](https://notepad-plus-plus.org) or [Atom](https://atom.io) might work. Sublime and Atom also work
-  on linux.  Of course there are also many others you can use.
+- It is very worth looking around for an editor you like. On the Mac,
+  [Textmate](https://macromates.com) or [Sublime](https://www.sublimetext.com) or [github
+  Atom](https://atom.io) might be good choices. On Windows
+  [Notepad++](https://notepad-plus-plus.org) or [Atom](https://atom.io) might work. Sublime and
+  Atom also work on linux. Of course there are also many others you can use.
 
 - It's a good idea to write little helper functions to do bits of the task. (For example, it might be useful to write
- a `parse_attributes()` function that parses a semi-colon-separated list of key=value pairs and return a dict, e.g. like this:
+ a `parse_attributes()` function that parses a semi-colon-separated list of key=value pairs and return a dict, e.g. so that this:
 ```
 > parse_attributes( 'ID=gene1;other_data=stuff' )
-{
-    "ID": "gene1",
-    "other_data": "stuff"
-}
 ```
+would produce this object:
+    {
+        "ID": "gene1",
+        "other_data": "stuff"
+    }
 
-- `.split()` can be used to split strings.  For example `"Hello;world".split( ";" ) == [ "hello", "world" ]``
+- `.split()` can be used to split strings.  For example `"Hello;world".split( ";" ) == [ "Hello", "world" ]`
 
 - If you want to apply a function to every row of a data frame - the [pandas `.apply()`
   method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html) is the ticket.
@@ -150,28 +171,31 @@ This leads us to a:
     df['start'].apply( int )
 ```
 
-- How do handle missing data?  One way is to use the python [syntax for conditional expressions](https://mail.python.org/pipermail/python-dev/2005-September/056846.html):
+- How do handle missing data? One way is to use the python [syntax for conditional
+  expressions](https://mail.python.org/pipermail/python-dev/2005-September/056846.html):
 ```
 # convert value to an int
 value = None if value == "." else int(value)
 ```
-(But for this task an easier way may be to exploit the `na_values` argument of `pandas.read_table`.)
+But a better way for this task may be to exploit the `na_values` argument of `pandas.read_table`.
 
 **Yet more hints:** The `solutions/part1/gff.py` file contains my solution to this. Feel free to have a look / steal code. As
 a comparison it also implements a similar pure python version called `parse_gff3_to_list()`. (There are lots of other
-ways to write this - for ecample, gathering the code into a class might be sensible - but I've gone with functions for
+ways to write this - for example, gathering the code into a class might be sensible - but I've gone with functions for
 simplicity.)
 
 ### A note on writing tests first
 
-I'd hazard a guess that not many people writing scientific code (including me) actually write their tests first in the
-way we did above. It is however a very useful approach, mainly because it forces you to think about how your code will
-be used before you spend the effort of writing it. So by definition it tends to produce functions etc. that are easy to
-use.
+I'd hazard a guess that not many people writing scientific code think of writing their tests first,
+like we did above. (This includes me.) However, it is a very useful approach, because it forces you
+to think about how your code will be used before you spend the effort of writing it. It tends to
+produce functions etc. that are easy to use and behave the way you expect.
 
-Also, if you do this you'll find all your code is tested - for free! (If this sounds like I'm convincing myself, it's
-because I hardly ever do this - but I wish I did.)
+Also, if you do this you'll find all your code is tested - for free! (If this all sounds like I'm
+convincing myself, it's because I'm hardly ever disciplined enough to do this - but I wish I did it
+more.)
 
 ### Using the code
 
-Do you have a working function `parse_gff3_to_dataframe()`?  Then let's [turn this into a useful program](Converting_gff_to_sqlite.md).
+Do you have a working function `parse_gff3_to_dataframe()`? Then let's [turn this into a useful
+program](Converting_gff_to_sqlite.md).

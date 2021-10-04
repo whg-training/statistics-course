@@ -5,5 +5,6 @@
 3. [Getting started writing some code](Getting_started_writing_some_code.md)
 4. [Writing a useful command-line program](Converting_gff_to_sqlite.md)
 5. [Gene counting I](Counting_genes_1.md)
-6. [Gene counting II - gene types and memory issues](Counting_genes_2.md)
-7. [Getting sequence lengths and other improvements](Getting sequence lengths.md)
+6. [Gene counting II](Counting_genes_2.md)
+7. [Memory issues and how to solve them](Memory_issues_and_how_to_solve_them.md)
+8. [Getting sequence lengths and other improvements](Getting sequence lengths.md)
