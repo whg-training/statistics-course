@@ -414,7 +414,7 @@ gene_summary
 ```
 
 This prints:
-    >>> gene_summary
+
                                                                          number_of_transcripts  average_number_of_exons
     analysis                                    ID                                                                     
     Acanthochromis_polyacanthus.ASM210954v1.104 gene:ENSAPOG00000000002                      1                      6.0
