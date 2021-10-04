@@ -70,7 +70,7 @@ tutorial](Memory_issues_and_how_to_solve_them.md).
 
 ### How many protein-coding genes are there?
 
-The above counts all "genes" - however, not all of these code for proteins though.  
+The above counts all "genes".  However, does this mean these are protein coding genes?
 
 **Question:** How do we count just the protein-coding genes?
 

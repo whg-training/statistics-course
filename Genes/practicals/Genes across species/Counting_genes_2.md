@@ -3,22 +3,23 @@
 
 ## How many protein-coding genes are there?
 
-If you've followed so far you will have code `gff.py` that can parse a GFF file, and will pull out
-certain fields from the `attributes` column. This includes the `ID` attribute, the `Parent`
-attribute that says how records are linked, and also the `Name` column (gene names) and the
-`biotype`. In the [Ensembl files](http://ftp.ensembl.org/pub/current_gff3/)) the `biotype` is
-useful because it tells us what kind of genes they are.
+If you've followed so far you will have code `gff.py` that can parse a GFF file, and in the process
+will pull out certain fields from the `attributes` column. This includes the `ID` attribute, the
+`Parent` attribute that says how records are linked, and maybe also the `Name` column (gene names)
+and the `biotype`. In the [Ensembl files](http://ftp.ensembl.org/pub/current_gff3/) the `biotype`
+is useful because it tells us what kind of genes they are.
 
 Hopefully you've also downloaded GFF files for some different species and run them through your
-[sqlite conversion program](Converting_gff_to_sqlite.md) to get them into a database. My version of
-that code (which you can find [here](solutions/part2/gff_to_sqlite.py) also adds an `analysis` column
-that I use to distinguish the different species - I'll assume you have done something similar.
+[sqlite conversion program](Converting_gff_to_sqlite.md) to get them into a database. And, to make
+this work well, hopefully you have also got your code to add an additional column taht records
+which species the record came from. (I've called this column `analysis` in my code and I'll use
+that below).
 
 (For reference my version of the code is at
-[solutions/part2/gff_to_sqlite.py](solutions/part2/gff_to_sqlite.py) - feel free to run that if
-needed.)
+[solutions/part2/gff_to_sqlite.py](solutions/part2/gff_to_sqlite.py) - feel free to run that
+instead, if needed.)
 
-With this data we can now do:
+With this sqlite file in hand we can now start to count genes:
 
 ```
 sqlite> .mode column
@@ -26,7 +27,7 @@ sqlite> .header on
 sqlite> .width 50 25 25
 sqlite> SELECT analysis, biotype, COUNT(*) FROM gff_data WHERE type=='gene' GROUP BY analysis, biotype ;
 ```
-which with my current data gives
+With the current data I have this gives:
 
     analysis                                            biotype                    COUNT(*)                 
     --------------------------------------------------  -------------------------  -------------------------
@@ -63,13 +64,15 @@ This suggests [house mice](https://en.wikipedia.org/wiki/House_mouse) have about
 chromis](https://en.wikipedia.org/wiki/Spiny_chromis) have about 10% more again.
 
 *Note:* The various biotypes used by Ensembl are [documented
-here](https://m.ensembl.org/info/genome/genebuild/biotypes.html). The `IG_` and TR_` categories are
-interesting: they are the 'constant', 'joining', and 'variable' gene segments of immunuglobulin and
-T cell receptors. They do encode proteins, but via a yet more [complex process that involves
-somatic recombination to assemble the mature genes in B and T
-cells](https://en.wikipedia.org/wiki/V(D)J_recombination). These gene segments also lie in regions
-that are [especially complex](https://doi.org/10.1371/journal.pcbi.1009254). (But we will focus on
-regular protein-coding genes in this tutorual.)
+here](https://m.ensembl.org/info/genome/genebuild/biotypes.html). A `polymorphic pseudogene` is a
+gene that is coding in some individuals, but not in others (including in the reference sequence).
+The `IG_` and `TR_` categories are also interesting: they are the 'constant', 'joining', and
+'variable' gene segments of immunuglobulin and T cell receptors. They do encode proteins, but via a
+yet more [complex process that involves somatic recombination to assemble the mature genes in B and
+T cells](https://en.wikipedia.org/wiki/V(D)J_recombination). These gene segments also lie in
+regions that are [especially complex](https://doi.org/10.1371/journal.pcbi.1009254). However, the
+vast majority of these genes are listed `protein_coding` and we will focus on these in this
+tutorial.
 
 *Note:* Does the above query work with the [*P.falciparum* data from
 PlasmoDB](https://plasmodb.org/plasmo/app/downloads/Current_Release/)? How many protein-coding
