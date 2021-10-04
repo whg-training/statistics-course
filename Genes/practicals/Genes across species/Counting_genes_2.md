@@ -104,20 +104,18 @@ When I run the above three lines with the [rewritten gff.py](solutions/part2/gff
 the process uses lots of memory - about 4Gb.  And my computer has only 16Gb in total!  If you were to try to
 analyse large data - say multiple species at once - you'd quickly find all your memory used up.
 
-If you have hit this problem - you're not alone
+This type of problem is actually quite typical for bioinformatics analyses - they always get larger until we hit some
+limit. High-level approaches like the one we've taken (which loads all the data into memory and then processes it) seem
+good at first, but they do not control memory usage.  And that rapidly becomes a problem as data volumes grow.
 
-The main ways to do this problem are:
+If you have hit this problem then it is a pain! In general the main ways to solve it are:
 
 - work with data subsets (genome regions, specific record types, smaller organisms).
 - use memory-efficient data structures (like the sqlite database we are using).
 - use things like sqlite that allow efficient access to on-disk data.
 - write code more carefully to control memory usage.
 
-[The next section](Memory_issues_and_how_to_solve_them.md) describes some of these issues for our code and suggests ways of solving it.
-
-This type of problem is actually quite typical for bioinformatics analyses - they always get larger until we hit some
-limit. High-level approaches like the one we've taken (which loads all the data into memory and then processes it) seem
-good at first, but they do not control memory usage.  And that rapidly becomes a problem as data volumes grow.
+[The next section](Memory_issues_and_how_to_solve_them.md) goes into more detail about this.
 
 What's more, with these data volumes, seemingly innocuous changes to this type of code can start to make a huge
 difference. My two versions of `gff.py` - [version 1](solutions/part1/gff.py) and [version 2](solutions/part2/gff.py) -
