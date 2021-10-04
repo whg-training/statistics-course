@@ -58,6 +58,7 @@ With the current data I have this gives:
     Homo_sapiens.GRCh38.104                             TR_V_gene                  106                      
     Homo_sapiens.GRCh38.104                             polymorphic_pseudogene     49                       
     Homo_sapiens.GRCh38.104                             protein_coding             19937          
+    PlasmoDB-54_Pfalciparum3D7                          protein_coding_gene        5318          
 
 This suggests [house mice](https://en.wikipedia.org/wiki/House_mouse) have about 10% more
 (annotated) protein-coding genes than humans, and [spiny
@@ -74,9 +75,12 @@ regions that are [especially complex](https://doi.org/10.1371/journal.pcbi.10092
 vast majority of these genes are listed `protein_coding` and we will focus on these in this
 tutorial.
 
-*Note:* Does the above query work with the [*P.falciparum* data from
-PlasmoDB](https://plasmodb.org/plasmo/app/downloads/Current_Release/)? How many protein-coding
-genes does *P.falciparum* have?
+*Note:* The above query doesn't work with the [*P.falciparum* data from
+PlasmoDB](https://plasmodb.org/plasmo/app/downloads/Current_Release/)? To fix this, I kludged it by running this sql:
+```
+UPDATE genes SET type = 'gene', biotype = 'protein_coding_gene' WHERE analysis == 'PlasmoDB-54_Pfalciparum3D7' AND type == 'protein_coding_gene' ;
+```
+I wouldn't advise this type of manually-fix-the-data approach in general though, because it will break if you re-import data.
 
 ### What are all those species anyway?
 
@@ -280,14 +284,11 @@ indexed (and let's do `Name` as well):
 
 ```
 CREATE INDEX gff_data_ID_index ON gff_data( ID ) ;
-CREATE INDEX gff_data_Parent_index ON gff_data( Parent ) ;
-CREATE INDEX gff_data_Name_index ON gff_data( Name ) ;
 ```
 (This can take a minute or so as it builds the indices).
 
 Now we can join them to make the counts.  First we'll count exons in transcripts:
 ```
-DROP VIEW transcript_summary_view ;
 CREATE VIEW transcript_summary_view AS
 SELECT T.*, COUNT( * ) AS number_of_exons
 FROM transcript_view T
@@ -303,7 +304,6 @@ you'll see it takes a little while to run its computation.
 
 Next we'll summarise transcripts in genes:
 ```
-DROP VIEW gene_summary_view ;
 CREATE VIEW gene_summary_view AS
 SELECT G.*, COUNT(*) AS number_of_transcripts, (0.0+SUM(number_of_exons))/COUNT(*) AS average_number_of_exons
 FROM gene_view G
@@ -332,8 +332,8 @@ One way to speed up our queries (that mimicks what we would do in python) is to 
 view into their own tables first:
 
 ```
-CREATE TABLE genes AS SELECT * FROM gene_view ;
-CREATE TABLE transcript_summary AS SELECT * FROM transcript_summary_view ;
+CREATE TABLE genes AS SELECT analysis, ID, Parent, Name, biotype, seqid, start, end, strand FROM gene_view ;
+CREATE TABLE transcript_summary AS SELECT analysis, ID, Parent, Name, biotype, seqid, start, end, strand, number_of_exons FROM transcript_summary_view ;
 CREATE INDEX transcript_summary_Parent_INDEX ON transcript_summary( Parent ) ;
 ```
 
@@ -357,7 +357,7 @@ It turns out that (among the above data) humans have by far the largest number o
 transcripts for a single gene - 151, for the MAPK10 gene which is a [member of the MAP kinase
 family](https://en.wikipedia.org/wiki/MAPK10). However, Chimpanzees turn out to have a gene with an
 extremely large number of exons: 184 for the *TTN* gene which encodes
-(Titin)[https://en.wikipedia.org/wiki/Titin]. And *TTN* also has the highest number of exons in
+(Titin)[https://en.wikipedia.org/wiki/Titin]. (*TTN* also has the highest number of exons in
 humans - but only a paltry 112.)  These observations may be explained by the description of Titin:
 
     Titin /ˈtaɪtɪn/, also known as connectin, is a protein that in humans is encoded by the TTN
@@ -368,23 +368,55 @@ humans - but only a paltry 112.)  These observations may be explained by the des
 
     - Wikipedia
 
-### Doing this in python
+### Joining data in python
+
+Here is the same process carried out in python.
+First we load the data:
 
 ```
 import pandas, sqlite3
 db = sqlite3.connect( "genes.sqlite" )
-genes = pandas.read_sql( "SELECT  ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'gene' )", db )
-transcripts = pandas.read_sql( "SELECT ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'mRNA' )", db )
-exons = pandas.read_sql( "SELECT  ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'exon' )", db )
+genes = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'gene' )", db )
+transcripts = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'mRNA' )", db )
+exons = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand FROM gff_data WHERE type IN ( 'exon' )", db )
+```
 
+Now we create the per-transcript summary of the number of exons. For this we have to use the slightly complicated
+pandas syntax for [`groupby` operations with named columns](https://pandas.pydata.org/docs/user_guide/groupby.html):
 
-join1 = pandas.merge(
-   exons, 
-   transcripts[["ID","Parent"]],
+```
+transcript_summary = pandas.merge(
+   transcripts,
+   exons[["ID", "Parent"]], 
    how = "outer",
-   left_on = "Parent",
-   right_on = "ID"
+   left_on = "ID",
+   right_on = "Parent"
+).groupby( ['ID_x', 'Parent_x'], as_index = False ).agg(
+    number_of_exons = pandas.NamedAgg( column = "ID_y", aggfunc = numpy.size )
 )
+```
+
+And finally we create the per-gene summary:
+
+gene_summary = pandas.merge(
+    genes,
+    transcript_summary,
+    how = "outer",
+    left_on = "ID",
+    right_on = "Parent_x"
+).groupby( [ "analysis", "ID" ] ).agg(
+    number_of_transcripts = pandas.NamedAgg( column = "ID", aggfunc = numpy.size ),
+    average_number_of_exons = pandas.NamedAgg( column = "number_of_exons", aggfunc = numpy.mean ),
+)
+```
+
+You can check this gives the same results as the above SQL:
+```
+gene_summary_by_sql.set_index(['analysis', 'ID'], inplace = True )
+gene_summary.sort_index( inplace = True )
+gene_summary_by_sql.sort_index( inplace = True )
+
+comparison = gene_summary[['number_of_transcripts', 'average_number_of_exons']] == gene_summary_by_sql[['number_of_transcripts', 'average_number_of_exons']]
 ```
 
 ## Sequence lengths

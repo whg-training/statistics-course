@@ -45,24 +45,30 @@ regions](https://www.ncbi.nlm.nih.gov/grc/human?filters=chr:Y#current-regions).
 Use this function in `gff_to_sqlite.py` so that it records sequence lengths into the output
 database as well.
 
-Your function should pass this test case:
+Here's a test case:
 
 ```
-def test_parse_sequences_from_gff_metadata():
-   import io
-   test_data = """##gff-version 3
-   ##sequence-region   1 1 248956422
-   ##sequence-region   10 1 133797422
-   1       GRCh38  chromosome      1       248956422       .       .       .       ID=chromosome:1;Alias=CM000663.2,chr1,NC_000001.11
-   """
+import unittest
 
-   sequences = parse_sequences_from_gff_metadata( io.StringIO( test_data ))
+class TestGff(unittest.TestCase):
+    def test_parse_sequences_from_gff_metadata():
+       import io
+       test_data = """##gff-version 3
+##sequence-region   1 1 248956422
+##sequence-region   10 1 133797422
+1       GRCh38  chromosome      1       248956422       .       .       .       ID=chromosome:1;Alias=CM000663.2,chr1,NC_000001.11
+"""
 
-   assert sequences['sequence'][0] = '1'
-   assert sequences['sequence'][0] = '10'
-   assert sequences['start'][1] = 1
-   assert sequences['start'][0] = 1
-   assert sequences['end'][0] = 248956422
-   assert sequences['end'][1] = 133797422
+       sequences = parse_sequences_from_gff_metadata( io.StringIO( test_data ))
+
+       self.assertEqual( sequences['sequence'][0], '1' )
+       self.assertEqual( sequences['sequence'][0], '10' )
+       self.assertEqual( sequences['start'][1], 1 )
+       self.assertEqual( sequences['start'][0], 1 )
+       self.assertEqual( sequences['end'][0], 248956422 )
+       self.assertEqual( sequences['end'][1], 133797422 )
 ```
+
+If you've had enough coding, [my version is here](solutions/part3/gff.py).
+
 
