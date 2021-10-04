@@ -179,21 +179,35 @@ value = None if value == "." else int(value)
 ```
 But a better way for this task may be to exploit the `na_values` argument of `pandas.read_table`.
 
-**Yet more hints:** The `solutions/part1/gff.py` file contains my solution to this. Feel free to have a look / steal code. As
-a comparison it also implements a similar pure python version called `parse_gff3_to_list()`. (There are lots of other
-ways to write this - for example, gathering the code into a class might be sensible - but I've gone with functions for
-simplicity.)
+**Yet more hints:** The [`solutions/part1/gff_first_version.py`](solutions/part1/gff_first_version.py) file contains my
+first go at a solution to this. As a comparison,
+[`solutions/part1/gff_python_version.py`](solutions/part1/gff_python_version.py) also implements a similar pure python
+version called `parse_gff3_to_list()`. (There are lots of other ways to write this of course - for example, gathering
+the code into a class might be sensible - but I've gone with functions for simplicity.)
 
-### A note on writing tests first
+If my code still looks too complicated to you - that's because it is. Having written the first version, I [refactored
+the code](Refactoring_makes_code_better.md) to produce a [nicer version](solutions/part1/gff.py).
 
-I'd hazard a guess that not many people writing scientific code think of writing their tests first,
-like we did above. (This includes me.) However, it is a very useful approach, because it forces you
-to think about how your code will be used before you spend the effort of writing it. It tends to
-produce functions etc. that are easy to use and behave the way you expect.
+### A note on writing tests
 
-Also, if you do this you'll find all your code is tested - for free! (If this all sounds like I'm
-convincing myself, it's because I'm hardly ever disciplined enough to do this - but I wish I did it
-more.)
+I'd hazard a guess that not many people writing scientific code think of writing their tests first, like we did above.
+However, it is a very useful approach, because it forces you to think about how your code will be used before you spend
+the effort of writing it. Also, if you write your tests then you'll be in the 1% of programmers for whom all their code
+is tested!
+
+If you follow [the section on refactoring](Refactoring_makes_code_better.md), you will also end up with code that is
+easy to test at high and low levels. To illustrate this I've written a proper [test for my version
+of`gff.py`](solutions/part1/test_gff.py) using the python [unittest
+module](https://docs.python.org/3/library/unittest.html). It includes the test above, but also tests individual
+functions in the module.
+
+(If you run this test using `python3 test_gff.py`, you'll see that my `add_ID_and_Parent()` function actually has a bug
+that kicks in if you give it strange `attributes` values.)
+
+How much time and effort should you spend on testing? This depends on what you're trying to achieve. If your script is
+a one-off exploratory analysis, it might not matter that much. However, when you're deep in a piece of scientific
+research you don't want to be worried about [off-by-one errors](https://doi.org/10.1038/nm1107-1276b). I suggest
+writing at least some tests to make sure the code does what it says.
 
 ### Using the code
 
