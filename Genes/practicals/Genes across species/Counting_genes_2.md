@@ -409,9 +409,30 @@ gene_summary = pandas.merge(
     number_of_transcripts = pandas.NamedAgg( column = "ID", aggfunc = numpy.size ),
     average_number_of_exons = pandas.NamedAgg( column = "number_of_exons", aggfunc = numpy.mean ),
 )
+
+gene_summary
 ```
 
-You can check this gives the same results as the above SQL:
+This prints:
+    >>> gene_summary
+                                                                         number_of_transcripts  average_number_of_exons
+    analysis                                    ID                                                                     
+    Acanthochromis_polyacanthus.ASM210954v1.104 gene:ENSAPOG00000000002                      1                      6.0
+                                                gene:ENSAPOG00000000003                      1                      6.0
+                                                gene:ENSAPOG00000000004                      1                     10.0
+                                                gene:ENSAPOG00000000005                      1                      9.0
+                                                gene:ENSAPOG00000000006                      1                      3.0
+    ...                                                                                    ...                      ...
+    PlasmoDB-54_Pfalciparum3D7                  PF3D7_API04600                               1                      1.0
+                                                PF3D7_API04700                               1                      1.0
+                                                PF3D7_MIT01400                               1                      1.0
+                                                PF3D7_MIT02100                               1                      1.0
+                                                PF3D7_MIT02300                               1                      1.0
+    
+    [134092 rows x 2 columns]
+
+You can also check this gives the same results as the above SQL:
+
 ```
 gene_summary_by_sql.set_index(['analysis', 'ID'], inplace = True )
 gene_summary.sort_index( inplace = True )
