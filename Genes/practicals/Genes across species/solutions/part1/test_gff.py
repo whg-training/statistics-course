@@ -43,5 +43,12 @@ chr10\tme\ttranscript\t1\t1000\t.\t+\t.\tID=transcript2;Parent=gene2
         self.assertEqual( X['Parent'][4], None ) # malformatted attributes!
         self.assertEqual( X['Parent'][5], None )
 
+    def test_parse_attributes( self ):
+        self.assertEqual( gff.parse_attributes( "ID=1" )['ID'] == "1" )
+        self.assertEqual( gff.parse_attributes( "ID=1" )['Pareny'] == None )
+        self.assertEqual( gff.parse_attributes( "ID=1;Parent=5" )['ID'] == "1" )
+        self.assertEqual( gff.parse_attributes( "ID=1;Parent=5" )['Parent'] == "5" )
+        self.assertEqual( gff.parse_attributes( "Parent=5;ID=1" )['ID'] == "1" )
+
 if __name__ == '__main__':
     unittest.main()

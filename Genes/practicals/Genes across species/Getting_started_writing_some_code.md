@@ -185,15 +185,15 @@ first go at a solution to this. As a comparison,
 version called `parse_gff3_to_list()`. (There are lots of other ways to write this of course - for example, gathering
 the code into a class might be sensible - but I've gone with functions for simplicity.)
 
-If my code still looks too complicated to you - that's because it is. Having written the first version, I [refactored
+If my code still looks too complicated to you - that's because it is. Having written the first version, I had a go[refactored
 the code](Refactoring_makes_code_better.md) to produce a [nicer version](solutions/part1/gff.py).
 
 ### A note on writing tests
 
 I'd hazard a guess that not many people writing scientific code think of writing their tests first, like we did above.
 However, it is a very useful approach, because it forces you to think about how your code will be used before you spend
-the effort of writing it. Also, if you write your tests then you'll be in the 1% of programmers for whom all their code
-is tested!
+the effort of writing it. Also, writing tests first is one way to ensure you're in the 1% of programmers whose code is
+actually tested at all!
 
 If you follow [the section on refactoring](Refactoring_makes_code_better.md), you will also end up with code that is
 easy to test at high and low levels. To illustrate this I've written a proper [test for my version
