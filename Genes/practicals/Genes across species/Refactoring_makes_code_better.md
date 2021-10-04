@@ -51,8 +51,11 @@ process of writing this I realised that the [pandas `.insert()`
 method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.insert.html) can be used to put the columns in at
 the start - so the last line of the original version (that reorders columns) isn't needed any more.
 
-What's more, written this way, both the main function and the bits used for implementation are easy to test. Here is a
-[test using python's unit test module]( (solutions/part1/test_gff.py) to show you what I mean. 
+The `add_ID_and_Parent()` function follows a different pattern from the other functions we have written: it *mutates
+its first argument*.  
+
+Written this way, both the main function and the bits used for implementation are easy to test. Here is a [test using
+python's unit test module]( (solutions/part1/test_gff.py) to show you what I mean.
 
 **Note.** If you run the tests, you'll see that in fact my `parse_attributes()` function has a potential bug if it
 encounters a badly-formatted attributes value that contains an equals sign in the value itself. Does this type of input
