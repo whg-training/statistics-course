@@ -2,6 +2,8 @@
 # This file implements the function parse_gff3_to_dataframe()
 # and a number of helper functions.
 
+import re
+
 def parse_gff3_to_dataframe( file ):
     """Read GFF3-formatted data in the specified file (or file-like object)
     Return a pandas dataframe with ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns.
@@ -75,3 +77,45 @@ def parse_sequence_from_line( line ):
         "start": int( nameStartEnd[1] ),
         "end": int( nameStartEnd[2] )
     }
+
+# regular expression declared here so they are only compiled once
+# (rather than once per function call)
+_regular_expressions = {
+    "ID": re.compile( "ID=([^;]+);?" ),
+    "Parent": re.compile( "Parent=([^;]+);?" ),
+    "Name": re.compile( "Name=([^;]+);?" ),
+    "biotype": re.compile( "biotype=([^;]+);?" )
+}
+
+def from_gff3_line_to_dict( line ):
+    """Helper function to parse a single line of a GFF file into a python dict"""
+    fields = line.strip().split( "\t" )
+    assert len( fields ) == 9 # sanity check
+
+    def getAttribute( entry, regexp ):
+        m = re.search( regexp, entry )
+        return None if m is None else m.group(1)
+    def removeAttribute( entry, regexp ):
+        return re.sub( regexp, "", entry )
+
+    attributes = fields[8]
+    result = {
+        "ID": getAttribute( attributes, _regular_expressions[ "ID" ] ),
+        "Parent": getAttribute( attributes, _regular_expressions[ "Parent" ] ),
+        "Name": getAttribute( attributes, _regular_expressions[ "Name" ] ),
+        "biotype": getAttribute( attributes, _regular_expressions[ "biotype" ] ),
+        "seqid": fields[0],
+        "source": fields[1],
+        "type": fields[2],
+        "start": None if fields[3] == "." else int( fields[3] ),
+        "end": None if fields[4] == "." else int( fields[4] ),
+        "score": None if fields[5] == "." else float(fields[5]),
+        "strand": None if fields[6] == "." else fields[6],
+        "phase": None if fields[7] == "." else fields[7],
+        "attributes": None
+    }
+    for attribute in _regular_expressions.keys():
+        result[attribute] = getAttribute( attributes, _regular_expressions[attribute] )
+        attributes = removeAttribute( attributes, _regular_expressions[attribute] )
+    result['attributes'] = attributes
+    return result

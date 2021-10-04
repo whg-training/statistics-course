@@ -5,6 +5,8 @@ Use it like this:
 
     python gff_to_sqlite.py --input <path to gff file> --output <path to output file> --analysis <name>
 
+This version has been updated to read rows in a limited number of chunks, so that it does not use excessive memory.
+
 """
 import argparse, gff, sqlite3
 
@@ -42,26 +44,69 @@ def parse_arguments():
     return parser.parse_args()
 
 def process( args ):
-    print( "++ Loading genes data from %s...\n" % args.input )
-    data = gff_lowmem.parse_gff3_to_dataframe( open( args.input ))
-    print( "++ ok, %d records loaded, they look like:\n" % data.shape[0] )
-    print( data )
-
-    print( "++ Loading sequence lengths from %s...\n" % args.input )
-    sequences = gff_lowmem.parse_sequences_from_gff_metadata( open( args.input ))
-    print( "++ ok, %d records loaded, they look like:\n" % sequences.shape[0] )
-    print( sequences )
-
-    print( "++ Writing records to %s...\n" % args.output )
-    db = sqlite3.connect( args.output )
-
-    # In this version I have hard-coded `gff_data` and `sequences` table names.
-    data.insert( 0, 'analysis', args.analysis )
-    data.to_sql( "gff_data", db, index = False, if_exists = 'replace' if args.overwrite else 'append' )
-    sequences.insert( 0, 'analysis', args.analysis )
-    sequences.to_sql( "sequences", db, index = False, if_exists = 'replace' if args.overwrite else 'append' )
-
+    print( "++ Writing genes data from %s to %s...\n" % ( args.input, args.output ) )
+    input_gff3 = open( args.input )
+    output_db = sqlite3.connect( args.output )
+    number_of_records = parse_gff3_by_line_to_db( input_gff3, output_db, args.overwrite )
+    print( "++ ok, stored %d records in total." % number_of_records )
+    input_gff3.close()
+    output_db.close()
     print( "++ Success.\n" )
+
+def parse_gff3_by_line_to_db( file, db, overwrite = False ):
+    queries = build_queries( args )
+    if overwrite:
+        db.execute( queries['drop_gff_data'] )
+    db.execute( queries['create_gff_data'] )
+
+    chunk_size = 100000
+    data = [None] * chunk_size
+    index = 0
+    total = 0
+    for line in file:
+        if line[0] == '#':
+            pass
+        else:
+            data[index] = gff.from_gff3_line_to_dict( line )
+            index = index + 1
+            total = total + 1
+            # write data if we have filled the chunk
+            if index == chunk_size:
+                db.executemany( queries['insert_gff_data'], data )
+                db.commit()
+                print( "  ...stored %d records..." % total )
+                index = 0
+                return total
+
+    # Store the data from the last chunk, if not complete
+    if index < chunk_size:
+        db.executemany( queries['insert_gff_data'], data[0:index] )
+        db.commit()
+    return total
+
+def build_queries( args ):
+    return {
+        "create_gff_data": """CREATE TABLE IF NOT EXISTS `gff_data` (
+            `analysis` TEXT NOT NULL,
+            `ID` TEXT,
+            `Parent` TEXT,
+            `Name` TEXT,
+            `biotype` TEXT,
+            `seqid` TEXT,
+            `source` TEXT,
+            `type` TEXT,
+            `start` INTEGER,
+            `end` INTEGER,
+            `score` REAL,
+            `strand` TEXT,
+            `phase` TEXT,
+            `attributes` TEXT
+        ) ;""",
+        "drop_gff_data": """DROP TABLE IF EXISTS `gff_data`""",
+        "insert_gff_data": """INSERT INTO `gff_data`
+VALUES( '%s', :ID, :Parent, :Name, :biotype, :seqid, :source, :type, :start, :end, :score, :strand, :phase, :attributes )
+""" % ( args.analysis )
+    }
 
 # It is always good to let the user know what we are doing
 # Both to confirm we're doing what they want, and because some of the steps
