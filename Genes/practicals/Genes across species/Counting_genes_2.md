@@ -136,7 +136,7 @@ memory.
 This problem is not unusual. Because genomics data is so large, it's very easy to write code that
 seems sensible and works on test data, but turns out to be a memory hog when used with real data.
 
-[The next section](Memory_issues_and_how_to_solve_them.md) dicsusses this problem in more detail
+[The next section](Memory_issues_and_how_to_solve_them.md) discusses this problem in more detail
 and suggests ways to fix it. For now let's solve this by the simple step of not loading so much
 data. I'm going to assume you have successfully created your sqlite file with some data from
 different species. If so you can load just the data you need like this:
@@ -217,8 +217,8 @@ one doesn't include rows with missing `biotype`. So even if you include the *P.f
 from PlasmoDB in the datat (by including fields with `type=="protein_coding_gene"`), it still won't
 show in the above because the file does not record `biotypes`.
 
-[The next section](Memory_issues_and_how_to_solve_them.md) goes into more detail about this.
-=======
+[The section on memory issues](Memory_issues_and_how_to_solve_them.md) goes into more detail about this.
+
 ## How complicated are genes?
 
 Can we count how many transcripts each gene has?  How many exons?
@@ -238,11 +238,9 @@ the transcripts for that gene).
   link them together.
   
 - Another way is to iterate through the data (for example using `.apply()`), and use it to build a data
-  structure mapping genes to transcripts and transcripts to exons. For example, you could use a
-  python dict with the keys being gene IDs and the values being lists of transcripts.  A second
-  pass through this structure can then compute the statistics. E.g. something like this:
+  structure mapping genes to transcripts and transcripts to exons. For example, you might end up with something like this:
 ```
-final_structure = {
+my_gene_summary = {
    "gene:ENSG00000186092": {
       "number_of_transcripts": 1,
       "average_number_of_exons": 3,
@@ -259,12 +257,12 @@ final_structure = {
    ...
 }
 ```
-It may however 
-- The above structure would actually waste a lot of memory with all those IDs (which are already
-  recorded in the loaded dataframes). Instead, how about recording the row indexes of the genes,
-  transcripts, and exons? You can then use e.g. `genes.iloc(i)` to retrieve the specific record
-  without having to search the ID again.
 
+- Another idea is to save memory in the above by only recording the (integer) indexes of the genes and transcripts,
+  instead of their (string) identifiers. How do you do that?
+
+In the following I'll show how this can be done directly in the sqlite database and we'll then explore a pandas-based
+python version.
 
 ### A sqlite approach
 
