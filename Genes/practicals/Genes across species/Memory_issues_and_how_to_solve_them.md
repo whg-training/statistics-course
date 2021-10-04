@@ -84,7 +84,7 @@ bioinformatics:
 - it ought to work
 - it ought to not take too long to do it
 - it ought to be obvious what it does
-- it ought to be frugal with memory
+- **it ought not to waste memory**
 
 ### Memory use challenge
 
@@ -95,7 +95,7 @@ an additional challenge, try this one:
 
 **Hints**:
 
-- The progam could process rows one at a time, instead of loading them all in at the top.
+- The program could process rows one at a time, instead of loading them all in at the top.
 
 - The [the pure python version](gff_to_sqlite_python_version.py) is a good place to look for the
   needed sql statements.
@@ -104,5 +104,11 @@ an additional challenge, try this one:
   `db.commit()` after each chunk to write the data.
   
 - Don't forget to `db.commit()` after the last chunk
-  
+
+My version is [here](solutions/low_memory/gff_to_sqlite.py).
+
 Is this version faster or slower than the original?
+
+(An alternative might be to try to use [`chunksize` in
+`pandas.read_table()`](https://pandas.pydata.org/docs/reference/api/pandas.read_table.html).) 
+
