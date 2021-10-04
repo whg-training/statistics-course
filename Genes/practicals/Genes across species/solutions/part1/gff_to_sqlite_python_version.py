@@ -31,7 +31,7 @@ def parse_arguments():
     )
     parser.add_argument(
         '--table',
-        default = "genes",
+        default = "gff_data",
         help ='The table name to use in the output sqlite3 file.'
     )
     parser.add_argument(
