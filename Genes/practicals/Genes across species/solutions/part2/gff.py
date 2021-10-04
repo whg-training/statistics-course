@@ -1,31 +1,13 @@
+# gff.py
+# This file implements the function parse_gff3_to_dataframe()
+# and a number of helper functions.
+
 def parse_gff3_to_dataframe( file ):
     """Read GFF3-formatted data in the specified file (or file-like object)
     Return a pandas dataframe with ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns.
     The ID and Parent are extracted from the attributes columns, and the dataframe is indexed by ID"""
-
-    result = _read_gff3_using_pandas( file ) # this is defined below
-
-    # The original function called parse_attributes twice - and was slow.
-    # I got rid of this and now unpack them once:
-    attributes = result['attributes'].apply( parse_attributes )
-    # `attributes` is now a list of dicts representing the unpacked attributes strings.
-    
-    # Extract desired columns
-    attributes_to_extract = [ 'ID', 'Parent', 'Name', 'biotype' ]
-    for attribute in attributes_to_extract:
-        # Add a new column with the given name to the dataframe. The code on the
-        # right is a python 'list comprehension', which is a quick way to write
-        # something applied to every element of a list.  (So it is like pandas
-        # .apply() )
-        result[attribute] = [ entry.get( attribute, None ) for entry in attributes ]
-
-    def format_attributes( entry, exclude ):
-        return ';'.join( "%s=%s" % ( key, value ) for key, value in entry.items() if key not in exclude )
-    
-    result['attributes'] = [ format_attributes( entry, exclude = attributes_to_extract ) for entry in attributes ]
-    # reorder columns, because I want ID and Parent first
-    result = result[ ['ID', 'Parent', 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'Name', 'biotype', 'attributes'] ]
-
+    result = read_gff3_using_pandas( file )
+    extract_attributes_to_columns( result, ['ID', 'Parent', 'Name', 'biotype'] )
     return result
 
 # functions starting with underscores are private to the file
@@ -51,6 +33,24 @@ def _read_gff3_using_pandas( file ):
     )
     return result
 
+def extract_attributes_to_columns( data, attributes_to_extract = [ 'ID', 'Parent' ] ):
+    # The original `add_ID_and_Parent()` function ultimately called parse_attributes twice - and was slow.
+    # To fix this I now unpack them once at the top:
+    attributes = data['attributes'].apply( parse_attributes )
+    # `attributes` is now a list of dicts representing the unpacked attributes strings.
+
+    for i in range( 0, len( attributes_to_extract )):
+        attribute = attributes_to_extract[i]
+        # The code in the 3rd argument below is a python 'comprehension'.  This is
+        # a quick way to write something applied to every element of a list - in this case, to
+        # extract the relevant attribute from the unpacked attributes.
+        data.insert( i, attribute, entry.get( attribute, None ) for entry in attributes )
+
+    # Now replace the original column with the remaining attributes:
+    def format_attributes( entry, exclude ):
+        return ';'.join( "%s=%s" % ( key, value ) for key, value in entry.items() if key not in exclude )
+    result['attributes'] = [ format_attributes( entry, exclude = attributes_to_extract ) for entry in attributes ]
+
 def parse_attributes( string ):
     """Helper function to parse a GFF3 attributes column (i.e. a string with semi-colon separated key=value pairs)
     and return a dict of the key/value pairs"""
@@ -60,23 +60,3 @@ def parse_attributes( string ):
         keyValue = part.split( "=" )
         result[keyValue[0]] = keyValue[1]
     return result
-
-def parse_sequences_from_gff_metadata( file ):
-    """GFF3 files from the Ensembl ftp site list sequences and their lengths in the file metadata.
-    This function parses this information and returns it as a pandas dataframe.
-    It's use may be specific to the Ensembl files."""
-    result = []
-    for line in file:
-        if line.startswith( '##sequence-region' ):
-            parts = line.strip().split( " " )
-            nameStartEnd = parts[-3:] # last 3 elements
-            result.append({
-                "seqid": nameStartEnd[0],
-                "start": int( nameStartEnd[1] ),
-                "end": int( nameStartEnd[2] )
-            })
-        elif not line[0] == '#':
-            # quit when we meet the first non-metadata line
-            break
-    import pandas
-    return pandas.DataFrame( result )
