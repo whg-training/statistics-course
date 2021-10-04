@@ -396,8 +396,9 @@ transcript_summary = pandas.merge(
 )
 ```
 
-And finally we create the per-gene summary:
+And then we create the per-gene summary:
 
+```
 gene_summary = pandas.merge(
     genes,
     transcript_summary,
