@@ -8,7 +8,7 @@
 6. [Gene counting I](Counting_genes_1.md)
 7. [Gene counting II](Counting_genes_2.md)
 8. [Memory issues and how to solve them](Memory_issues_and_how_to_solve_them.md)
-9. [Getting sequence lengths](Getting sequence lengths.md)
+9. [Getting sequence lengths](Getting_sequence_lengths.md)
 10. [How much of the genome is in genes?](How_much_of_the_genome_is_in_genes.md)
 11. [Running it](Running_it_for_real.md)
 12. [Closing thoughts](Closing_thoughts.md)
