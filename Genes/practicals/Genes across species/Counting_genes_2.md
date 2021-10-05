@@ -231,7 +231,7 @@ test](solutions/part2/test_gff.py).  So that needs to be fixed too.  Good luck!
 **Note.** which of these approaches do you find easier to understand? The python version of my code
 is definitely longer, but neither seems especially simple. However, the
 `count_exons_per_transcript()` and `summarise_transcripts_per_gene()` functions are pretty similar.
-These are good candidates for a refactor.
+These are good candidates for a refactor so I think this code can be improved...
 
 ### A sqlite approach
 
