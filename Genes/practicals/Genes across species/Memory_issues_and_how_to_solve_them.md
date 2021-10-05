@@ -8,9 +8,10 @@ we should use it. We've used python and pandas to implement our code, because th
 gave us high-level features. And we haven't done anything special to keep memory usage low or work
 on performance.
 
-Unfortunately the data volumes used in many bioinformatics analyses are so large, this approach
-can fall over quite quickly. And indeed if I use [version 2 of my code](solutions/part2/gff.py)] to load the gene
-annotations:
+Unfortunately the data volumes used in many bioinformatics analyses are so large, this approach can
+fall over quite quickly. And indeed if I use [version 2 of my code](solutions/part2/gff.py)] to
+load the gene annotations:
+
 ```
 import gff
 data = gff.parse_gff3_to_dataframe("Homo_sapiens.GRCh38.104.chr.gff3" )
@@ -21,8 +22,8 @@ if the data was any larger, it would start to fail.)
 
 Moreover, seemingly innocuous changes to the code can make large differences to the memory usage.
 My two versions of `gff.py` - [version 1](solutions/part1/gff.py) and [version
-2](solutions/part2/gff.py) - do almost the same thing. The second one was tweaked to add a couple of
-extra columns. But it turns out to use about 4 times the memory.
+2](solutions/part2/gff.py) - do almost the same thing. The second one was tweaked to add a couple
+of extra columns. But it turns out to use about 4 times the memory.
 
 **Question.** How much memory does your version of the code use? (To find out, run the above in one
 terminal, then in a second terminal run `top -u <username> -o RES` (linux) or `top -U <username> -o
