@@ -1,3 +1,6 @@
+[Up to table of contents](README.md)
+[Back to the previous page](Memory_issues_and_how_to_solve_them.md)
+
 ## Getting sequence lengths
 
 To answer questions like 'how much of the genome is in genes' we need to know what the length of
