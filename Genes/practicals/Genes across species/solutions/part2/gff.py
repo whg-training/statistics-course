@@ -150,11 +150,10 @@ def summarise_genes_python_version( genes, transcripts, exons ):
 
     def compute_average_number_of_exons( gene ):
         transcripts = gene['transcripts']
-        N = len( transcripts )
-        if N == 0:
+        if len( transcripts ) == 0:
             return None
         count = sum( len( transcript['exons'] ) for transcript in transcripts )
-        return count / N
+        return count / len( transcripts )
 
     transcript_summary = count_exons_per_transcript( transcripts, exons )
     gene_summary = summarise_transcripts_per_gene( genes, transcript_summary )
