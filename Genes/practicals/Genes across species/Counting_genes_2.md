@@ -122,17 +122,39 @@ the transcripts for that gene).
 
 **Hints.**
 
-- To do this is a bit more involved than previous steps. We need to join the transcripts to the
-  genes and the exons to the transcripts somehow. There are several ways to do this.
-
-- In what follows I'll give a SQL approach to this - and then show how to mimic that approach in
-  python. This uses data joins (implemented in the pandas [`merge()
-  function`](https://pandas.pydata.org/docs/user_guide/merging.html)) to join exons to transcripts
-  and transcripts to genes.
+To do this is a bit more involved than previous steps. You need to find a way to join the transcript records to the
+genes, and the exon records to the transcripts. Here is one way using pandas.
   
-- But you don't have to do it this way. For example, another (better?) way would be to iterate through the data
-  (for example using `.apply()`), and directly build a data structure mapping genes to transcripts
-  and transcripts to exons. E.g. you might end up with a structure like this:
+- Start by loading just the genes, transcripts, and exons into seperate data frames.
+
+- Then write a function `count_exons_per_transcript()` that takes the transcripts and exons, and returns a dataframe of
+  transcripts with a column that reports the number of exons.
+  
+- To implement this, you could use a 'data join' followed by a `group by` operation. In pandas this is done using the
+  [`merge() function`](https://pandas.pydata.org/docs/user_guide/merging.html)) and the
+  [`groupby()`](https://pandas.pydata.org/docs/user_guide/groupby.html) function.  Something like this:
+
+```
+transcripts_and_exons = pandas.merge(
+    transcripts,
+    exons,
+    how = "outer",
+    left_on = "ID",
+    right_on = "Parent"
+)
+result = transcripts_and_exons.groupby( ['analysis', 'ID', 'Parent'] ).size()
+```
+
+- However, as always it pays off to name things clearly and the above doesn't do this. So I like the 'Named
+  aggregation' operations described on that page isntead - even if the syntax gets a bit involved. You can also use the
+  [`.rename()` function](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rename.html) to rename columns.
+
+- Similarly - you could now write a `summarise_transcripts_per_gene()` function that takes the genes and the transcript
+  summary from the above function, and returns a dataframe with transcript counts and average exon counts per gene. 
+
+You could also do this using plain python. For example, one way would be to iterate through the data and directly build
+a data structure mapping genes to transcripts and transcripts to exons. E.g. you might end up with a structure like
+this:
 
 ```
 gene_summary = {
@@ -153,12 +175,31 @@ gene_summary = {
 }
 ```
 
-(You could also save quite a bit of it by storing row indices instead of gene and transcripts
-identifiers in the above.)
+or like this:
+```
+gene_summary = [
+    {
+        "ID": "gene:ENSG00000186092",
+        "transcripts": [
+            {
+                "ID": "transcript:ENST00000641515",
+                "exons": [
+                    "ENSE00003812156", "ENSE00003813641", "ENSE00003813949"
+                ]
+            }
+        ]
+    },
+    ...
+]
+```
+
+You would then take a second pass through this structure to compute the statistics.  Good luck!
 
 ### A sqlite approach
 
-Just for completeness, here's how you could solve that in the sqlite database itself.
+
+In the rest of this section I'll show how you could solve those problems in the sqlite database itself - using data
+joins.
 
 First, it's convenient to make some views of the data that just reflect the genes, transcripts and
 exons:
@@ -179,7 +220,7 @@ CREATE INDEX gff_data_ID_index ON gff_data( ID ) ;
 Now we can join up the data to make the counts.  First we'll count exons in transcripts:
 ```
 CREATE VIEW transcript_summary_view AS
-SELECT T.*, COUNT(*) AS number_of_exons
+SELECT T.*, COUNT(E.ID) AS number_of_exons
 FROM transcript_view T
 LEFT JOIN exon_view E ON E.Parent == T.ID
 GROUP BY T.ID;
@@ -195,7 +236,10 @@ the number of exons in the last column
 Next we can summarise transcripts for each gene:
 ```
 CREATE VIEW gene_summary_view AS
-SELECT G.*, COUNT(*) AS number_of_transcripts, SUM(number_of_exons) / (COUNT(*) + 0.0) AS average_number_of_exons
+SELECT
+    G.*,
+    COUNT(T.ID) AS number_of_transcripts,
+    ((SUM(number_of_exons)+0.0)/COUNT(T.ID)) AS average_number_of_exons
 FROM gene_view G
 LEFT JOIN transcript_summary_view T ON T.Parent == G.ID
 GROUP BY G.ID;
@@ -226,7 +270,10 @@ and then rewrite `gene_summary_view` to use these tables:
 ```
 DROP VIEW gene_summary_view ;
 CREATE VIEW gene_summary_view AS
-SELECT G.*, COUNT(*) AS number_of_transcripts, (0.0+SUM(number_of_exons))/COUNT(*) AS average_number_of_exons
+SELECT
+    G.*,
+    COUNT(T.ID) AS number_of_transcripts,
+    ((SUM(number_of_exons)+0.0)/COUNT(T.ID)) AS average_number_of_exons
 FROM genes G
 LEFT JOIN transcript_summary T ON T.Parent == G.ID
 GROUP BY G.ID;
@@ -264,79 +311,4 @@ humans - but only a paltry 112.)  These observations may be explained by the des
     the protein is stretched and refold when the tension is removed.
 
     - Wikipedia
-
-### Joining data in python
-
-Here is the same process carried out in python.
-First we load the data:
-
-```
-import pandas, sqlite3
-db = sqlite3.connect( "genes.sqlite" )
-genes = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'gene' )", db )
-transcripts = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand, Name, biotype FROM gff_data WHERE type IN ( 'mRNA' )", db )
-exons = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand FROM gff_data WHERE type IN ( 'exon' )", db )
-```
-
-Now we create the per-transcript summary of the number of exons. For this we have to use the slightly complicated
-pandas syntax for [`groupby` operations with named columns](https://pandas.pydata.org/docs/user_guide/groupby.html):
-
-```
-transcript_summary = pandas.merge(
-   transcripts,
-   exons[["ID", "Parent"]], 
-   how = "outer",
-   left_on = "ID",
-   right_on = "Parent"
-).groupby( ['ID_x', 'Parent_x'], as_index = False ).agg(
-    number_of_exons = pandas.NamedAgg( column = "ID_y", aggfunc = numpy.size )
-)
-```
-
-And then we create the per-gene summary:
-
-```
-gene_summary = pandas.merge(
-    genes,
-    transcript_summary,
-    how = "outer",
-    left_on = "ID",
-    right_on = "Parent_x"
-).groupby( [ "analysis", "ID" ] ).agg(
-    number_of_transcripts = pandas.NamedAgg( column = "ID", aggfunc = numpy.size ),
-    average_number_of_exons = pandas.NamedAgg( column = "number_of_exons", aggfunc = numpy.mean ),
-)
-
-gene_summary
-```
-
-This prints:
-
-                                                                         number_of_transcripts  average_number_of_exons
-    analysis                                    ID                                                                     
-    Acanthochromis_polyacanthus.ASM210954v1.104 gene:ENSAPOG00000000002                      1                      6.0
-                                                gene:ENSAPOG00000000003                      1                      6.0
-                                                gene:ENSAPOG00000000004                      1                     10.0
-                                                gene:ENSAPOG00000000005                      1                      9.0
-                                                gene:ENSAPOG00000000006                      1                      3.0
-    ...                                                                                    ...                      ...
-    PlasmoDB-54_Pfalciparum3D7                  PF3D7_API04600                               1                      1.0
-                                                PF3D7_API04700                               1                      1.0
-                                                PF3D7_MIT01400                               1                      1.0
-                                                PF3D7_MIT02100                               1                      1.0
-                                                PF3D7_MIT02300                               1                      1.0
-    
-    [134092 rows x 2 columns]
-
-You can also check this gives the same results as the above SQL:
-
-```
-gene_summary_by_sql.set_index(['analysis', 'ID'], inplace = True )
-gene_summary.sort_index( inplace = True )
-gene_summary_by_sql.sort_index( inplace = True )
-
-comparison = gene_summary[['number_of_transcripts', 'average_number_of_exons']] == gene_summary_by_sql[['number_of_transcripts', 'average_number_of_exons']]
-```
-
-## Sequence lengths
 
