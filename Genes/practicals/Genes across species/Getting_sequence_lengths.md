@@ -18,10 +18,10 @@ listed in the metadata.  For example, for humans they look like this:
     ##sequence-region   X 1 156040895
     ##sequence-region   Y 2752083 56887902
 
-The three pieces of data on each row are: the sequence name (first column), the sequence starting
-position, and the ending position. (The Y chromosome starts at a base different than 1, because it
-omits the [pseudoautosomal
-regions](https://www.ncbi.nlm.nih.gov/grc/human?filters=chr:Y#current-regions).
+The three pieces of data on each row are: the sequence name (first column), the sequence starting position, and the
+ending position. (Incidentally, the reason the Y chromosome starts at a base different than 1 is because it omits the
+[pseudoautosomal regions](https://www.ncbi.nlm.nih.gov/grc/human?filters=chr:Y#current-regions), which are often
+treated for analysis purposes as being on the X chromosome).
 
 **Challenge:** write a function `parse_sequences_from_gff_metadata()` that
 
