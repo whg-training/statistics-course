@@ -122,39 +122,35 @@ the transcripts for that gene).
 
 **Hints.**
 
-To do this is a bit more involved than previous steps. You need to find a way to join the transcript records to the
-genes, and the exon records to the transcripts. Here is one way using pandas.
+To do this is a bit more involved than previous steps. You need to find a way to join the
+transcript records to the genes, and the exon records to the transcripts. Here is one way:
   
 - Start by loading just the genes, transcripts, and exons into seperate data frames.
 
-- Then write a function `count_exons_per_transcript()` that takes the transcripts and exons, and returns a dataframe of
-  transcripts with a column that reports the number of exons.
+- Write a function `count_exons_per_transcript()` that takes the transcripts and exons, and
+  returns a dataframe of transcripts with a column that reports the number of exons.
   
-- To implement this, you could use a 'data join' followed by a `group by` operation. In pandas this is done using the
-  [`merge() function`](https://pandas.pydata.org/docs/user_guide/merging.html)) and the
-  [`groupby()`](https://pandas.pydata.org/docs/user_guide/groupby.html) function.  Something like this:
+- Then similarly write a function `summarise_transcripts_per_gene()` that takes the genes and the
+  above summarised transcripts, and returns a dataframe of transcripts with a column for the number
+  of transcripts and a column for the average number of exons.
 
+- There are a couple of ways to implement these functions. One way is to iterate through dataframes
+  and build python data structures that capture the hierarchy of genes, transcripts, and exons.
+  E.g. the first function might return something like this:
+  
 ```
-transcripts_and_exons = pandas.merge(
-    transcripts,
-    exons,
-    how = "outer",
-    left_on = "ID",
-    right_on = "Parent"
-)
-result = transcripts_and_exons.groupby( ['analysis', 'ID', 'Parent'] ).size()
+transcript_summary = [
+   {
+      "ID":"transcript:ENST00000641515",
+      "exons": [
+         "ENSE00003812156", "ENSE00003813641", "ENSE00003813949"
+      ]
+   },
+   ...
+}
 ```
 
-- However, as always it pays off to name things clearly and the above doesn't do this. So I like the 'Named
-  aggregation' operations described on that page isntead - even if the syntax gets a bit involved. You can also use the
-  [`.rename()` function](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rename.html) to rename columns.
-
-- Similarly - you could now write a `summarise_transcripts_per_gene()` function that takes the genes and the transcript
-  summary from the above function, and returns a dataframe with transcript counts and average exon counts per gene. 
-
-You could also do this using plain python. For example, one way would be to iterate through the data and directly build
-a data structure mapping genes to transcripts and transcripts to exons. E.g. you might end up with a structure like
-this:
+and the second function something like this:
 
 ```
 gene_summary = {
@@ -175,31 +171,72 @@ gene_summary = {
 }
 ```
 
-or like this:
+You would then iterate through the second object to compute the summaries.
+
+- A second way to implement this is to use 'data joins' and 'group by' operations. In pandas the
+  functions to use are the [`merge()
+  function`](https://pandas.pydata.org/docs/user_guide/merging.html)) and the
+  [`groupby()`](https://pandas.pydata.org/docs/user_guide/groupby.html) function. A simple version
+  of this is:
+
 ```
-gene_summary = [
-    {
-        "ID": "gene:ENSG00000186092",
-        "transcripts": [
-            {
-                "ID": "transcript:ENST00000641515",
-                "exons": [
-                    "ENSE00003812156", "ENSE00003813641", "ENSE00003813949"
-                ]
-            }
-        ]
-    },
-    ...
-]
+transcripts_and_exons = pandas.merge(
+    transcripts,
+    exons[ ["ID", "Parent" ]],
+    how = "outer",
+    left_on = "ID",
+    right_on = "Parent"
+)
+transcript_summary = transcripts_and_exons.groupby( ['ID_x', 'Parent_x'] ).count()
 ```
 
-You would then take a second pass through this structure to compute the statistics.  Good luck!
+This joins the transcripts to the exon IDs, and then groups the result by transcript to count the rows.
+
+However the above has a few issues. First, gets the names wrong - "ID_x", "Parent_x" and so on, and
+the third column does not even have a name! It is always good to have the right names. The
+`.rename()` option and the 'Named aggregation' syntax described on the [`groupby()`
+page](https://pandas.pydata.org/docs/user_guide/groupby.html) can be used to fix this. Something like this:
+
+```
+transcripts_and_exons.rename(
+   columns = { 'ID_x': 'ID', 'Parent_x': 'Parent', 'ID_y': 'exon_ID', 'Parent_y', 'exon_Parent' },
+   inplace = True
+)
+
+def count( x ):
+   return len(x)
+
+transcript_summary = (
+   transcripts_and_exons
+      .groupby( ['ID', 'Parent'] )
+      .agg(
+         number_of_exons = pandas.NamedAgg(
+            column = "exon_ID",
+            aggfunc = count
+         )
+      )
+)
+```
+
+If you run this you will see it has "ID", "Parent" and "number_of_exons" columns. 
+
+More seriously, the above code has a possible bug. (You did test it, right?) Specifically it gets
+the answer wrong if a transcript has no exons. How did I discover this? [By writing a
+test](solutions/part2/test_gff.py).  So that needs to be fixed too.  Good luck! 
+
+**Note.** My version of the code can be found in the
+[`solutions/part2/gff.py`](solutions/part2/gff.py) file. There is both a pandas version
+(`summarise_genes()`) and a python datastructure version (`summarise_genes_python_version()`).
+
+**Note.** which of these approaches do you find easier to understand? The python version of my code
+is definitely longer, but neither seems especially simple. However, the
+`count_exons_per_transcript()` and `summarise_transcripts_per_gene()` functions are pretty similar.
+These are good candidates for a refactor.
 
 ### A sqlite approach
 
-
-In the rest of this section I'll show how you could solve those problems in the sqlite database itself - using data
-joins.
+In the rest of this section I'll show how you could solve those problems in the sqlite database
+itself using data joins and group by operations.
 
 First, it's convenient to make some views of the data that just reflect the genes, transcripts and
 exons:
