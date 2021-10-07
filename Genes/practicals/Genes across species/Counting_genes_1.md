@@ -181,4 +181,4 @@ Because of the earlier refactor, I only had to change one line of `parse_gff3_to
 then implemented a new function `extract_attributes_to_columns()` instead of the original
 `add_ID_and_Parent()`.
 
-Now let's talk more about [Counting protein-coding genes](Counting_genes_2.md).
+Now let's talk more about [Investigating protein-coding genes](Counting_genes_2.md).

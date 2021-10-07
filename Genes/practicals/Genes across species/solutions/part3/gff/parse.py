@@ -1,17 +1,18 @@
 # gff.py
 # This file implements the function parse_gff3_to_dataframe()
 # and a number of helper functions.
-
-def parse_gff3_to_dataframe( file ):
+import pandas
+ 
+def gff3_to_dataframe( file ):
     """Read GFF3-formatted data in the specified file (or file-like object)
     Return a pandas dataframe with ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns.
     The ID and Parent are extracted from the attributes columns, and the dataframe is indexed by ID"""
-    result = read_gff3_using_pandas( file )
-    extract_attributes_to_columns( result, ['ID', 'Parent', 'Name', 'biotype'] )
+    result = _read_gff3_using_pandas( file )
+    _extract_attributes_to_columns( result, ['ID', 'Parent', 'Name', 'biotype'] )
     return result
 
 # functions starting with underscores are private to the file
-def read_gff3_using_pandas( file ):
+def _read_gff3_using_pandas( file ):
     """Helper function to read the given GFF3 file into a dataframe, without any postprocessing."""
     import pandas
     result = pandas.read_table(
@@ -33,7 +34,7 @@ def read_gff3_using_pandas( file ):
     )
     return result
 
-def extract_attributes_to_columns( data, attributes_to_extract = [ 'ID', 'Parent' ] ):
+def _extract_attributes_to_columns( data, attributes_to_extract = [ 'ID', 'Parent' ] ):
     # The original function called parse_attributes twice - and was slow.
     # The second version called it once to unpack them all, but used masses of memory.
     # This third version uses regular expression to parse the attributes, get the value
@@ -53,22 +54,3 @@ def extract_attributes_to_columns( data, attributes_to_extract = [ 'ID', 'Parent
         # (I could not get .transform() work here for some reason)
         data['attributes'] = data['attributes'].apply( lambda entry: removeAttribute( entry, regexp ))
 
-def parse_sequences_from_gff_metadata( file ):
-    """GFF3 files from the Ensembl ftp site list sequences and their lengths in the file metadata.
-    This function parses this information and returns it as a pandas dataframe.
-    It's use may be specific to the Ensembl files."""
-    import pandas
-    result = []
-    for line in file:
-        if line.startswith( '##sequence-region' ):
-            parts = line.strip().split( " " )
-            nameStartEnd = parts[-3:] # last 3 elements
-            result.append({
-                "seqid": nameStartEnd[0],
-                "start": int( nameStartEnd[1] ),
-                "end": int( nameStartEnd[2] )
-            })
-        elif not line[0] == '#':
-            # quit when we meet the first non-metadata line
-            break
-    return pandas.DataFrame( result )

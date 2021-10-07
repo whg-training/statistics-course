@@ -1,7 +1,7 @@
 [Up to table of contents](README.md)
 [Back to the previous page](Counting_genes_1.md)
 
-## How many protein-coding genes are there?
+## How protein-coding genes are there?
 
 If you've followed so far you will have code `gff.py` that can parse a GFF file, and in the process
 will pull out certain fields from the `attributes` column. This includes the `ID` attribute, the
@@ -102,6 +102,15 @@ data = pandas.read_sql( "SELECT * FROM gff_data WHERE type IN ( 'gene' )", db )
 data.groupby( [ 'analysis', 'biotype' ] ).size()
 ```
 
+### What do some protein-coding genes look like?
+
+**Challenge.** Pick a gene (say human ABO or FUT2) and investigate in detail using your file. (If you've followed so
+far this will be in the `Name` column.) How many transcripts does it have? (Hint: find records with `Parent` equal to
+the gene `ID`. (Are there any other records with the gene as parent, that aren't transcripts? What are they?). What is
+the `transcript_support_level` for transcripts, and what does that mean? Pick a transcript and look at its sub-records
+(again by matching the `Parent`` to the transcript `ID`). What types are they apart from exons? Can you see how this
+data compares to the representation on [Ensembl](http://www.ensembl.org/) or on the [UCSC genome browser]()?
+
 ### What are all those species anyway?
 
 If like me you're a bit unclear about what [all those
@@ -112,7 +121,7 @@ Group](http://www.onezoom.org/life/@Ovalentaria=5553750?img=best_any&anim=flight
  that also includes Cichlids, Silversides and Guppies, or that *mus musculus* is one of 37 species
 collectively known as 'house mice'.
 
-## How complicated are genes?
+## How complicated are protein-coding genes?
 
 Can we count how many transcripts each gene has, and how many exons?
 
@@ -224,14 +233,13 @@ More seriously, the above code has a possible bug. (You did test it, right?) Spe
 the answer wrong if a transcript has no exons. How did I discover this? [By writing a
 test](solutions/part2/test_gff.py).  So that needs to be fixed too.  Good luck! 
 
-**Note.** My version of the code can be found in the
-[`solutions/part2/gff.py`](solutions/part2/gff.py) file. There is both a pandas version
-(`summarise_genes()`) and a python datastructure version (`summarise_genes_python_version()`).
+**Note.** My version of the code can be found in the [`solutions/part2/gff.py`](solutions/part2/gff.py) file. There is
+both a pandas version (`summarise_genes()`) and a python datastructure version (`summarise_genes_python_version()`).
 
-**Note.** which of these approaches do you find easier to understand? The python version of my code
-is definitely longer, but neither seems especially simple. However, the
-`count_exons_per_transcript()` and `summarise_transcripts_per_gene()` functions are pretty similar.
-These are good candidates for a refactor so I think this code can be improved...
+**Note.** which of these approaches do you find easier to understand? The python version of my code is definitely
+longer, but neither seems especially simple. However, the `count_exons_per_transcript()` and
+`summarise_transcripts_per_gene()` functions are pretty similar and so they are good candidates for a refactor - so I
+think this code can be improved...
 
 ### A sqlite approach
 
@@ -257,29 +265,35 @@ CREATE INDEX gff_data_ID_index ON gff_data( ID ) ;
 Now we can join up the data to make the counts.  First we'll count exons in transcripts:
 ```
 CREATE VIEW transcript_summary_view AS
-SELECT T.*, COUNT(E.ID) AS number_of_exons
+SELECT T.*, COUNT(E.Parent) AS number_of_exons
 FROM transcript_view T
 LEFT JOIN exon_view E ON E.Parent == T.ID
 GROUP BY T.ID;
 ```
+
 
 If you look at the result:
 ```
 SELECT * FROM transcript_summary_view LIMIT 10 ;
 ```
 you'll see it takes a little while to run its computation, and it has one row per transcript, with
-the number of exons in the last column
+the number of exons in the last column.
+
+**Note.** As with python in principle we have to be careful what we count above. The `COUNT(E.Parent)` makes sure that
+we count only rows that correspond to an actual exon (rather than a transcript with no exons, which should get a count
+of zero. (There shouldn't really be any transcripts like this - otherwise it isn't really a transcript - but it is
+worth making sure. Are there any?)
 
 Next we can summarise transcripts for each gene:
 ```
 CREATE VIEW gene_summary_view AS
 SELECT
-    G.*,
-    COUNT(T.ID) AS number_of_transcripts,
-    ((SUM(number_of_exons)+0.0)/COUNT(T.ID)) AS average_number_of_exons
-FROM gene_view G
-LEFT JOIN transcript_summary_view T ON T.Parent == G.ID
-GROUP BY G.ID;
+    gene_view.*,
+    COUNT(T.Parent) AS number_of_transcripts,
+    CAST( SUM(number_of_exons) AS FLOAT ) / COUNT(T.ID) AS average_number_of_exons
+FROM gene_view
+LEFT JOIN transcript_summary_view T ON T.Parent == gene_view.ID
+GROUP BY gene_view.ID;
 ```
 
 This solves our problem:
@@ -308,15 +322,16 @@ and then rewrite `gene_summary_view` to use these tables:
 DROP VIEW gene_summary_view ;
 CREATE VIEW gene_summary_view AS
 SELECT
-    G.*,
+    genes.*,
     COUNT(T.ID) AS number_of_transcripts,
-    ((SUM(number_of_exons)+0.0)/COUNT(T.ID)) AS average_number_of_exons
-FROM genes G
-LEFT JOIN transcript_summary T ON T.Parent == G.ID
-GROUP BY G.ID;
+    CAST( SUM(number_of_exons) AS FLOAT ) / COUNT(T.ID) AS average_number_of_exons
+FROM genes
+LEFT JOIN transcript_summary T ON T.Parent == genes.ID
+GROUP BY genes.ID;
 ```
 On my system, with the data above this brings query time down to a few seconds.
 
-Equivalent python code [is here](solutions/part2/gene_summary.py).
+**Note.** The `CAST( .. AS FLOAT )` syntax is needed above to make sure sqlite uses [floating-point arithmetic]() for the division.
 
-Let's use this to [answer some questions](Clash_of_the_titins.md).
+Let's use this data to [investigate genes more deeply](Counting_genes_3.md).
+

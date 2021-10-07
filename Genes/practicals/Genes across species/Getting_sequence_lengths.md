@@ -3,10 +3,9 @@
 
 ## Getting sequence lengths
 
-To answer questions like 'how much of the genome is in genes' we need to know what the length of
-each genome is. Happily, if you look at the [GFF files on
-Ensembl](http://ftp.ensembl.org/pub/current_gff3/) the sequences from the relevant reference are
-listed in the metadata.  For example, for humans they look like this:
+To answer questions like 'how much of the genome is in genes' we need to know what the length of each genome is.
+Happily, if you look at the [GFF files on Ensembl](http://ftp.ensembl.org/pub/current_gff3/) the sequences from the
+relevant reference are listed in the metadata. For example, for humans they look like this:
 
     ##gff-version 3
     ##sequence-region   1 1 248956422
