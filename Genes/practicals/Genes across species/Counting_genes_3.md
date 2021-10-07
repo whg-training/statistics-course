@@ -21,9 +21,7 @@ Here are some things I noticed:
   information on this gene including its expression patterns and function. Is there much published literature about it?
   What does it look like in other species?
 
-* Quite a few genes have lots of exons. One that really stands out in that [few species I've looked
-  at](Counting_genes_2.md) is [*Titin*](https://en.wikipedia.org/wiki/Titin). It has 184 exons in Chimpanzees (*Pan
-  troglodytes*) and ~113 in humans. Another is [*Nebulin*](https://en.wikipedia.org/wiki/Nebulin). These genes seem
+* Quite a few genes have lots of exons, but one that really stands out is [*Titin*](https://en.wikipedia.org/wiki/Titin). It has a slightly incredible 184 exons in Chimpanzees (*Pan troglodytes*) and ~113 in humans. Another is [*Nebulin*](https://en.wikipedia.org/wiki/Nebulin). These genes seem
   especially huge in Chimpanzees. Are they big in all species? In all great apes? Is there literature that might
   explain the results for these genes, or other genes with lots of exons?
   
