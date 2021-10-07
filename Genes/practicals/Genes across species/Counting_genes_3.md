@@ -15,9 +15,9 @@ You can work this out, but here are my solutions for reference:
 Here are some things I noticed:
 
 * In all the data I looked at, there's only one gene with > 100 transcripts. It is [*MAPK10*, "Mitogen-activated
-  protein kinase 10"](https://www.uniprot.org/uniprot/P53779) and it has 151 transcripts! It [takes a while to load in
-  Ensembl](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000109339;r=4:85990007-86594625) and the
-  [UCSC Genome browser](https://genome-euro.ucsc.edu/cgi-bin/hgGene?hgg_gene=ENST00000641010.1&hgg_chrom=chr4&hgg_start=85990006&hgg_end=86360060&hgg_type=knownGene&db=hg38). If you explore these genome browsers you will find a wealth of
+  protein kinase 10"](https://www.uniprot.org/uniprot/P53779) and it has 151 transcripts! It even takes a while to load in
+  [Ensembl](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000109339;r=4:85990007-86594625) and the
+  [UCSC Genome browser](https://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr4%3A86016491%2D86594110&hgsid=275896231_HieWdPQTMOsgYQUFAnwTALgAECs0). If you explore these genome browsers you will find a wealth of
   information on this gene including its expression patterns and function. Is there much published literature about it?
   What does it look like in other species?
 
