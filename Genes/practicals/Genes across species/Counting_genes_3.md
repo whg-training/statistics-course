@@ -26,7 +26,7 @@ Here are some things I noticed:
   explain the results for these genes, or other genes with lots of exons?
   
 * The genes with lots of exons aren't the largest though (by length). In humans and chimpanzees, that accolade goes
-  to [`RBFOX1`]() with a whopping length of around 2 and a half megabases, or 0.08% of the genome. What does this look
+  to [`RBFOX1`](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000078328;r=16:5239802-7713340) with a whopping length of around 2 and a half megabases, or 0.08% of the genome. What does this look
   like across species? Where is it expressed? (Interestingly, this gene has been previously associated [with aggressive
   behaviour](https://www.nature.com/articles/s41380-018-0068-7)).
 
