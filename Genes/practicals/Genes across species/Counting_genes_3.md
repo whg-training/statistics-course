@@ -25,18 +25,18 @@ Here are some things I noticed:
   especially huge in Chimpanzees. Are they big in all species? In all great apes? Is there literature that might
   explain the results for these genes, or other genes with lots of exons?
   
-* Those genes with lots of exons aren't the largest thoguh (by length). In humans and chimpanzees, that accolade goes
+* The genes with lots of exons aren't the largest though (by length). In humans and chimpanzees, that accolade goes
   to [`RBFOX1`]() with a whopping length of around 2 and a half megabases, or 0.08% of the genome. What does this look
-  like across species? Where is it expressed? (Interestingly, this gene has been previously assocaited [with aggressive
+  like across species? Where is it expressed? (Interestingly, this gene has been previously associated [with aggressive
   behaviour](https://www.nature.com/articles/s41380-018-0068-7)).
 
 * There are also some pretty tiny genes around. In humans the smallest is
-  [*ENSG00000288608*](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000288608;r=7:151061928-151061978
-   ;t=ENST00000674552), which is only 50 base pairs long. (However, it seems to be contained in an exon of the much
+  [*ENSG00000288608*](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000288608;r=7:151061928-151061978;t=ENST00000674552),
+  which is only 50 base pairs long. (However, it seems to be contained in an exon of the much
   longer [*SLC4A2* Anion exhange protein
   2](https://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType
   =default&virtMode=0&nonVirtPosition=&position=chr7%3A151061877%2D151062029&hgsid=275886241_mxgWOGDr4elcf2SdW0zGz6ukwVJ
-  W).  I'm not sure what this means!)
+  W).  I'm not sure what this means...)
 
 What other extreme genes are there?
 
