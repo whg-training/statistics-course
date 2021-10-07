@@ -319,33 +319,4 @@ On my system, with the data above this brings query time down to a few seconds.
 
 Equivalent python code [is here](solutions/part2/gene_summary.py).
 
-Let's use this to answer some questions.
-
-### Which genes have the most transcripts?
-
-I'll use the SQL version to answer these questions.
-
-**Challenge.** replicate these queries using python.
-
-```
-
-SELECT analysis, MAX(number_of_transcripts), MAX( average_number_of_exons ) FROM gene_summary_view
-GROUP BY analysis ;
-
-```
-
-It turns out that (among the above data) humans have by far the largest number of annotated
-transcripts for a single gene - 151, for the MAPK10 gene which is a [member of the MAP kinase
-family](https://en.wikipedia.org/wiki/MAPK10). However, Chimpanzees turn out to have a gene with an
-extremely large number of exons: 184 for the *TTN* gene which encodes
-(Titin)[https://en.wikipedia.org/wiki/Titin]. (*TTN* also has the highest number of exons in
-humans - but only a paltry 112.)  These observations may be explained by the description of Titin:
-
-    Titin /ˈtaɪtɪn/, also known as connectin, is a protein that in humans is encoded by the TTN
-    gene. Titin is a giant protein, greater than 1 µm in length,that functions as a molecular
-    spring which is responsible for the passive elasticity of muscle. It comprises 244 individually
-    folded protein domains connected by unstructured peptide sequences. These domains unfold when
-    the protein is stretched and refold when the tension is removed.
-
-    - Wikipedia
-
+Let's use this to [answer some questions](Clash_of_the_titins.md).

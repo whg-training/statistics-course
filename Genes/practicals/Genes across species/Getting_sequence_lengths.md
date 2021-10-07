@@ -26,6 +26,8 @@ ending position. (Incidentally, the reason the Y chromosome starts at a base dif
 [pseudoautosomal regions](https://www.ncbi.nlm.nih.gov/grc/human?filters=chr:Y#current-regions), which are often
 treated for analysis purposes as being on the X chromosome).
 
+If you feel like it, please try the following:
+
 **Challenge:** write a function `parse_sequences_from_gff_metadata()` that
 
 - takes the gff filename as argument
@@ -58,6 +60,8 @@ class TestGff(unittest.TestCase):
        self.assertEqual( sequences['end'][1], 133797422 )
 ```
 
-If you've had enough coding, [my version is here](solutions/part3/gff.py).
+If you want some hints or just don't fancy writing this piece of sequence parsing code - feel free
+to look at [my version is here](solutions/part3/gff.py). And I added it to
+[`gff_to_sqlite.py`](solutions/part3/gff_to_sqlite.py).
 
-
+We are now ready to [figure out how much of the genome is in genes](How_much_of_the_genome_is_in_genes.md).

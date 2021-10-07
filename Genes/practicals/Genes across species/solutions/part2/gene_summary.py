@@ -16,8 +16,12 @@ exons = pandas.read_sql( "SELECT analysis, ID, Parent, seqid, start, end, strand
 def count_exons_per_transcript( transcripts, exons ):
     summary = join_dataframes_by_ID_and_Parent( transcripts, exons, [ "ID", "Parent" ] )
     summary.rename( columns = { "ID_x": "ID", "Parent_x": "Parent", "ID_y": "exon_ID", "Parent_y": "exon_Parent" }, inplace = True )
+    print( summary )
     result = summary.groupby( [ 'analysis', 'ID', 'Parent'], as_index = False ).agg(
-        number_of_exons = pandas.NamedAgg( column = "exon_ID", aggfunc = numpy.size )
+        number_of_exons = pandas.NamedAgg(
+            column = "exon_ID",
+            aggfunc = lambda x: x.notnull().sum()
+        )
     )
     return result
 
