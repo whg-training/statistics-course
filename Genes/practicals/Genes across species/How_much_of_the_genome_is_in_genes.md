@@ -85,7 +85,7 @@ My solution is [here](solutions/part3/gff/regions.py).
 
 ### So how much of the genome is in genes?
 
-We're ready to answer this! Let's use the above to write function that counts the bases covered:
+We're ready to answer this! Let's use the above to write function that counts the bases covered in each genome:
 
 ```
 # Add this to your gff.py file
@@ -158,14 +158,14 @@ gff.compute_genome_bases_covered( genes, sequences )
 This gives:
 
                                                 bases_covered  sequence_length  proportion
-   analysis                                                                               
-   Acanthochromis_polyacanthus.ASM210954v1.104      415285145        830196730    0.500225
-   Camelus_dromedarius.CamDro2.104.chr.gff3         815783547       2052758671    0.397408
-   Gallus_gallus.GRCg6a.104                         480522985       1050156563    0.457573
-   Homo_sapiens.GRCh38.104                         1298183323       3085194781    0.420778
-   Mus_musculus.GRCm39.104                         1046654226       2723431121    0.384315
-   Pan_troglodytes.Pan_tro_3.0.104.chr             1101889770       2967125051    0.371366
-   PlasmoDB-54_Pfalciparum3D7                        18174434         23332823    0.778921
+    analysis                                                                               
+    Acanthochromis_polyacanthus.ASM210954v1.104      415285145        830196730    0.500225
+    Camelus_dromedarius.CamDro2.104.chr.gff3         815783547       2052758671    0.397408
+    Gallus_gallus.GRCg6a.104                         480522985       1050156563    0.457573
+    Homo_sapiens.GRCh38.104                         1298183323       3085194781    0.420778
+    Mus_musculus.GRCm39.104                         1046654226       2723431121    0.384315
+    Pan_troglodytes.Pan_tro_3.0.104.chr             1101889770       2967125051    0.371366
+    PlasmoDB-54_Pfalciparum3D7                        18174434         23332823    0.778921
 
 So only 42% of the human genome is covered by protein-coding genes. This drops a bit in
 chimpanzees, while a colossal 78% of the *P.falciparum* genome is in genes.
@@ -230,14 +230,14 @@ gff.compute_genome_bases_covered( cds, sequences )
 
 This gives:
                                                  bases_covered  sequence_length  proportion
-    analysis                                                                               
-    Acanthochromis_polyacanthus.ASM210954v1.104       37182784        830196730    0.044788
-    Camelus_dromedarius.CamDro2.104.chr.gff3          31455083       2052758671    0.015323
-    Gallus_gallus.GRCg6a.104                          28472131       1050156563    0.027112
-    Homo_sapiens.GRCh38.104                           35837191       3085194781    0.011616
-    Mus_musculus.GRCm39.104                           36746474       2723431121    0.013493
-    Pan_troglodytes.Pan_tro_3.0.104.chr               35836571       2967125051    0.012078
-    PlasmoDB-54_Pfalciparum3D7                        12357002         23332823    0.529597
+   analysis                                                                               
+   Acanthochromis_polyacanthus.ASM210954v1.104       37182784        830196730    0.044788
+   Camelus_dromedarius.CamDro2.104.chr.gff3          31455083       2052758671    0.015323
+   Gallus_gallus.GRCg6a.104                          28472131       1050156563    0.027112
+   Homo_sapiens.GRCh38.104                           35837191       3085194781    0.011616
+   Mus_musculus.GRCm39.104                           36746474       2723431121    0.013493
+   Pan_troglodytes.Pan_tro_3.0.104.chr               35836571       2967125051    0.012078
+   PlasmoDB-54_Pfalciparum3D7                        12357002         23332823    0.529597
 
 ## Conclusions
 
