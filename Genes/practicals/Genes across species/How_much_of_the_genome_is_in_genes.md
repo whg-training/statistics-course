@@ -229,15 +229,16 @@ gff.compute_genome_bases_covered( cds, sequences )
 ```
 
 This gives:
+
                                                  bases_covered  sequence_length  proportion
-   analysis                                                                               
-   Acanthochromis_polyacanthus.ASM210954v1.104       37182784        830196730    0.044788
-   Camelus_dromedarius.CamDro2.104.chr.gff3          31455083       2052758671    0.015323
-   Gallus_gallus.GRCg6a.104                          28472131       1050156563    0.027112
-   Homo_sapiens.GRCh38.104                           35837191       3085194781    0.011616
-   Mus_musculus.GRCm39.104                           36746474       2723431121    0.013493
-   Pan_troglodytes.Pan_tro_3.0.104.chr               35836571       2967125051    0.012078
-   PlasmoDB-54_Pfalciparum3D7                        12357002         23332823    0.529597
+    analysis                                                                               
+    Acanthochromis_polyacanthus.ASM210954v1.104       37182784        830196730    0.044788
+    Camelus_dromedarius.CamDro2.104.chr.gff3          31455083       2052758671    0.015323
+    Gallus_gallus.GRCg6a.104                          28472131       1050156563    0.027112
+    Homo_sapiens.GRCh38.104                           35837191       3085194781    0.011616
+    Mus_musculus.GRCm39.104                           36746474       2723431121    0.013493
+    Pan_troglodytes.Pan_tro_3.0.104.chr               35836571       2967125051    0.012078
+    PlasmoDB-54_Pfalciparum3D7                        12357002         23332823    0.529597
 
 ## Conclusions
 
