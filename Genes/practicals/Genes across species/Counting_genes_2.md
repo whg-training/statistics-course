@@ -3,10 +3,6 @@
 
 ## More on protein-coding genes
 
-Let's use our results so far to start answering some questions:
-
-### How protein-coding genes are there?
-
 If you've followed so far you will have code `gff.py` that can parse a GFF file, and in the process
 will pull out certain fields from the `attributes` column. This includes the `ID` attribute, the
 `Parent` attribute that says how records are linked, and also the `biotype` column and maybe also
@@ -23,8 +19,11 @@ different species]() - in my code this is called `analysis` and I'll use that be
 [solutions/part2/gff_to_sqlite.py](solutions/part2/gff_to_sqlite.py) - feel free to run that
 instead, if needed.)
 
-This sqlite file is now in a good shape to start really exploring genes. First let's check out the
-`biotypes`:
+This sqlite file is now in a good shape to start really exploring genes.   First let's look at what `biotypes` there are.
+
+
+### What types of protein-coding gene are there?
+
 
 ```
 sqlite> .mode column
