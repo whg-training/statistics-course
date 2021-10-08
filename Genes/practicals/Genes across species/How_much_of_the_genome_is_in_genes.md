@@ -250,8 +250,8 @@ encodes non-protein-coding RNAs](Counting_genes_1.md). Quite a lot actually is f
 described in the ENCODE paper](https://doi.org/10.1038/nature11247) (at least in the limited sense that
 proteins bind there, as part of a general process of regulating gene expression). Some of it is viral DNA
 that has been retro-transposed into the genome - such as the [LINEs and SINEs in the human
-genome](https://en.wikipedia.org/wiki/Retrotransposon).  Some is genuinely doing nothing. Much
-of the function of even well-annotated genomes is not known.
+genome](https://en.wikipedia.org/wiki/Retrotransposon).  Some is genuinely doing nothing. However, much
+of the function of even well-annotated genomes (like humans) is not known.
 
 On the other hand, some organisms like malaria seem to be making use of a great deal of their
 genome for making proteins. Quite why this is is also not known.
