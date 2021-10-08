@@ -102,7 +102,7 @@ data = pandas.read_sql( "SELECT * FROM gff_data WHERE type IN ( 'gene' )", db )
 data.groupby( [ 'analysis', 'biotype' ] ).size()
 ```
 
-### What do some protein-coding genes look like?
+### What do genes look like?
 
 **Challenge.** Pick a gene (say human ABO or FUT2) and investigate in detail using your file. (If you've followed so
 far this will be in the `Name` column.) How many transcripts does it have? (Hint: find records with `Parent` equal to
