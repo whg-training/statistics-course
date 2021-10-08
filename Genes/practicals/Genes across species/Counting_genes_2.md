@@ -1,7 +1,11 @@
 [Up to table of contents](README.md)
 [Back to the previous page](Counting_genes_1.md)
 
-## How protein-coding genes are there?
+## More on protein-coding genes
+
+Let's use our results so far to start answering some questions:
+
+### How protein-coding genes are there?
 
 If you've followed so far you will have code `gff.py` that can parse a GFF file, and in the process
 will pull out certain fields from the `attributes` column. This includes the `ID` attribute, the
