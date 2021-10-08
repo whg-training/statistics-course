@@ -243,10 +243,12 @@ This gives:
 ## Conclusions
 
 Two really striking things jump out from this to me.  First, in many eukaryotic organisms, hardly any of the
-genome is actually coding for protein. What is the rest doing? Some of it is in [pseudogenes or
+genome is actually coding for protein. 
+
+What is the rest doing? Well, we saw that some of it is in [pseudogenes or
 encodes non-protein-coding RNAs](Counting_genes_1.md). Quite a lot actually is functional [as
-described in the ENCODE paper](https://doi.org/10.1038/nature11247) (at least in the sense that
-proteins bind there, as part of a process of regulating gene expression). Some of it is viral DNA
+described in the ENCODE paper](https://doi.org/10.1038/nature11247) (at least in the limited sense that
+proteins bind there, as part of a general process of regulating gene expression). Some of it is viral DNA
 that has been retro-transposed into the genome - such as the [LINEs and SINEs in the human
 genome](https://en.wikipedia.org/wiki/Retrotransposon) - and some is genuinely doing nothing. Much
 of the function of even well-annotated genomes is not known.
