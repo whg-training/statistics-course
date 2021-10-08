@@ -242,7 +242,7 @@ This gives:
 
 ## Conclusions
 
-Two really striking things jump out from this. In many eukaryotic organisms, hardly any of the
+Two really striking things jump out from this to me.  First, in many eukaryotic organisms, hardly any of the
 genome is actually coding for protein. What is the rest doing? Some of it is in [pseudogenes or
 encodes non-protein-coding RNAs](Counting_genes_1.md). Quite a lot actually is functional [as
 described in the ENCODE paper](https://doi.org/10.1038/nature11247) (at least in the sense that
