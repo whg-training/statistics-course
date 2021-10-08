@@ -123,7 +123,7 @@ collectively known as 'house mice'.
 
 ## How complicated are protein-coding genes?
 
-Can we count how many transcripts each gene has, and how many exons?
+Let's count how many transcripts each gene has, and how many exons.
 
 **Challenge.** Write python code that reads in the appropriate data from `gff_data` table, and for
 each gene counts i. the number of transcripts and ii. the average number of exons (averaged over
