@@ -240,6 +240,8 @@ This gives:
     Pan_troglodytes.Pan_tro_3.0.104.chr               35836571       2967125051    0.012078
     PlasmoDB-54_Pfalciparum3D7                        12357002         23332823    0.529597
 
+In humans, only about half of the sequence in protein-coding gene exons actually codes for proteins.
+
 ## Conclusions
 
 Two really striking things jump out from this to me.  First, in many eukaryotic organisms, hardly any of the
