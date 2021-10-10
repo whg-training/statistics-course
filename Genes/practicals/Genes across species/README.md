@@ -12,5 +12,5 @@
 10. [Computing sequence lengths](Getting_sequence_lengths.md)
 11. [How much of the genome is in genes?](How_much_of_the_genome_is_in_genes.md)
 12. [A note on visualisation](Visualisation.md)
-13. [Scaling up and running for real](Scaling up.md)
+13. [Scaling up and running for real](Scaling_up.md)
 14. [Some closing thoughts](Closing_thoughts.md)
