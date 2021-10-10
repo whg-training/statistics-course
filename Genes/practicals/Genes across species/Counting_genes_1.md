@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
+
 [Back to the previous page](Converting_gff_to_sqlite.md)
+
+[Go to the next page](Counting_genes_2.md)
 
 ## Gathering some first statistics
 
