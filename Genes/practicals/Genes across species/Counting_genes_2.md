@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
+
 [Back to the previous page](Counting_genes_1.md)
+
+[Go to the next page](Counting_genes_3.md)
 
 ## Investigating protein-coding genes
 
