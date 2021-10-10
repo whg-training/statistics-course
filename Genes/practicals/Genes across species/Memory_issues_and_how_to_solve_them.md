@@ -32,7 +32,7 @@ of extra columns. But it turns out to use about 4 times the memory.
 terminal, then in a second terminal run `top -u <username> -o RES` (linux) or `top -U <username> -o
 mem` (Mac OS). You should see your program climbing the rankings as it loads the data.
 
-### Some solutions
+### Some solutions
 
 The main ways to solve this type of problem are:
 
