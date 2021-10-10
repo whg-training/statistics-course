@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
+
 [Back to the introduction](Introduction.md)
+
+[Go the next page](Getting_started_writing_some_code.md)
 
 ## What gene annotation data looks like
 
