@@ -339,5 +339,5 @@ On my system, with the data above this brings query time down to a few seconds.
 
 **Note.** The `CAST( .. AS FLOAT )` syntax is needed above to make sure sqlite uses [floating-point arithmetic]() for the division.
 
-Let's use this data to [investigate genes more deeply](Counting_genes_3.md).
+Let's use this data to [find some extreme genes](Counting_genes_3.md).
 
