@@ -38,14 +38,14 @@ scientific questions above. But we're also going to use this as a chance to writ
 re-useable code.
 
 There are lots of ways to define 'good code' and lots of ways to write it. But here are some simple
-things our code out to aim for:
+things our code ought to aim for:
 
 - it ought to work
 - it ought to not take too long to do it
 - it ought to be obvious what it does
 
 Arguably the third point is the most important one here. Because if you can figure out what the code does, then you
-can fix any problems with it and work to speed it up. And it will be easy to write about it. But if you can't figure it
+can fix any problems with it and work to speed it up. But if you can't figure it
 out, you'll end up throwing it away and starting again.
 
 Here are some useful principles to keep in mind as we try to write useful code:
@@ -58,7 +58,7 @@ Here are some useful principles to keep in mind as we try to write useful code:
 6. *Write short functions.*
 7. *Give things good names.*
 
-There are of course lots of other principles that we could apply, but these are the ones I stick by.
+There are of course lots of other principles that we could apply, but these are ones I tend to focus on.
 
 ### A comment on comments
 
@@ -66,11 +66,11 @@ Many people would add to the above:
 
 7. *Write lots of comments to explain the code.*
 
-However, I don't generally do this. This is because my feeling is that the ideal we're looking in
-1-6 above is that the code should largely explain itself (at least to a trained eye). I therefore
-try to reserve comments for the inevitable bits left over that are still surprising or hard to
-understand, even after you've done your best on the above. (This also has the great advantage of being
-less work.)
+However, I don't generally do this. This is because I think if 1-6 above are done correctly, then the
+code will largely explain itself (at least to a trained eye). I
+try to reserve comments for the inevitable leftover bits of code that are still surprising or hard to
+understand, even after I've done my best on the above. (Not writing comments also has the great advantage of being
+less work, especially when you start to change the code... have you remembered to change the comment?)
 
 ## What gene annotation data look like
 
