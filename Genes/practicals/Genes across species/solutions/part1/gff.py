@@ -6,7 +6,7 @@
 def parse_gff3_to_dataframe( file ):
     """Read GFF3-formatted data in the specified file (or file-like object)
     Return a pandas dataframe with ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns.
-    The ID and Parent are extracted from the attributes columns, and the dataframe is indexed by ID"""
+    The ID and Parent are extracted from the attributes columns."""
     result = read_gff3_using_pandas( file )
     add_ID_and_Parent( result )
     return result

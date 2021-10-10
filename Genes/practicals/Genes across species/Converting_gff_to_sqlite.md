@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
+
 [Back to the previous page](Getting_started_writing_some_code.md)
+
+[Go to the next page](Counting_genes_1.md)
 
 ## Writing a useful conversion program.
 

@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
 
+[Go to next page](What_gene_annotation_data_looks_like.md).
+
+
 # Coding warm-up - analysing genes across species.
 
 One of the most amazing scientific acheivements in the last 100 years has been the mapping of genes - DNA
@@ -20,8 +23,8 @@ But what do genes actually look like?  Lots of questions spring to mind:
 
 You can probably think many others!
 
-In this practical we will write some re-useable code that can process gene annotation files, as a way to start figuring
-out these questions.
+In this practical we will write some re-useable code that can process gene annotation files, as a
+way to start figuring out these questions.
 
 ### Plan of attack
 

@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
-[Back to the previous page](Memory_issues_and_how_to_solve_them.md)
+
+[Back to the previous page](Counting_genes_3.md)
+
+[Go to the next page](How_much_of_the_genome_is_in_genes.md)
 
 ## Getting sequence lengths
 

@@ -36,7 +36,7 @@ def compute_genome_bases_covered( regions, sequences ):
       # Finally, we return as a pandas.Series() object
       # because this lets us name the output variable.
       return pandas.Series(
-         sum( [ (region[1]-region[0]+1) for region in union ] ),
+         result,
          index = ['bases_covered']
       )
    # Utility function to sum lengths per species per chromosome

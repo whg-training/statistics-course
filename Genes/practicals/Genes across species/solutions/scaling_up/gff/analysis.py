@@ -8,31 +8,41 @@ class GFF3:
     def __init__( self, filename, analysis ):
         self.filename = filename
         self.analysis = analysis
-        print( "++ GFF3: Loading data from %s..." % self.filename )
-        data = gff3_to_dataframe( open( filename ) )
-        data.insert( 0, 'analysis', analysis )
-        print( "++ ok, %d records loaded." % data.shape[0] )
+        data = self.load_and_sanitise_data()
+
+        print( "++ Extracting regular protein-coding genes..." )
+        self.m_genes = data[ (data['type'] == 'gene') & (data['biotype'] == 'protein_coding') ]
+        self.m_transcripts = data[ (data['type'] == 'mRNA') & (data['Parent'].isin( self.m_genes['ID'] ))]
+        self.m_exons = data[ (data['type'] == 'exon') & (data['Parent'].isin( self.m_transcripts['ID'] ))]
+        self.m_cds = data[ (data.type == 'CDS') & (data['Parent'].isin( self.m_transcripts['ID'] ))]
+        # The above is a common pattern: I want to have methods called genes(),
+        # transcripts() etc. below. So to avoid name clashes, the data members
+        # are called m_genes, m_transcripts etc.
+
+        self.add_gene_summary_columns()
+
+        print( "++ loading sequences..." )
+        self.m_sequences = self.load_sequences( filename )
+
+    def load_and_sanitise_data( self, filename ):
+        print( "++ GFF3: Loading data from %s..." % filename )
+        result = gff3_to_resultframe( open( filename ) )
+        result.insert( 0, 'analysis', self.analysis )
+        print( "++ ok, %d records loaded." % result.shape[0] )
         # Remove unwanted parts of IDs: the "gene:" and "transcript:" prefixes
         def fix_id( id ):
             if id is None:
                 return None
             else:
                 return id.replace( "gene:", "" ).replace( "transcript:", "" )
-        data.loc[ :, 'ID'] = data['ID'].apply( fix_id )
-        data.loc[ :, 'Parent'] = data['Parent'].apply( fix_id )
+        result.loc[ :, 'ID'] = result['ID'].apply( fix_id )
+        result.loc[ :, 'Parent'] = result['Parent'].apply( fix_id )
+        # Kludge: fix gene types/biotypes for PlasmoDB result
+        result.loc[result.type == 'protein_coding_gene', 'biotype' ] = 'protein_coding'
+        result.loc[result.type == 'protein_coding_gene', 'type' ] = 'gene'
+        return result
 
-        # Kludge: fix gene types/biotypes for PlasmoDB data
-        data.loc[data.type == 'protein_coding_gene', 'biotype' ] = 'protein_coding'
-        data.loc[data.type == 'protein_coding_gene', 'type' ] = 'gene'
-
-        # Common pattern: I want to have methods called genes(), transcripts() etc. below.
-        # So the data member is called m_genes, m_transcripts etc.
-        print( "++ Extracting regular protein-coding genes...")
-        self.m_genes = data[ (data['type'] == 'gene') & (data['biotype'] == 'protein_coding') ]
-        self.m_transcripts = data[ (data['type'] == 'mRNA') & (data['Parent'].isin( self.m_genes['ID'] ))]
-        self.m_exons = data[ (data['type'] == 'exon') & (data['Parent'].isin( self.m_transcripts['ID'] ))]
-        self.m_cds = data[ (data.type == 'CDS') & (data['Parent'].isin( self.m_transcripts['ID'] ))]
-
+    def add_gene_summary_columns( self ):
         # We add columns to genes from the gene summary.
         # Another way would be to make summarise_transcripts_and_exons_per_gene() return all this info, but that seems wasteful.
         print( "++ summarising genes..." )
@@ -44,12 +54,13 @@ class GFF3:
             right_on = 'ID'
         )
         self.m_genes.loc[ :, 'length'] = self.m_genes['end'] - self.m_genes['start'] + 1
-        
+
+    def load_sequences( self, filename ):
         print( "++ loading sequences..." )
-        self.m_sequences = sequences_from_gff3_metadata( open( filename ) )
-        self.m_sequences.insert( 0, 'analysis', analysis )
-        self.m_sequences.insert( self.m_sequences.shape[1], 'sequence_length', self.m_sequences['end'] - self.m_sequences['start'] + 1 )
-        print( "++ Ok, %d sequences loaded." % self.m_sequences.shape[0] )
+        result = sequences_from_gff3_metadata( open( filename ) )
+        result.insert( 0, 'analysis', self.analysis )
+        result.insert( result.shape[1], 'sequence_length', result['end'] - result['start'] + 1 )
+        return result
 
     def genes( self ):
         columns = [

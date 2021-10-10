@@ -1,18 +1,17 @@
 """
 gff_to_sqlite.py
-This program reads data in GFF3 format and stores it in a table in a sqlite file, indexed by the ID.
+This program reads data in GFF3 format and gathers summary statistics for genes.  Results are stored in a sqlite file.
 Use it like this:
 
-    python gff_to_sqlite.py --input <path to gff file> --output <path to output file> --analysis <name>
+    python summarise_gff3.py --input <path to gff file> --output <path to output file> --analysis <name>
 
 """
 import argparse, gff, sqlite3
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
-        description = """Convert a GFF3 file to sqlite3 format.
-        The result will be a table with the GFF3 fields, and with ID, Parent, Name and buitype fields in columns.
-        The resulting table will be indexed by the ID field for easy lookup."""
+        description = """Gather summary statistics for genes from a GFF3 file to sqlite3 format.
+        The result, including a table of genes, will be stored in a sqlite file for downstream analysis."""
     )
     parser.add_argument(
         '--analysis',
@@ -102,8 +101,8 @@ def process( args ):
 # It is always good to let the user know what we are doing
 # Both to confirm we're doing what they want, and because some of the steps
 # can take some time (so we want to give them confidence it's still working).
-# So we print out lots of messages!.print( "++ gff_to_sqlite_py" )
+# So we print out lots of messages!.print( "++ summarise_gff3_py" )
 args = parse_arguments()
 print( "++ Converting %s to %s...\n" % ( args.input, args.output ))
 process( args )
-print( "++ Thank you for using gff_to_sqlite.py" )
+print( "++ Thank you for using summarise_gff3.py" )

@@ -1,4 +1,5 @@
 [Up to table of contents](README.md)
+
 [Back to the previous page](Converting_gff_to_sqlite.md)
 
 ## Refactoring makes code better
@@ -64,4 +65,4 @@ used to fix this.)
 
 **Challenge.** Refactor your code. Can you make it easy to understand?
 
-When you're ready, [Go back to writing some code](Getting_started_writing_some_code.md).
+Now [go back to the section on writing code](Getting_started_writing_some_code.md).

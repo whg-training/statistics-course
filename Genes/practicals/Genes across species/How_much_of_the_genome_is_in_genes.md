@@ -263,4 +263,4 @@ genome for making proteins. Quite why this is is also not known.
 
 ## Where next?
 
-See [a note on visualisation](Visualisation.md).
+An obvious thing to do is [plot the data](Visualisation.md).

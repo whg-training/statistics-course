@@ -64,6 +64,7 @@ pandas.merge(
 )
 
 # Find the proportion of single-exon genes
+# We use the average exon count for simplicity - this should really be improved.
 single_exon_count = gene_summary[ gene_summary['biotype'] == 'protein_coding' ].groupby( 'analysis' ).agg(
     single_exon_count = pandas.NamedAgg(
         column = 'average_number_of_exons',

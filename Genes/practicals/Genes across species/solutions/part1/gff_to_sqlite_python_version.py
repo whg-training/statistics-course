@@ -1,6 +1,6 @@
 """
 gff_to_sqlite.py
-This program reads data in GFF3 format and stores it in a table in a sqlite file, indexed by the ID.
+This program reads data in GFF3 format and stores it in a table in a sqlite file.
 Use it like this:
 
     python gff_to_sqlite_python_version.py --input <path to gff file> --output <path to output file> --analysis <name>
@@ -11,8 +11,7 @@ import argparse, gff, sqlite3
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description = """Convert a GFF3 file to sqlite3 format.
-        The result will be a table with the GFF3 fields, and with ID and Parent fields in columns.
-        The resulting table will be indexed by the ID field for easy lookup."""
+        The result will be a table with the GFF3 fields, and with ID and Parent fields in columns."""
     )
     parser.add_argument(
         '--analysis',
