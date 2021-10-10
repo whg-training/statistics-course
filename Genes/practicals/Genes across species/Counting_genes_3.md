@@ -1,5 +1,7 @@
 [Up to table of contents](README.md)
+
 [Back to the previous page](Counting_genes_2.md)
+
 [On to the next page](Getting_sequence_lengths.md)
 
 Let's use our data to answer some questions on the extremes of the distribution of genes.
@@ -70,5 +72,5 @@ data = dbGetQuery( db, "SELECT * FROM gene_summary_view" )
 
 ### Getting sequence lengths
 
-In the next section we will see how to [get sequence lengths](Getting_sequence_lengths.md).
-
+To go further than this and compute the amount of genome that is covered by genes, we will need to compute genome lengths.
+The [next page](Getting_sequence_lengths.md) shows one way to do this.
