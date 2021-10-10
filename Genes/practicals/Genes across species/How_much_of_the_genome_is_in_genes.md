@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
+
 [Back to the previous page](Getting_sequence_lengths.md)
+
+[Go to the next page](Visualiation.md)
 
 ## How much of the genome is in genes?
 
@@ -14,7 +17,7 @@ genes.groupby('analysis').agg(
 
 Then we could compare to the sequence lengths
 ```
-sequence_lengths = pandas.read_sql( "SELECT analysis, SUM(end-start) FROM sequences GROUP BY analysis", db )
+sequence_lengths = pandas.read_sql( "SELECT analysis, SUM(end-start) AS sequence_length FROM sequences GROUP BY analysis", db )
 ```
 
 So this would say for example that about 44% of the human genome is covered by genes.
@@ -242,7 +245,7 @@ This gives:
 
 In humans, only about half of the sequence in protein-coding gene exons actually codes for proteins - genes have a great deal of *untranslated sequence*.
 
-## Conclusions
+### Conclusions
 
 Two really striking things jump out from this to me.  First, in many eukaryotic organisms, hardly any of the
 genome is actually coding for protein. 
@@ -258,4 +261,6 @@ of the function of even well-annotated genomes (like humans) is not known.
 On the other hand, some organisms like malaria seem to be making use of a great deal of their
 genome for making proteins. Quite why this is is also not known.
 
+## Where next?
 
+See [a note on visualisation](Visualisation.md).
