@@ -1,4 +1,7 @@
 [Up to table of contents](README.md)
+
+[Back to the previous page](Getting_sequence_lengths.md)
+
 [Back to the previous page](Getting_sequence_lengths.md)
 
 ## How much of the genome is in genes?
@@ -242,7 +245,7 @@ This gives:
 
 In humans, only about half of the sequence in protein-coding gene exons actually codes for proteins - genes have a great deal of *untranslated sequence*.
 
-## Conclusions
+### Conclusions
 
 Two really striking things jump out from this to me.  First, in many eukaryotic organisms, hardly any of the
 genome is actually coding for protein. 
@@ -257,5 +260,4 @@ of the function of even well-annotated genomes (like humans) is not known.
 
 On the other hand, some organisms like malaria seem to be making use of a great deal of their
 genome for making proteins. Quite why this is is also not known.
-
 
