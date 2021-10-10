@@ -1,5 +1,8 @@
 [Up to table of contents](README.md)
-[Back to the previous page](Counting_genes_2.md)
+
+[Back to the previous page](Counting_genes_1.md)
+
+[Go to the next page](Counting_genes_2.md)
 
 ## Memory issues - and how to solve them
 
@@ -70,7 +73,7 @@ attributes. The crucial point here, however, is not the regular expressions them
 just a tool to do the parsing) but the fact that the data is never copied around. This version is
 back down to < 2Gb of memory.
 
-### Memory vs. performance
+### Memory vs. performance
 
 Funnily enough this version is also almost twice as fast as the version not using regular
 expression! This is not really surprising either, because the regular expression library is highly
@@ -113,3 +116,4 @@ Is this version faster or slower than the original?
 (An alternative might be to try to use [`chunksize` in
 `pandas.read_table()`](https://pandas.pydata.org/docs/reference/api/pandas.read_table.html).) 
 
+Now let's get [back to counting genes](Counting_genes_2.md).
