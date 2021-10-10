@@ -1,4 +1,4 @@
-def summarise_genes( genes, transcripts, exons ):
+def summarise_transcripts_and_exons_per_gene( genes, transcripts, exons ):
     """Given data frames of genes, transcripts and exons, return a dataframe with one row per gene
     and ID, number_of_transcripts, and average_number_of_exons columns."""
     transcript_summary = count_exons_per_transcript( transcripts, exons )
@@ -51,57 +51,21 @@ def _join_dataframes_by_ID_and_Parent( left, right, right_columns ):
            right_on = "Parent"
         )
 
-def summarise_genes_python_version( genes, transcripts, exons ):
-    # This is a python-based implementation of the gene summary code.
-    # It works by building an array data structure that keeps
-    # track of exons per transcript, and then transcripts per gene.
-    # The results are returned as a pandas data frame.
+def count_single_exon_genes( gene_summary ):
+    import pandas
+    result = gene_summary[ gene_summary['biotype'] == 'protein_coding' ].groupby( 'analysis' ).agg(
+        total_genes = pandas.NamedAgg(
+            column = 'ID',
+            aggfunc = lambda x: x.notnull().sum()
+        ),
+        total_single_exon = pandas.NamedAgg(
+            column = 'average_number_of_exons',
+            aggfunc = lambda x: ( x == 1 ).sum()
+        ),
+        proportion = pandas.NamedAgg(
+            column = 'average_number_of_exons',
+            aggfunc = lambda x: (x == 1).sum() / x.notnull().sum()
+        )
+    )
+    return result
 
-    # Here I am using nested functions to keep everything together:
-    def count_exons_per_transcript( transcripts, exons ):
-        result = [ None ] * transcripts.shape[0]
-        transcript_ids = {}
-        for i, transcript in transcripts.iterrows():
-            transcript_ids[ transcript['ID'] ] = i
-            result[i] = {
-                "ID": transcript['ID'],
-                'Parent': transcript['Parent'],
-                "exons": []
-            }
-        for i, exon in exons.iterrows():
-            transcript_i = transcript_ids[ exon['Parent'] ]
-            result[transcript_i]['exons'].append( exon['ID'] )
-        return result
-
-    def summarise_transcripts_per_gene( genes, transcript_summary ):
-        result = [ None ] * genes.shape[0]
-        gene_ids = {}
-        for i, gene in genes.iterrows():
-            gene_ids[ gene['ID'] ] = i
-            result[i] = {
-                "ID": gene['ID'],
-                "transcripts": []
-            }
-        for transcript in transcript_summary:
-            gene_id = gene_ids[ transcript['Parent'] ]
-            result[ gene_id ]['transcripts'].append( transcript )
-        return result
-
-    def compute_average_number_of_exons( gene ):
-        transcripts = gene['transcripts']
-        if len( transcripts ) == 0:
-            return None
-        count = sum( len( transcript['exons'] ) for transcript in transcripts )
-        return count / len( transcripts )
-
-    transcript_summary = count_exons_per_transcript( transcripts, exons )
-    gene_summary = summarise_transcripts_per_gene( genes, transcript_summary )
-    result = [
-        {
-            "ID": gene['ID'],
-            "number_of_transcripts": len( gene['transcripts'] ),
-            "average_number_of_exons": compute_average_number_of_exons( gene )
-        }
-        for gene in gene_summary
-    ]
-    return pandas.DataFrame( result )

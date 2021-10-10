@@ -23,7 +23,6 @@ def compute_genome_bases_covered( regions, sequences ):
    a dataframe showing the total number and proportion of sequence bases covered by the regions in
    each analysis."""
    import pandas
-
    # Utility function to add up lengths of some regions
    # Using compute_union_of_regions to avoid double-counting...
    def sum_region_lengths( regions ):

@@ -3,93 +3,6 @@
 # and a number of helper functions.
 import pandas
 
-class GFF3:
-    def __init__( self, filename, analysis ):
-        self.filename = filename
-        self.analysis = analysis
-        self.data = gff3_to_dataframe( open( filename ) )
-        self.data.insert( 0, 'analysis', analysis )
-        # Fix for PlasmoDB data
-        self.data.loc[self.data.type == 'protein_coding_gene', 'biotype' ] = 'protein_coding'
-        self.data.loc[self.data.type == 'protein_coding_gene', 'type' ] = 'gene'
-        # Remove unwanted parts of IDs: the "gene:" and "transcript:" prefixes
-        def fix_id( id ):
-            if id is None:
-                return None
-            else:
-                return id.replace( "gene:", "" ).replace( "transcript:", "" )
-        self.data['ID'] = self.data['ID'].apply( fix_id )
-        self.data['Parent'] = self.data['Parent'].apply( fix_id )
-        self.sequences = parse_sequences_from_gff_metadata( open( filename ) )
-        self.sequences.insert( 0, 'analysis', analysis )
-
-    def genes( self ):
-        columns = [
-            "analysis",
-            "ID",
-            "Parent",
-            "Name",
-            "biotype",
-            "seqid",
-            "source",
-            "start",
-            "end",
-            "strand",
-            "attributes"
-        ]
-        return self.data.loc[ self.data[ 'type' ] == 'gene', columns ]
-
-    def transcripts( self ):
-        columns = [
-            "analysis",
-            "ID",
-            "Parent",
-            "Name",
-            "biotype",
-            "seqid",
-            "source",
-            "start",
-            "end",
-            "strand",
-            "attributes"
-        ]
-        return self.data.loc[ self.data[ 'type' ] == 'mRNA', columns ]
-
-    def exons( self ):
-        columns = [
-            "analysis",
-            "ID",
-            "Parent",
-            "Name",
-            "biotype",
-            "seqid",
-            "source",
-            "start",
-            "end",
-            "strand",
-            #"attributes"
-        ]
-        return self.data.loc[ self.data[ 'type' ] == 'exon', columns ]
-
-    def CDS( self ):
-        columns = [
-            "analysis",
-            "ID",
-            "Parent",
-            "Name",
-            "biotype",
-            "seqid",
-            "source",
-            "start",
-            "end",
-            "strand",
-            #"attributes"
-        ]
-        return self.data.loc[ self.data[ 'type' ] == 'CDS', columns ]
-
-    def genome_sequences( self ):
-        return self.sequences
-
 def gff3_to_dataframe( file ):
     """Read GFF3-formatted data in the specified file (or file-like object)
     Return a pandas dataframe with ID, Parent, seqid, source, type, start, end, score, strand, phase, and attributes columns.
@@ -139,7 +52,7 @@ def _extract_attributes_to_columns( data, attributes_to_extract = [ 'ID', 'Paren
         data.insert( i, attribute, data['attributes'].apply( lambda entry: getAttribute( entry, regexp ) ))
         # Delete the field from the current attributes
         # (I could not get .transform() work here for some reason)
-        data['attributes'] = data['attributes'].apply( lambda entry: removeAttribute( entry, regexp ))
+        data.loc[ :, 'attributes'] = data['attributes'].apply( lambda entry: removeAttribute( entry, regexp ))
 
 def parse_sequences_from_gff_metadata( file ):
     """GFF3 files from the Ensembl ftp site list sequences and their lengths in the file metadata.
@@ -160,3 +73,4 @@ def parse_sequences_from_gff_metadata( file ):
             # quit when we meet the first non-metadata line
             break
     return pandas.DataFrame( result )
+
