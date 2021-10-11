@@ -95,6 +95,7 @@ chr1\tme\texon\t10\t900\t.\t+\t.\tID=gene1.1;Parent=gene1
 """
 
 # 1. run our function:
+# The io.StringIO() bit is just for testing and is explained below
 data = parse_gff3_to_dataframe( io.StringIO( test_data ))
 
 # 2. test it:
