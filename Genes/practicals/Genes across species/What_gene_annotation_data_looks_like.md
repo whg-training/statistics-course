@@ -51,7 +51,7 @@ The NCBI is a second project that creates gene annotations (NCBI RefSeq).  Their
 
 Simple!
 
-An important point is that these annotations are made from severe data sources - including computational predictions from the genome assemblies themselves, but also alignments of known mRNA and protein sequences, and a great deal of automatic and for some genomes manual curation.  They are 'current best guess' annotations.
+An important point is that these annotations are made from severe data sources - including computational predictions from the genome assemblies themselves, but also alignments of known mRNA and protein sequences, and a great deal of automatic and for some genomes manual curation.  They shouldn't be regarded as the whole truth about genes, but as a current best guess - and for some genomes like humans they are fairly complete.
 
 ### What's in the file?
 
