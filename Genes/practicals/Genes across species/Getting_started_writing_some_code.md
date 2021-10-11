@@ -37,15 +37,15 @@ a library that processes gene annotations at a higher level. Now, using that wou
 defeat the purpose of the exercise, but on the other hand what we're really interested in is genes
 rather than the coding itself. So if that gets you to better answers quicker, go ahead!
 
-**Use nothing but raw code.** It's quite possible to do this task in (say) base python without
+**Write everything from scratch.** It's quite possible to do this task in (say) base python without
 using any existing libraries. In fact that might be a good way to it because it gives you lots of
 control over how it works, and (as we'll see later) you might need control over things like
 performance and memory usage.
 
 This tutorial will take a middle way. We will use python with the popular [pandas
 library](https://pandas.pydata.org) library to begin reading and manipulating the data. pandas
-seems a natural fit here because the GFF3 data is basically tabular (many rows x 9 named columns,
-at least if we don't unpack the `attributes`) and that fits a dataframe (which is what pandas
+is a natural fit here because the GFF3 data is basically tabular (many rows x 9 named columns,
+at least if we don't unpack the `attributes`) and so it ought to fit in a dataframe (which is what pandas
 provides). This works well but, as we'll see, it comes with some tradeoffs as well. 
 
 In the course of the tutorial we'll develop a little python module to help us answer the above
