@@ -41,6 +41,10 @@ to figure out in there:
 
 Can you work these out?
 
+### How are gene annotations created?
+
+The Ensembl gene annotations are created using a particular pipeline based on computational prediction.  It is described in detail [here](https://www.ensembl.org/info/genome/genebuild/index.html).
+
 ### What's in the file?
 
 If you look at the spec you'll see the third column of the file above is called the `type`. The
