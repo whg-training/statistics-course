@@ -95,7 +95,7 @@ Here is a test:
 ```
 import io, math
 
-# Note \t means a tab character, so this is valid GFF3-format data.
+# Note \t means a tab character, so this is the same data as above:
 test_data = """##gff-version 3
 #description: test data
 chr1\tme\tgene\t1\t1000\t.\t+\t.\tID=gene1;other_data=stuff
