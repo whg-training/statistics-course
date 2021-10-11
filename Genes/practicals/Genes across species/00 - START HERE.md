@@ -1,1 +1,1 @@
-To start the tutorial, please go [here](README.md).
+To start the tutorial, please go to [the README](README.md).
