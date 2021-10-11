@@ -82,7 +82,15 @@ Second, even before we've written it, we can see the function is going to follow
 pattern: it creates a new thing (the result of the function, so it is called `result`) and returns
 it on the last line. All the function has to do is build `result` - simple!
 
-The other thing to see is that this function is already reasonably testable. Look, here is a test:
+The other thing to see is that this function is already reasonably testable. Look, let's test it with some fake data:
+
+    ##gff-version 3
+    #description: test data
+    chr1   me    gene    1    1000    .    +    .    ID=gene1;other_data=stuff
+    chr1   me    exon    10    900    .    +    .    ID=gene1.1;Parent=gene1
+
+
+Here is a test:
 
 ```
 import io, math
