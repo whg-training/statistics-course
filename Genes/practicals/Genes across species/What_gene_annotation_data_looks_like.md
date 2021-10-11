@@ -45,7 +45,11 @@ Can you work these out?
 
 The Ensembl gene annotations are created using a particular pipeline based on computational prediction.  It is described in detail [here](https://www.ensembl.org/info/genome/genebuild/index.html).
 
-The NCBI is a second project that creates gene annotations (NCBI RefSeq).  Their pipeline for Eukaryotes is described [here](https://www.ncbi.nlm.nih.gov/genome/annotation_euk/process/).
+The NCBI is a second project that creates gene annotations (NCBI RefSeq).  Their pipeline for Eukaryotes is described [here](https://www.ncbi.nlm.nih.gov/genome/annotation_euk/process/).  The process looks like this:
+
+![diagram of gene annotation pipeline](https://www.ncbi.nlm.nih.gov/core/assets/genome/images/Pipeline_RFAM.png)
+
+Simple!
 
 ### What's in the file?
 
