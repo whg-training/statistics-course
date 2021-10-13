@@ -1,0 +1,6 @@
+##gff-version 3
+#description: a test GFF file
+chr1	GMS	gene	1	1000	.	+	.	ID=my_test_gene
+chr1	GMS	transcript	1	1000	.	+	.	ID=my_test_transcript;Parent=my_test_gene
+chr1	GMS	exon	100	300	.	+	.	ID=my_test_exon1;Parent=my_test_transcript
+chr1	GMS	exon	800	900	.	+	.	ID=my_test_exon2;Parent=my_test_transcript
