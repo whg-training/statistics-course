@@ -1,3 +1,9 @@
+[Up to table of contents](README.md)
+
+[Back to the previous page](Where_next.md)
+
+[Go to the next page](Visualisation.md)
+
 ## Scaling up
 
 So far we've written some code and (if you've done what I did) looked at data from a few species.
@@ -105,4 +111,4 @@ arguably not very well written and it fails on some of the [original criteria](I
 suggested - not least that it would be hard to test. So really this class should be split up
 further.
 
-
+The next page has some [tips on visualisation](Visualisation.md).

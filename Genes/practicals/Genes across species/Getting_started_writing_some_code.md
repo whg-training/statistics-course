@@ -37,15 +37,15 @@ a library that processes gene annotations at a higher level. Now, using that wou
 defeat the purpose of the exercise, but on the other hand what we're really interested in is genes
 rather than the coding itself. So if that gets you to better answers quicker, go ahead!
 
-**Use nothing but raw code.** It's quite possible to do this task in (say) base python without
+**Write everything from scratch.** It's quite possible to do this task in (say) base python without
 using any existing libraries. In fact that might be a good way to it because it gives you lots of
 control over how it works, and (as we'll see later) you might need control over things like
 performance and memory usage.
 
 This tutorial will take a middle way. We will use python with the popular [pandas
 library](https://pandas.pydata.org) library to begin reading and manipulating the data. pandas
-seems a natural fit here because the GFF3 data is basically tabular (many rows x 9 named columns,
-at least if we don't unpack the `attributes`) and that fits a dataframe (which is what pandas
+is a natural fit here because the GFF3 data is basically tabular (many rows x 9 named columns,
+at least if we don't unpack the `attributes`) and so it ought to fit in a dataframe (which is what pandas
 provides). This works well but, as we'll see, it comes with some tradeoffs as well. 
 
 In the course of the tutorial we'll develop a little python module to help us answer the above
@@ -82,12 +82,20 @@ Second, even before we've written it, we can see the function is going to follow
 pattern: it creates a new thing (the result of the function, so it is called `result`) and returns
 it on the last line. All the function has to do is build `result` - simple!
 
-The other thing to see is that this function is already reasonably testable. Look, here is a test:
+The other thing to see is that this function is already reasonably testable. Look, let's test it with some fake data:
+
+    ##gff-version 3
+    #description: test data
+    chr1   me    gene    1    1000    .    +    .    ID=gene1;other_data=stuff
+    chr1   me    exon    10    900    .    +    .    ID=gene1.1;Parent=gene1
+
+
+Here is a test:
 
 ```
 import io, math
 
-# Note \t means a tab character, so this is valid GFF3-format data.
+# Note \t means a tab character, so this is the same data as above:
 test_data = """##gff-version 3
 #description: test data
 chr1\tme\tgene\t1\t1000\t.\t+\t.\tID=gene1;other_data=stuff
@@ -95,6 +103,7 @@ chr1\tme\texon\t10\t900\t.\t+\t.\tID=gene1.1;Parent=gene1
 """
 
 # 1. run our function:
+# The io.StringIO() bit is just for testing and is explained below
 data = parse_gff3_to_dataframe( io.StringIO( test_data ))
 
 # 2. test it:

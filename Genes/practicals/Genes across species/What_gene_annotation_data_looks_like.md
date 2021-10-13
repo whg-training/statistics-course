@@ -41,6 +41,18 @@ to figure out in there:
 
 Can you work these out?
 
+### How are gene annotations created?
+
+The Ensembl gene annotations are created using a particular pipeline that is described in detail [here](https://www.ensembl.org/info/genome/genebuild/index.html).
+
+The NCBI is a second project that creates gene annotations (NCBI RefSeq).  Their pipeline for Eukaryotes is described [here](https://www.ncbi.nlm.nih.gov/genome/annotation_euk/process/).  The process looks like this:
+
+![diagram of gene annotation pipeline](https://www.ncbi.nlm.nih.gov/core/assets/genome/images/Pipeline_RFAM.png)
+
+Simple!
+
+An important point is that these annotations are made from severe data sources - including computational predictions from the genome assemblies themselves, but also alignments of known mRNA and protein sequences, and a great deal of automatic and for some genomes manual curation.  They shouldn't be regarded as the whole truth about genes, but as a current best guess - and for some genomes like humans they are fairly complete.
+
 ### What's in the file?
 
 If you look at the spec you'll see the third column of the file above is called the `type`. The

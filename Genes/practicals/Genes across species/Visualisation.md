@@ -1,8 +1,8 @@
 [Up to table of contents](README.md)
 
-[Back to the previous page](How_much_of_the_genome_is_in_genes.md)
+[Back to the previous page](Scaling_up.md)
 
-[Go to the next page](Scaling_up.md)
+[Go to the next page](Closing_thoughts.md)
 
 ## A note on visualisation
 
@@ -33,4 +33,6 @@ ggsave( p, file = "gene_length_versus_number_of_exons.pdf", width = 8, height = 
 In python, you could instead try using  [matplotlib](https://matplotlib.org). I'd like to
 include a matplotlib example here but don't have one - let me know if you write one!
 
-[Go to the next page](Scaling_up.md)
+## Conclusion
+
+That's the end of this tutorial!  You can read some [closing thoughts](Closing_thoughts.md).
