@@ -135,8 +135,8 @@ practical we'll go with it.
 
 ## Modelling copy number variation
 
-Our general model of the effect of CNVs on coverage is that coverage of a site with copy number c should be (c/2) times
-as large as the copy number at a diploid site - plus noise. If we think of sequence reads as being generated from each
+Our general model of the effect of CNVs on coverage is that coverage of a site with copy number `c` should be `c` times
+as large as at a site with copy number 1 - plus noise.  (Humans are diploid so the copy number at most sites is 2). If we think of sequence reads as being generated from each
 copy independently, a bit of thought shows that the same relationship happens for the variance as well. So our model
 for copy number c would be that
 
