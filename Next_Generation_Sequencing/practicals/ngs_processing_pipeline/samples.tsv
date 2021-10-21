@@ -1,0 +1,6 @@
+Sample	Site	Country	Lat	Long	Year	ENA	% callable	read1_ftp	read2_ftp
+QG0033-C	Kinshasa	Congo DR	-4.36939	15.320977	2012	ERR377582	90.87	ftp.sra.ebi.ac.uk/vol1/fastq/ERR377/ERR377582/ERR377582_1.fastq.gz	ftp.sra.ebi.ac.uk/vol1/fastq/ERR377/ERR377582/ERR377582_2.fastq.gz
+QG0041-C	Kinshasa	Congo DR	-4.36939	15.320977	2012	ERR377591	90.48	ftp.sra.ebi.ac.uk/vol1/fastq/ERR377/ERR377591/ERR377591_1.fastq.gz	ftp.sra.ebi.ac.uk/vol1/fastq/ERR377/ERR377591/ERR377591_2.fastq.gz
+QG0049-C	Kinshasa	Congo DR	-4.36939	15.320977	2012	ERR417627	88.32	ftp.sra.ebi.ac.uk/vol1/fastq/ERR417/ERR417627/ERR417627_1.fastq.gz	ftp.sra.ebi.ac.uk/vol1/fastq/ERR417/ERR417627/ERR417627_2.fastq.gz
+QG0056-C	Kinshasa	Congo DR	-4.36939	15.320977	2012	ERR417621	89.08	ftp.sra.ebi.ac.uk/vol1/fastq/ERR417/ERR417621/ERR417621_1.fastq.gz	ftp.sra.ebi.ac.uk/vol1/fastq/ERR417/ERR417621/ERR417621_2.fastq.gz
+QG0088-C	Kinshasa	Congo DR	-4.36939	15.320977	2012	ERR377629	89.27	ftp.sra.ebi.ac.uk/vol1/fastq/ERR377/ERR377629/ERR377629_1.fastq.gz	ftp.sra.ebi.ac.uk/vol1/fastq/ERR377/ERR377629/ERR377629_2.fastq.gz
