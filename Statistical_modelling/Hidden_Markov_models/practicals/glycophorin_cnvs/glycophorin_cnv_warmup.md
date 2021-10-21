@@ -82,8 +82,8 @@ coverage.parameters = data.frame(
 View( coverage.parameters )
 ```
 
-We're going to use a Gaussian likelihood function to model sequence coverage data. Here's the function we wrote in the
-stats modelling session (here implemented using `dnorm`).
+We're going to use a Gaussian likelihood function to model sequence coverage data.  The `dnorm()` function in R can be used to implement this. In the spirit of making code readable, let's use this to write a 'gaussian.ll()` function that we will use in our code:
+
 ```R
 gaussian.ll <- function(
     data,
