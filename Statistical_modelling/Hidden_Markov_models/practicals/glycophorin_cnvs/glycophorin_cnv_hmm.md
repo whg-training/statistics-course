@@ -1,6 +1,6 @@
 # Hidden Markov Model CNV calling example - continued #
 
-** !! Note !! ** To run this code, you first need to have computed a set of log-likelihoods for each sample at each site in the relevant dataset.  The code to do this was explained in the [warmup tutorial](glycophorin_cnv_hmm.md), which you can also find in this directory.
+** !! Note !! ** To run this code, you first need to have computed a set of log-likelihoods for each sample at each site in the relevant dataset.  The code to do this was explained in the [warmup tutorial](glycophorin_cnv_warmup.md), which you can also find in this directory.
 
 If you haven't run it in this R session, please run this now:
 ```R
