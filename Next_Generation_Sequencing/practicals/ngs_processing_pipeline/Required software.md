@@ -16,4 +16,6 @@ $ conda install snakemake
 $ conda install fastqc multiqc
 ```
 
-etc.  We would like to solve any issues so please try now!
+and so on.
+
+We would like to identify and solve any installation issues so please try this now!
