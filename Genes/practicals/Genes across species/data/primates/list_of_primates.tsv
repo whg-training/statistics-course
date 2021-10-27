@@ -1,0 +1,25 @@
+Common name	Scientific name	url	folder	filename
+Bushbaby	Otolemur garnettii	http://ftp.ensembl.org/pub/current_gff3	otolemur_garnettii	Otolemur_garnettii.OtoGar3.104.gff3.gz
+Mouse Lemur	Microcebus murinus	http://ftp.ensembl.org/pub/current_gff3	microcebus_murinus	Microcebus_murinus.Mmur_3.0.104.chr.gff3.gz
+Coquerels sifaka	Propithecus http://ftp.ensembl.org/pub/current_gff3	coquereli	propithecus_coquereli	Propithecus_coquereli.Pcoq_1.0.104.gff3.gz
+Greater bamboo lemur	Prolemur http://ftp.ensembl.org/pub/current_gff3	simus	prolemur_simus	Prolemur_simus.Prosim_1.0.104.gff3.gz
+Marmoset	Callithrix jacchus	http://ftp.ensembl.org/pub/current_gff3	callithrix_jacchus	Callithrix_jacchus.ASM275486v1.104.gff3.gz
+Bolivian squirrel monkey	http://ftp.ensembl.org/pub/current_gff3	Saimiri boliviensis boliviensis	saimiri_boliviensis_boliviensis	Saimiri_boliviensis_boliviensis.SaiBol1.0.104.gff3.gz
+Capuchin	Cebus imitator	http://ftp.ensembl.org/pub/current_gff3	cebus_capucinus	Cebus_capucinus.Cebus_imitator-1.0.104.gff3.gz
+Mas night monkey	Aotus nancymaae	http://ftp.ensembl.org/pub/current_gff3	aotus_nancymaae	Aotus_nancymaae.Anan_2.0.104.gff3.gz
+Sooty mangabey	Cercocebus atys	http://ftp.ensembl.org/pub/current_gff3	cercocebus_atys	Cercocebus_atys.Caty_1.0.104.gff3.gz
+Crab-eating macaque	Macaca fascicularis	http://ftp.ensembl.org/pub/current_gff3	macaca_fascicularis	Macaca_fascicularis.Macaca_fascicularis_6.0.104.chr.gff3.gz
+Macaque	Macaca mulatta	http://ftp.ensembl.org/pub/current_gff3	macaca_mulatta	Macaca_mulatta.Mmul_10.104.chr.gff3.gz
+Pig-tailed macaque	Macaca nemestrina	http://ftp.ensembl.org/pub/current_gff3	macaca_nemestrina	Macaca_nemestrina.Mnem_1.0.104.gff3.gz
+Olive baboon	Papio anubis	http://ftp.ensembl.org/pub/current_gff3	papio_anubis	Papio_anubis.Panu_3.0.104.chr.gff3.gz
+Drill	Mandrillus leucophaeus	http://ftp.ensembl.org/pub/current_gff3	mandrillus_leucophaeus	Mandrillus_leucophaeus.Mleu.le_1.0.104.gff3.gz
+Vervet-AGM	Chlorocebus sabaeus	http://ftp.ensembl.org/pub/current_gff3	chlorocebus_sabaeus	Chlorocebus_sabaeus.ChlSab1.1.104.chr.gff3.gz
+Black snub-nosed monkey	Rhinopithecus bieti	http://ftp.ensembl.org/pub/current_gff3	rhinopithecus_bieti	Rhinopithecus_bieti.ASM169854v1.104.gff3.gz
+Golden snub-nosed monkey	Rhinopithecus roxellana	http://ftp.ensembl.org/pub/current_gff3/	rhinopithecus_roxellana	Rhinopithecus_roxellana.Rrox_v1.104.gff3.gz
+Orangutan	Pongo abelii	http://ftp.ensembl.org/pub/current_gff3	pongo_abelii	Pongo_abelii.PPYG2.104.chr.gff3.gz
+Gorilla	Gorilla gorilla gorilla	http://ftp.ensembl.org/pub/current_gff3	gorilla_gorilla	Gorilla_gorilla.gorGor4.104.chr.gff3.gz
+Bonobo	Pan paniscus	http://ftp.ensembl.org/pub/current_gff3	pan_paniscus	Pan_paniscus.panpan1.1.104.chr.gff3.gz
+Chimpanzee	Pan troglodytes	http://ftp.ensembl.org/pub/current_gff3	pan_troglodytes	Pan_troglodytes.Pan_tro_3.0.104.chr.gff3.gz
+Human	Homo sapiens	http://ftp.ensembl.org/pub/current_gff3	homo_sapiens	Homo_sapiens.GRCh38.104.chr.gff3.gz
+Gibbon	Nomascus leucogenys	http://ftp.ensembl.org/pub/current_gff3	nomascus_leucogenys	Nomascus_leucogenys.Nleu_3.0.104.chr.gff3.gz
+Tarsier	Carlito syrichta	http://ftp.ensembl.org/pub/current_gff3	carlito_syrichta	Carlito_syrichta.Tarsius_syrichta-2.0.1.104.gff3.gz
