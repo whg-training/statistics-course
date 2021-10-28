@@ -19,9 +19,11 @@ To get the data you have two options:
 
 1. Download the full FASTQ files from the ENA.  The relevant links are provided in [`samples.tsv`](samples.tsv).  The full data is aorund 12Gb.
 
-2. To reduce the computational and space requirements for this tutorial, I created a lower depth version of the same data.  You can download these files from [this link](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Next_Generation_Sequencing/practicals/ngs_processing_pipeline/subsampled/).  the sub-sampled data is around 2Gb.
+2. To reduce the computational and space requirements for this tutorial, I created a lower depth version of the same data.  You can download these files from [this link](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Next_Generation_Sequencing/practicals/ngs_processing_pipeline/data/subsampled/).  the sub-sampled data is around 2Gb.
 
 It's up to you which version of data you want to try to process.
+
+You will also need the reference sequence to align to - we will use `Pf3D7_v3` which you can find [here](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Next_Generation_Sequencing/practicals/ngs_processing_pipeline/reference/).
 
 ### Some general advice
 
