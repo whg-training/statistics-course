@@ -2,11 +2,9 @@
 
 If you've followed the [introduction](README.md), you should now have a bunch of softare installed,
 including the `snakemake` pipelining software, and you will have a set of 10 fastq files named in
-the format `ERR[xxxxxx]_[1|2].fastq.gz`.
+the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the *P.falciparum* reference sequence, `Pf3D7_v3.fa.gz`.
 
-**Challenge.**  Write a snakemake pipeline that processes these reads.
-
-Your pipeline should:
+**Challenge.**  Write a snakemake pipeline that processes these reads.  Your pipeline should:
 
 * take in a set of fastq read files named by accessions as described above.  To keep things well-organised, it's a good idea to put these in a subdirectory, so they will look something like this:
 
@@ -65,25 +63,13 @@ Your pipeline should:
     results/qc/multiqc_report.html
 ```
 
-Here are some of the things you will need in your pipeline:
+![Diagram of pipeline](pipeline.svg).
 
-* A QC step. We recommend running FastQC on the initial fastq files, and multiqc to get a report
-  across the samples.
+(The pipeline shown in the diagram has a bunch of optional steps in it, including read adapter trimming.  I suggest leaving these out for now unless you feel you want to.)
 
-* A read alignment step.  For short-read paired-end data, `bwa mem` is the recommended algorithm
+### Tips and tricks
 
-* A 'remove duplicates', or 'mark duplicates' step. This can either be done directly to the fastqc
-  files (using `FastUniq`, which removes duplicate reads) or later at the alignment step (using
-  `Picard MarkDup`, which doesn't remove them but flags them in the BAM file.)
 
-* If your reads show high levels of adapter contamination - an adapter trimming step may be needed.
-  For the current practical we suggest skipping this, but
-  [`trimmomatic`](http://www.usadellab.org/cms/?page=trimmomatic) is a good way to do this.
-
-* A step to compute the coverage of your reads at each position in the genome - `bedtools genomecov` is a good option here.
-
-Along the way you will need various other steps - sorting reads by alignment position, converting
-between SAM and BAM formats, indexing and so on.
 
 ##
 
