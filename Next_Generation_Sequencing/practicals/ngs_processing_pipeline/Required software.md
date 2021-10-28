@@ -6,7 +6,7 @@ For the '**Introduction to NGS: from sequencing to variant calling**' workshop y
 * For general data manipulation: [`samtools`](https://github.com/samtools/samtools)
 * For BAM file processing: [`picard`](https://broadinstitute.github.io/picard/).
 
-To put together a pipeline for the full tutorial you will additionally need:
+For the pipeline-building tutorial you will additionally need:
 
 * For pipelining: [`snakemake`](https://snakemake.readthedocs.io/en/stable/).  (Or another workflow management tool of your choice.  [`WDL`](https://openwdl.org) and [`Nextflow`](https://www.nextflow.io) are possibilities, if you prefer them, but you will have to work them out for yourself.)
 * For QC: [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [`multiqc`](https://multiqc.info)
