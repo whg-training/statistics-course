@@ -1,22 +1,26 @@
 ## Required software
 
-To run the tutorial you will need several pieces of software:
+For the '**Introduction to NGS: from sequencing to variant calling**' workshop you will need the following software installed:
+
+* For alignment: [`bwa`](https://github.com/lh3/bwa)
+* For general data manipulation: [`samtools`](https://github.com/samtools/samtools)
+* For BAM file processing: [`picard`](https://broadinstitute.github.io/picard/).
+
+For the pipeline-building tutorial you will additionally need:
 
 * For pipelining: [`snakemake`](https://snakemake.readthedocs.io/en/stable/).  (Or another workflow management tool of your choice.  [`WDL`](https://openwdl.org) and [`Nextflow`](https://www.nextflow.io) are possibilities, if you prefer them, but you will have to work them out for yourself.)
 * For QC: [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [`multiqc`](https://multiqc.info)
-* For alignment: [`bwa`](https://github.com/lh3/bwa)
-* For general file manipulation: [`samtools`](https://github.com/samtools/samtools) and [`picard`](https://broadinstitute.github.io/picard/).
 * For coverage calculations: [`bedtools`](https://bedtools.readthedocs.io/en/latest/index.html)
 * For variant calling: [`octopus`](https://github.com/luntergroup/octopus)
 
-With luck you should be able to install these using `conda` (please try now!)  E.g.:
+With luck you should be able to install the above software using `conda` (please try now!)  E.g.:
+
+```
+$ conda install samtools
+```
 
 ```
 $ conda install snakemake
-```
-
-```
-$ conda install fastqc multiqc
 ```
 
 and so on.
