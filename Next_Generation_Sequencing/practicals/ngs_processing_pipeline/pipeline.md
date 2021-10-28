@@ -10,6 +10,7 @@ Your pipeline should:
 
 * take in a set of fastq read files named by accessions as above.  You should put these in a subdirectory, so they will look like this:
 
+```
    data/reads/ERR377582_1.fastq.gz
    data/reads/ERR377582_2.fastq.gz
    data/reads/ERR377591_1.fastq.gz
@@ -20,6 +21,7 @@ Your pipeline should:
    data/reads/ERR417621_2.fastq.gz
    data/reads/ERR417627_1.fastq.gz
    data/reads/ERR417627_2.fastq.gz
+```
 
 * output a set of BAM files containing these reads aligned to the a reference sequence.  The reads should be coordinate sorted, duplicates sohuld have been marked or removed, and the reads should be indexed.  My advice is to put results in a seperate subdirectory, so they will look something like this:
 
