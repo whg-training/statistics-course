@@ -1,6 +1,6 @@
 ## Required software
 
-For the 'Introduction to NGS: from sequencing to variant calling' workshop you will need the following software installed:
+For the '**Introduction to NGS: from sequencing to variant calling**' workshop you will need the following software installed:
 
 * For alignment: [`bwa`](https://github.com/lh3/bwa)
 * For general data manipulation: [`samtools`](https://github.com/samtools/samtools)
