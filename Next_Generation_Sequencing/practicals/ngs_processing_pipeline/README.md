@@ -11,7 +11,7 @@ reads, identify or remove duplicate reads, compute coverage and - optionally gen
 
 You will need lots of software to implement this pipeline!  Before starting the tutorial please visit the [required software page](required software.md) and make sure you can install the needed pieces.
 
-## Where to get the data
+### Getting the data
 
 This tutorial will start with a set of fastq files representing *P.falciparum* (malaria) sequence reads from 5 samples.  The data comes from the [MalariaGEN Pf6 open resource](https://www.malariagen.net/resource/26) (described further in the [corresponding publication](https://wellcomeopenresearch.org/articles/6-42) and is publicly available via the [European Nucleotide Archive](https://www.ebi.ac.uk/ena/browser/home).
 
@@ -36,7 +36,10 @@ $ gunzip -c filename.fastq.gz | head -n 4000 | gzip -c > filename.subsampled.fas
 
 to take the first few reads from each file.
 
-**Question.** The above command specifies a How many reads does the above command take?
+**Question.** The above command specifies a multiple of 4 lines.  Why?  How many reads does the above command extract?
 
-If you set your pipeline up right (for example using a [config file]() to list the data) then it will be easy to rerun it on the real data once you have it working.
+If you set your pipeline up right (for example using a [config file](https://snakemake.readthedocs.io/en/stable/executing/cli.html) to list the data) then it will be easy to rerun it on the real data once you have it working.
 
+## Getting started
+
+When you're ready, go the the [pipeline overview page](pipeline.md).
