@@ -16,11 +16,11 @@ For the pipeline-building tutorial you will additionally need:
 With luck you should be able to install the above software using `conda` (please try now!)  E.g.:
 
 ```
-$ conda install snakemake
+$ conda install samtools
 ```
 
 ```
-$ conda install fastqc multiqc
+$ conda install snakemake
 ```
 
 and so on.
