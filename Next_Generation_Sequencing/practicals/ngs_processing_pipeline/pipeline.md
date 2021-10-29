@@ -293,3 +293,6 @@ Unfortunately the format of this information changes depending on where you get 
 information from. Some other examples can be found [on
 wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers).
 
+## Enjoy!
+
+If you are running this as part of a [WHG course](www.well.ox.ac.uk), we'll discuss your pipeline at the wrap-up session later in the week.
