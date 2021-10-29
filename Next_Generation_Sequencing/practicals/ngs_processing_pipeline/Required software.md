@@ -30,7 +30,7 @@ and so on.
 $ conda install -c bioconda -c conda-forge snakemake fastqc multiqc samtools octopus bedtools
 ```
 
-**Note.** There are also slightly different instructions on the [snakemake webpage](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) that you might like to follow instead - this suggests to use the `mamba` command instead of `conda`.  (Mamba does seem slightly nicer - it prints a nice picture!)
+**Note.** There are also slightly different instructions on the [snakemake webpage](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) that you might like to follow instead - this suggests to use the `mamba` command instead of `conda`.  (Mamba does seem slightly nicer - and it prints a picture of a snake!)
 
 **Note.** Depending on your setup you might also need to use `sudo` to run these commands.  (This is related to system permissions - `sudo` gives a command higher priveleges.)  So you would write:
 ```
