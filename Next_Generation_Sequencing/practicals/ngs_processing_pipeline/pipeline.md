@@ -6,7 +6,7 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
 
 **Challenge.**  Write a snakemake pipeline that processes these reads.  Your pipeline should:
 
-* Take in a set of fastq read files named by accessions as described above.  To keep things well-organised, it's a good idea to put these in a subdirectory, so they will look something like this:
+* Take in a set of fastq read files named by accessions as described above.  To keep things well-organised, it's a good idea to keep these in a subdirectory, so they will look something like this:
 
 ```
    data/reads/ERR377582_1.fastq.gz
@@ -36,7 +36,8 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
     results/aligned/QG0088-C.bam.bai
 ```
 
-* QC the fastq files first.  We suggest using `fastqc` and `multiqc` for this.  So this will output some files that look like this:
+* It should also start by QCing the fastq files. We suggest using `fastqc` and `multiqc` for this.
+  So this will output some files that look like this:
 
 ```
     results/qc/QG0033-C.fastqc.html
@@ -46,8 +47,9 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
     results/qc/QG0088-C.fastqc.html
     results/qc/multiqc_report.html
 ```
+You should of course look at the output to look for anything odd!
 
-* (Optional) output a BED file for each sample, reporting the coverage at each site in the genome.  (`bedtools genomecov -bg` is a good way to create this).  Theese will look like this:
+* Optionally output a [`bedgraph`](http://genome.ucsc.edu/goldenPath/help/bedgraph.html) file for each sample, reporting the coverage at each site in the genome.  (`bedtools genomecov -bg` is a good way to create this).  These will look like this:
 
 ```
     results/coverage/QG0033-C.coverage.bedgraph
@@ -57,22 +59,27 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
     results/coverage/QG0088-C.coverage.bedgraph
 ```
 
-* (Optional) also output a variant calls file.  These will be an indexed bgzipped [vcf file](https://samtools.github.io/hts-specs/VCFv4.2.pdf), which should look like this:
+* Optionally also output a variant calls file.  These will be an indexed bgzipped [vcf file](https://samtools.github.io/hts-specs/VCFv4.2.pdf), which should look like this:
 
 ```
     results/variant_calls/variant_calls.vcf.gz
     results/variant_calls/variant_calls.vcf.gz.tbi
 ```
 
-Here is a diagram of the pipeline you should implement:
+To give you a better sense of this, here is a diagram of the overall pipeline you should implement:
 
 ![Diagram of pipeline](pipeline.svg).
 
-(The pipeline shown in the diagram has a bunch of optional steps in it, including read adapter trimming.  I suggest leaving these out for now unless you feel you want to.)
+Easy, right?
 
 ### Tips and tricks
 
+Here is some guidance to help you write your pipeline.
 
+* [How should I put the sample information in?](How_to_get_sample_information_in.md)
+* [How should I organise my pipeline files?](How_should_I_organise_my_pipeline.md)
+* [My snakefiles are getting too big!](How_should_I_organise_my_pipeline.md)
+* [Keeping runtimes short during development](Keeping_runtimes_short_during_development.md)
 
-##
+### 
 
