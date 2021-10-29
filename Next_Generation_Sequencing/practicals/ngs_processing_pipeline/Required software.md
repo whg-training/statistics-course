@@ -13,7 +13,7 @@ For the pipeline-building tutorial you will additionally need:
 * For coverage calculations: [`bedtools`](https://bedtools.readthedocs.io/en/latest/index.html)
 * For variant calling: [`octopus`](https://github.com/luntergroup/octopus)
 
-With luck you should be able to install the above software using `conda` (please try now!) E.g.:
+With luck you should be able to install the above software using `conda` (please try now!) E.g. this may work better:
 
 ```
 $ conda install samtools
