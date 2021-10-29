@@ -76,10 +76,38 @@ Easy, right?
 
 Here is some guidance to help you write your pipeline.
 
+#### How should I put sample information in?
+
+I always put the sample information in through the config file - and specifically *not* encoded in
+the snakefile itself. For example like this:
+
+```
+{
+	"reference": "data/reference/Pf3D7_v3.fa.gz",
+	"fastq_filename_template": "data/reads/subsampled/{id}_{read}.fastq.gz",
+	"samples": [
+		{ "name": "QG0033-C", "ID": "ERR377582" },
+		{ "name": "QG0041-C", "ID": "ERR377591" },
+		{ "name": "QG0049-C", "ID": "ERR417627" },
+		{ "name": "QG0056-C", "ID": "ERR417621" },
+		{ "name": "QG0088-C", "ID": "ERR377629" }
+	]
+}
+```
+
+And I then run snakemake with the `--configfile` argument like this:
+```
+snakemake -s pipelines/master.snakefile --configfile config.json
+```
+
+The point of this is that it makes it easy to run the pipeline on different sets of data
+
+
 * [How should I put the sample information in?](How_to_get_sample_information_in.md)
 * [How should I organise my pipeline files?](How_should_I_organise_my_pipeline.md)
 * [My snakefiles are getting too big!](How_should_I_organise_my_pipeline.md)
 * [Keeping runtimes short during development](Keeping_runtimes_short_during_development.md)
+* [What's with all these intermediate files?](How_to_handle_intermediate_outputs.md)
 
 ### 
 
