@@ -80,7 +80,7 @@ Here is some guidance to help you write your pipeline.
 * [How should I organise my pipeline files?](#How-should-I-organise-my-pipeline-files)
 * [My snakefiles are getting too big!](#My-snakefiles-are-getting-too-big)
 * [Keeping a fast iteration time during development](#Keeping-a-fast-iteration-time-during-development).
-* [Dealing with intermediate files](#Dealing-with-intermediate-files].
+* [Dealing with intermediate files](#Dealing-with-intermediate-files).
 * [Read groups what now?](#Read-groups-what-now)
 * [What's in the fastq header?](#Whats-in-the-fastq-header)
 
