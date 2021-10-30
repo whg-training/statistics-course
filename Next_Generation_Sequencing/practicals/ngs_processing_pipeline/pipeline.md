@@ -77,12 +77,12 @@ Easy, right?
 Here is some guidance to help you write your pipeline.
 
 * [How should I put sample information in?](#How-should-I-put-sample-information-in)
-* [How should I organise my pipeline files?](How should I-organise-my-pipeline-files)
-* [My snakefiles are getting too big!](My-snakefiles-are-getting-too-big)
-* [Keeping a fast iteration time during development](Keeping-a-fast-iteration-time-during-development).
-* [Dealing with intermediate files](Dealing-with-intermediate-files].
-* [Read groups what?](Read-groups-what)
-* [What's in the fastq header?](Whats-in-the-fastq-header)
+* [How should I organise my pipeline files?](#How-should-I-organise-my-pipeline-files)
+* [My snakefiles are getting too big!](#My-snakefiles-are-getting-too-big)
+* [Keeping a fast iteration time during development](#Keeping-a-fast-iteration-time-during-development).
+* [Dealing with intermediate files](#Dealing-with-intermediate-files].
+* [Read groups what now?](#Read-groups-what-now)
+* [What's in the fastq header?](#Whats-in-the-fastq-header)
 
 #### How should I put sample information in?
 
@@ -228,7 +228,7 @@ you can get the benefit of the UNIX pipe with the same syntax as above - just re
 `pipe()` and it should automatically work. (I've never actually used this feature but it's a nice
 idea for this step, because the SAM file output by `bwa` might be huge when applied to real data.)
 
-#### Read groups what?
+#### Read groups what now?
 
 Some programs require reads to have 'read groups'. What are they and how do you get them in there?
 
