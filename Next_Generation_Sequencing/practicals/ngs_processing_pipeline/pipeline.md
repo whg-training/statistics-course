@@ -1,6 +1,6 @@
 ## Implementing a NGS data processing pipeline.
 
-If you've followed the [introduction](README.md), you should now have a bunch of softare installed,
+If you've followed the [introduction](README.md), you should now have a bunch of software installed,
 including the `snakemake` pipelining software, and you will have a set of 10 fastq files named in
 the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the *P.falciparum* reference sequence, `Pf3D7_v3.fa.gz` - we recommend putting this in its own folder, say `data/reference/`.
 
