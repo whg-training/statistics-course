@@ -274,7 +274,6 @@ rule align_reads:
 
 If you look at the resulting files, they have an `@RG` header record and `RG` tags for each read - octopus will then accept these files.
 
-
 #### What's in a fastq header?
 
 If you look at the header / read name rows of a fastq file you'll see they actually contain a bunch of information - like this:
@@ -286,10 +285,11 @@ This row actually tells us the sample ID (`ERR377582`) and the read identifier (
 this is followed by information identifying the instrument that generated the reads (`HS23_10792`),
 the flowcell lane and tile number in the lane (`2:2307`), the coordinates of the cluster within the
 tile (`6524`, `31920`), a number identifying the index of the sample within a multiplexed set of
-samples (i.e. all run at the same time; `#15`), and whether it's read 1 or 2. That is pretty
-detailed information about our read.
+samples (i.e. all run at the same time; `#15`), and whether it's read 1 or 2.
 
-Unfortunately the format of this information changes depending on where you get your
+Some of this info can be put in the read group as well.
+
+**Note.** Unfortunately the format of this information changes depending on where you get your
 information from. Some other examples can be found [on
 wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers).
 
