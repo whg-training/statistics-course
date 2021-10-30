@@ -74,7 +74,7 @@ Easy, right?
 
 ### Tips and tricks
 
-Here is some guidance to help you write your pipeline.
+Here is some guidance to help you write your pipeline.  Click the links to jump to the relevant section.
 
 * [How should I put sample information in?](#How-should-I-put-sample-information-in)
 * [How should I organise my pipeline files?](#How-should-I-organise-my-pipeline-files)
@@ -110,6 +110,8 @@ snakemake -s pipelines/master.snakefile --configfile config.json
 
 The point of this is that it makes it easy to run the pipeline on different sets of data - you just swap out the config file for a different one.
 
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 #### How should I organise my pipeline files?
 
 I stick to a specific hierarchy: data goes in the `data/` folder, analysis results go in the
@@ -138,6 +140,8 @@ The point of this arrangement is that the `pipelines` folder contains all of the
 
 **Note.** The snakemake documentation suggests a [similar, but slightly different layout](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html).
 
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 #### My snakefiles are getting too big!
 
 To fix this, I often use the snakemake [`include`
@@ -161,6 +165,8 @@ I like this because it keeps related things together, but the files become manag
 
 **Note.** You'll notice I included a `functions.snakemake` above.  This is because you often need a few python functions to help with your pipeline - for example, mapping from sample names to fastq filenames and so on.  They tend to be re-used so it can be nice to group these into one file.
 
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 #### Keeping a fast iteration time during development.
 
 When you're developing a pipeline, you don't want to wait two hours only to discover that it didn't
@@ -178,6 +184,8 @@ to take the first few reads from each file.
 If you set your pipeline up the way I suggest above then you can have a config file for the small
 test dataset, and then once it is all working, rerun using the real config file specifying the full
 dataset.
+
+[Go back to the tips and tricks](#Tips-and-tricks).
 
 #### Dealing with intermediate files
 
@@ -227,6 +235,8 @@ output](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#piped-o
 you can get the benefit of the UNIX pipe with the same syntax as above - just replace `temp()` with
 `pipe()` and it should automatically work. (I've never actually used this feature but it's a nice
 idea for this step, because the SAM file output by `bwa` might be huge when applied to real data.)
+
+[Go back to the tips and tricks](#Tips-and-tricks).
 
 #### Read groups what now?
 
@@ -290,6 +300,8 @@ can be obtained from the read names in the fastq files.  For the data in this pr
 on the [ENA website](ERR377582).  But in general it's a bit hard to put it all together.
 (Luckily just the sample name and identifier are enough for our analysis.)
 
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 #### What's in the fastq header?
 
 If you look at the header / read name rows of a fastq file you'll see they actually contain a bunch of information - like this:
@@ -308,6 +320,8 @@ detailed information about our read.
 depending on your data provider. Some other examples can be found [on
 wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers) or on the 
 [GATK read groups page](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups).
+
+[Go back to the tips and tricks](#Tips-and-tricks).
 
 ## Enjoy!
 
