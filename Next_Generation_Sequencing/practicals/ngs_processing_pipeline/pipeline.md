@@ -66,11 +66,11 @@ You should of course look at the output to look for anything odd!
     results/variant_calls/variant_calls.vcf.gz.tbi
 ```
 
-To give you a better sense of this, here is a diagram of the overall pipeline - you should implement the green bits:
+To give you a better sense of this, here is a diagram of the overall pipeline.
 
 ![Diagram of pipeline](pipeline.svg).
 
-Easy, right?
+You just have to implement the green bits... easy, right?
 
 ### Tips and tricks
 
