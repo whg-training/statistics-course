@@ -6,6 +6,8 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
 
 **Challenge.**  Write a snakemake pipeline that processes these reads.  Your pipeline should:
 
+[Go to tips and tricks](#tips-and-tricks).
+
 * Take in a set of fastq read files named by accessions as described above.  To keep things well-organised, it's a good idea to keep these in a subdirectory, so they will look something like this:
 
 ```
