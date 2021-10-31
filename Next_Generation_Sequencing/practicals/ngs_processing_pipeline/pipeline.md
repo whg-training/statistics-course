@@ -4,9 +4,9 @@ If you've followed the [introduction](README.md), you should now have a bunch of
 including the `snakemake` pipelining software, and you will have a set of 10 fastq files named in
 the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the *P.falciparum* reference sequence, `Pf3D7_v3.fa.gz` - we recommend putting this in its own folder, say `data/reference/`.
 
-**Challenge.**  Write a snakemake pipeline that processes these reads.  Your pipeline should:
+**Challenge.**  Write a snakemake pipeline that processes these reads.  Here are some points to consider.
 
-* Take in a set of fastq read files named by accessions as described above.  To keep things well-organised, it's a good idea to keep these in a subdirectory, so they will look something like this:
+* Your pipeline should start with the set of fastq read files named by accessions as described in the [introduction](Introduction.md).  To keep things well-organised, it's a good idea to keep these in a subdirectory, so they will look something like this:
 
 ```
    data/reads/ERR377582_1.fastq.gz
@@ -21,7 +21,9 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
    data/reads/ERR417627_2.fastq.gz
 ```
 
-* Output a set of BAM files containing these reads aligned to the a reference sequence.  The reads should be coordinate sorted, duplicates sohuld have been marked or removed, and the reads should be indexed.  My advice is to put results in a seperate subdirectory, so they will look something like this:
+* You will also need the reference sequence, placed in `data/reference/Pf3D7_v3.fa.gz`.
+
+* The pipelines will output a set of BAM files containing these reads aligned to the a reference sequence.  The reads should be coordinate sorted, duplicate read pairs should have been marked (or removed), and the reads should be indexed.  My advice is to put results in a seperate subdirectory, so they will look something like this:
 
 ```
     results/aligned/QG0033-C.bam
@@ -36,7 +38,7 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
     results/aligned/QG0088-C.bam.bai
 ```
 
-* It should also start by QCing the fastq files. We suggest using `fastqc` and `multiqc` for this.
+* The pipeline should also perform QC of the fastq files. We suggest using `fastqc` and `multiqc` for this.
   So this will output some files that look like this:
 
 ```
@@ -49,7 +51,7 @@ the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the 
 ```
 You should of course look at the output to look for anything odd!
 
-* Optionally output a [`bedgraph`](http://genome.ucsc.edu/goldenPath/help/bedgraph.html) file for each sample, reporting the coverage at each site in the genome.  (`bedtools genomecov -bg` is a good way to create this).  These will look like this:
+* The pipeline will also output a [`bedgraph`](http://genome.ucsc.edu/goldenPath/help/bedgraph.html) file for each sample, reporting the coverage at each site in the genome.  (`bedtools genomecov -bg` is a good way to create this).  These will look like this:
 
 ```
     results/coverage/QG0033-C.coverage.bedgraph
@@ -59,7 +61,7 @@ You should of course look at the output to look for anything odd!
     results/coverage/QG0088-C.coverage.bedgraph
 ```
 
-* Optionally also output a variant calls file.  These will be an indexed bgzipped [vcf file](https://samtools.github.io/hts-specs/VCFv4.2.pdf), which should look like this:
+* And, if you implement the whole pipeline, it will also output a variant calls file (for this tutorial we suggest using the [`octopus` variant caller](https://github.com/luntergroup/octopus) for this).  These will be an indexed bgzipped [vcf file](https://samtools.github.io/hts-specs/VCFv4.2.pdf), which should look like this:
 
 ```
     results/variant_calls/variant_calls.vcf.gz
@@ -70,7 +72,9 @@ To give you a better sense of this, here is a diagram of the overall pipeline.
 
 ![Diagram of pipeline](pipeline.svg).
 
-You just have to implement the green bits... easy, right?
+You have to implement the green bits... easy, right?
+
+If you are running this as part of a [WHG course](www.well.ox.ac.uk), we'll discuss your pipeline and look at the outputs at the wrap-up session later in the week.
 
 ### Tips and tricks
 
@@ -323,6 +327,5 @@ wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifi
 
 [Go back to the tips and tricks](#Tips-and-tricks).
 
-## Enjoy!
+## Good luck!
 
-If you are running this as part of a [WHG course](www.well.ox.ac.uk), we'll discuss your pipeline at the wrap-up session later in the week.
