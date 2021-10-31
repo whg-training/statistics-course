@@ -11,7 +11,8 @@ For the pipeline-building tutorial you will additionally need:
 * For pipelining: [`snakemake`](https://snakemake.readthedocs.io/en/stable/).  (Or another workflow management tool of your choice.  [`WDL`](https://openwdl.org) and [`Nextflow`](https://www.nextflow.io) are possibilities, if you prefer them, but you will have to work them out for yourself.)
 * For QC: [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [`multiqc`](https://multiqc.info)
 * For coverage calculations: [`bedtools`](https://bedtools.readthedocs.io/en/latest/index.html)
-* For variant calling: [`octopus`](https://github.com/luntergroup/octopus)
+* For variant calling: [`octopus`](https://github.com/luntergroup/octopus).
+* For manipulating VCF files: `tabix`
 
 With luck you should be able to install the above software using `conda` (please try now!) E.g. this may work better:
 

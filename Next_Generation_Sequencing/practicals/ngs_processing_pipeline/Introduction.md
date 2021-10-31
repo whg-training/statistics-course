@@ -9,7 +9,7 @@ reads, identify or remove duplicate reads, compute coverage and - optionally gen
 
 ### Required software.
 
-You will need lots of software to implement this pipeline!  Before starting the tutorial please visit the [Required software page](Required software.md) and make sure you can install the needed pieces.
+You will need lots of software to implement this pipeline!  Before starting the tutorial please visit the [Required software page](Required_software.md) and make sure you can install the needed pieces.
 
 ### Obtaining the data
 
