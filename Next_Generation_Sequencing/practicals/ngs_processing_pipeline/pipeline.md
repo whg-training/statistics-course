@@ -1,6 +1,6 @@
 ## Implementing a NGS data processing pipeline.
 
-If you've followed the [introduction](README.md), you should now have a bunch of software installed,
+If you've followed the [introduction](Introduction.md), you should now have a bunch of software installed,
 including the `snakemake` pipelining software, and you will have a set of 10 fastq files named in
 the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the *P.falciparum* reference sequence, `Pf3D7_v3.fa.gz` - we recommend putting this in its own folder, say `data/reference/`.
 
@@ -310,7 +310,6 @@ on the [ENA website](ERR377582).  But in general it's a bit hard to put it all t
 [Go back to the tips and tricks](#Tips-and-tricks).
 
 #### What's in the fastq header?
->>>>>>> e6db8037d2cce2ee1a99c73d1fefa4601374fa2c
 
 If you look at the header / read name rows of a fastq file you'll see they actually contain a bunch of information - like this:
 ```
@@ -325,18 +324,12 @@ samples (i.e. all run at the same time; `#15`), and whether it's read 1 or 2.
 
 Some of this info can be put in the read group as well.
 
-<<<<<<< HEAD
-**Note.** Unfortunately the format of this information changes depending on where you get your
-information from. Some other examples can be found [on
-wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers).
-=======
 **Note.** The format of this information is not standard across platforms, and it changes
 depending on your data provider. Some other examples can be found [on
 wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers) or on the 
 [GATK read groups page](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups).
 
 [Go back to the tips and tricks](#Tips-and-tricks).
->>>>>>> e6db8037d2cce2ee1a99c73d1fefa4601374fa2c
 
 ## Good luck!
 
