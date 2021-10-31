@@ -1,6 +1,6 @@
 ## Implementing a NGS data processing pipeline.
 
-If you've followed the [introduction](README.md), you should now have a bunch of softare installed,
+If you've followed the [introduction](README.md), you should now have a bunch of software installed,
 including the `snakemake` pipelining software, and you will have a set of 10 fastq files named in
 the format `ERR[xxxxxx]_[1|2].fastq.gz`.  And you will also have downloaded the *P.falciparum* reference sequence, `Pf3D7_v3.fa.gz` - we recommend putting this in its own folder, say `data/reference/`.
 
@@ -66,15 +66,23 @@ You should of course look at the output to look for anything odd!
     results/variant_calls/variant_calls.vcf.gz.tbi
 ```
 
-To give you a better sense of this, here is a diagram of the overall pipeline - you should implement the green bits:
+To give you a better sense of this, here is a diagram of the overall pipeline.
 
 ![Diagram of pipeline](pipeline.svg).
 
-Easy, right?
+You just have to implement the green bits... easy, right?
 
 ### Tips and tricks
 
-Here is some guidance to help you write your pipeline.
+Here is some guidance to help you write your pipeline.  Click the links to jump to the relevant section.
+
+* [How should I put sample information in?](#How-should-I-put-sample-information-in)
+* [How should I organise my pipeline files?](#How-should-I-organise-my-pipeline-files)
+* [My snakefiles are getting too big!](#My-snakefiles-are-getting-too-big)
+* [Keeping a fast iteration time during development](#Keeping-a-fast-iteration-time-during-development).
+* [Dealing with intermediate files](#Dealing-with-intermediate-files).
+* [Read groups what now?](#Read-groups-what-now)
+* [What's in the fastq header?](#Whats-in-the-fastq-header)
 
 #### How should I put sample information in?
 
@@ -101,6 +109,8 @@ snakemake -s pipelines/master.snakefile --configfile config.json
 ```
 
 The point of this is that it makes it easy to run the pipeline on different sets of data - you just swap out the config file for a different one.
+
+[Go back to the tips and tricks](#Tips-and-tricks).
 
 #### How should I organise my pipeline files?
 
@@ -130,6 +140,8 @@ The point of this arrangement is that the `pipelines` folder contains all of the
 
 **Note.** The snakemake documentation suggests a [similar, but slightly different layout](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html).
 
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 #### My snakefiles are getting too big!
 
 To fix this, I often use the snakemake [`include`
@@ -153,6 +165,8 @@ I like this because it keeps related things together, but the files become manag
 
 **Note.** You'll notice I included a `functions.snakemake` above.  This is because you often need a few python functions to help with your pipeline - for example, mapping from sample names to fastq filenames and so on.  They tend to be re-used so it can be nice to group these into one file.
 
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 #### Keeping a fast iteration time during development.
 
 When you're developing a pipeline, you don't want to wait two hours only to discover that it didn't
@@ -170,6 +184,8 @@ to take the first few reads from each file.
 If you set your pipeline up the way I suggest above then you can have a config file for the small
 test dataset, and then once it is all working, rerun using the real config file specifying the full
 dataset.
+
+[Go back to the tips and tricks](#Tips-and-tricks).
 
 #### Dealing with intermediate files
 
@@ -220,11 +236,13 @@ you can get the benefit of the UNIX pipe with the same syntax as above - just re
 `pipe()` and it should automatically work. (I've never actually used this feature but it's a nice
 idea for this step, because the SAM file output by `bwa` might be huge when applied to real data.)
 
-#### Read groups WAT?
+[Go back to the tips and tricks](#Tips-and-tricks).
+
+#### Read groups what now?
 
 Some programs require reads to have 'read groups'. What are they and how do you get them in there?
 
-BAM files can easily be post-processed and merged.  Read groups are a way to put information in that records the original sample and the sequencing run, so that downstream programs can distinguish these.  The read groups are encoded in the `@RG` header field of the BAM file (which you can see using `samtools view -h`), and in the `RG` tag for each alignment.
+BAM files can easily be post-processed and merged.  Read groups are a way to put information in that records the original sample and the sequencing run, so that downstream programs can distinguish these.  The read groups are encoded in the `@RG` header field of the BAM file (which you can see using `samtools view -h`), and in the `RG` tag for each alignment.  A good document on read groups is [this one on the GATK website](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups).
 
 In our pipeline these don't seem that important (we have one alignment file per input fastq file
 pair), but in other pipelines the same sample might have been sequenced many times and the results
@@ -274,24 +292,47 @@ rule align_reads:
 
 If you look at the resulting files, they have an `@RG` header record and `RG` tags for each read - octopus will then accept these files.
 
+<<<<<<< HEAD
 #### What's in a fastq header?
+=======
+What else can go in a read group?  As the
+[GATK documentation indicates](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups) the read group
+can also contain information about the sequencing flowcell, lane, and sample barcode, and an identifier for the library itself.
+Unfortunately some of this information can be hard to come by depending on where your reads come from.  As we describe below, some of it
+can be obtained from the read names in the fastq files.  For the data in this practical, some parts such as the library identifier can be found 
+on the [ENA website](ERR377582).  But in general it's a bit hard to put it all together.
+(Luckily just the sample name and identifier are enough for our analysis.)
+
+[Go back to the tips and tricks](#Tips-and-tricks).
+
+#### What's in the fastq header?
+>>>>>>> e6db8037d2cce2ee1a99c73d1fefa4601374fa2c
 
 If you look at the header / read name rows of a fastq file you'll see they actually contain a bunch of information - like this:
 ```
 @ERR377582.7615542 HS23_10792:2:2307:6524:31920#15/1
 ```
 
-This row actually tells us the sample ID (`ERR377582`) and the read identifier (`7615542`). And
+This row tells us the sample ID (`ERR377582`) and the read identifier (`7615542`). And
 this is followed by information identifying the instrument that generated the reads (`HS23_10792`),
-the flowcell lane and tile number in the lane (`2:2307`), the coordinates of the cluster within the
+the flowcell lane and tile number in the lane (`2:2307`), the coordinates of the [cluster](https://www.broadinstitute.org/files/shared/illuminavids/clusterGenSlides.pdf) within the
 tile (`6524`, `31920`), a number identifying the index of the sample within a multiplexed set of
 samples (i.e. all run at the same time; `#15`), and whether it's read 1 or 2.
 
 Some of this info can be put in the read group as well.
 
+<<<<<<< HEAD
 **Note.** Unfortunately the format of this information changes depending on where you get your
 information from. Some other examples can be found [on
 wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers).
+=======
+**Note.** The format of this information is not standard across platforms, and it changes
+depending on your data provider. Some other examples can be found [on
+wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers) or on the 
+[GATK read groups page](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups).
+
+[Go back to the tips and tricks](#Tips-and-tricks).
+>>>>>>> e6db8037d2cce2ee1a99c73d1fefa4601374fa2c
 
 ## Enjoy!
 
