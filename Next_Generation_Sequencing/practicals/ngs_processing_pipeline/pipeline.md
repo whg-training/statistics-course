@@ -347,6 +347,8 @@ See `octopus --help` for a full list of options.
 
 (In general this might be less of a problem for real work as you might run it a compute cluster.)
 
+Another option is to try a different variant caller - [`GATK HaplotypeCaller`](https://gatk.broadinstitute.org/hc/en-us), [`DeepVariant`](https://www.nature.com/articles/nbt.4235) or [`freebayes`](https://github.com/freebayes/freebayes) might be possibilities.  For a simple approach you could also use [`bcftools mpileup` and `bcftools call`](https://samtools.github.io/bcftools/bcftools.html) (this is likely to be substantially faster as it relies on the input alignments does not try to reconstruct local haplotypes near each variant.)
+
 [Go back to the tips and tricks](#Tips-and-tricks).
 
 
