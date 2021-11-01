@@ -340,7 +340,7 @@ The [Octopus variant caller](https://github.com/luntergroup/octopus) can take a 
 
 * If you have a multi-core CPU, you can use more threads (`--threads` argument).
 
-* Restrict to a set of regions.  You can add the `--regions` option to tell Octopus to only work on specified regions.  For this tutorial, please include these regions: `--regions Pf3D7_02_v3:616190-656190 Pf3D7_02_v3:779288-859288 Pf3D7_11_v3:1023035-1081305`.
+* Restrict to a set of regions.  You can add the `--regions` option to tell Octopus to only work on specified regions.  For this tutorial, please include these regions: `--regions Pf3D7_02_v3:616190-656190 Pf3D7_02_v3:779288-859288 Pf3D7_11_v3:1023035-1081305`.  (This brought the calling down to about half and hour when I tried it.)
 
 * You could also try the Octopus 'fast' or 'very fast' modes - though I haven't tried this.
 
