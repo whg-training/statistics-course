@@ -89,6 +89,7 @@ Here is some guidance to help you write your pipeline.  Click the links to jump 
 * [What's in the fastq header?](#Whats-in-the-fastq-header)
 * [Octopus is taking too long!](#octopus-is-taking-too-long)
 * [What ploidy?](#what-ploidy)
+* [Tools that use temporary directories](#tools-that-use-temporary-directories)
 
 #### How should I put sample information in?
 
@@ -361,6 +362,22 @@ On the other hand, [mixed infections are common](https://doi.org/10.7554/eLife.4
 For the purposes of this tutorial you could do either - or both so we can see the difference?
 
 [Go back to the tips and tricks](#Tips-and-tricks).
+
+#### Tools that use temporary directories
+
+Some tools have that bad habit of leaving 'stuff' in the directory you run them in. This is really
+annoying for pipelines because you don't want that - you want to put the temp stuff away somewhere
+out of the way. `octopus` is one of these tools: if you run it you'll see it outputs a directory
+called `octopus-temp`.
+
+Really the only way to deal with this is use the program help to find the option that renames the
+temp dir - then send it somewhere different. For example:
+
+```
+octopus [other options] --temp-directory-prefix results/variants/tmp/octopus/
+```
+
+This will probably work here. (In general you may need to use snakemake wildcards etc. to name this temp directory so it doesn't clash if the same rule runs multiple jobs in parallel.)
 
 ## Good luck!
 
