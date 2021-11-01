@@ -87,6 +87,7 @@ Here is some guidance to help you write your pipeline.  Click the links to jump 
 * [Dealing with intermediate files](#Dealing-with-intermediate-files).
 * [Read groups what now?](#Read-groups-what-now)
 * [What's in the fastq header?](#Whats-in-the-fastq-header)
+* [Octopus is taking too long!](#octopus-is-taking-too-long)
 
 #### How should I put sample information in?
 
@@ -296,40 +297,58 @@ rule align_reads:
 
 If you look at the resulting files, they have an `@RG` header record and `RG` tags for each read - octopus will then accept these files.
 
-<<<<<<< HEAD
-#### What's in a fastq header?
-=======
-What else can go in a read group?  As the
-[GATK documentation indicates](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups) the read group
-can also contain information about the sequencing flowcell, lane, and sample barcode, and an identifier for the library itself.
-Unfortunately some of this information can be hard to come by depending on where your reads come from.  As we describe below, some of it
-can be obtained from the read names in the fastq files.  For the data in this practical, some parts such as the library identifier can be found 
-on the [ENA website](ERR377582).  But in general it's a bit hard to put it all together.
-(Luckily just the sample name and identifier are enough for our analysis.)
+What else can go in a read group? As the [GATK documentation
+indicates](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups) the read
+group can also contain information about the sequencing flowcell, lane, and sample barcode, and an
+identifier for the library itself. Unfortunately some of this information can be hard to come by
+depending on where your reads come from. As we describe below, some of it can be obtained from the
+read names in the fastq files. For the data in this practical, some parts such as the library
+identifier can be found on the [ENA website](ERR377582). But in general it's a bit hard to put it
+all together. (Luckily just the sample name and identifier are enough for our analysis.)
 
 [Go back to the tips and tricks](#Tips-and-tricks).
 
 #### What's in the fastq header?
 
-If you look at the header / read name rows of a fastq file you'll see they actually contain a bunch of information - like this:
+If you look at the header / read name rows of a fastq file you'll see they actually contain a bunch
+of information - like this:
+
 ```
 @ERR377582.7615542 HS23_10792:2:2307:6524:31920#15/1
 ```
 
-This row tells us the sample ID (`ERR377582`) and the read identifier (`7615542`). And
-this is followed by information identifying the instrument that generated the reads (`HS23_10792`),
-the flowcell lane and tile number in the lane (`2:2307`), the coordinates of the [cluster](https://www.broadinstitute.org/files/shared/illuminavids/clusterGenSlides.pdf) within the
+This row tells us the sample ID (`ERR377582`) and the read identifier (`7615542`). And this is
+followed by information identifying the instrument that generated the reads (`HS23_10792`), the
+flowcell lane and tile number in the lane (`2:2307`), the coordinates of the
+[cluster](https://www.broadinstitute.org/files/shared/illuminavids/clusterGenSlides.pdf) within the
 tile (`6524`, `31920`), a number identifying the index of the sample within a multiplexed set of
 samples (i.e. all run at the same time; `#15`), and whether it's read 1 or 2.
 
 Some of this info can be put in the read group as well.
 
-**Note.** The format of this information is not standard across platforms, and it changes
-depending on your data provider. Some other examples can be found [on
-wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers) or on the 
+**Note.** The format of this information is not standard across platforms, and it changes depending
+on your data provider. Some other examples can be found [on
+wikipedia](https://en.wikipedia.org/wiki/FASTQ_format#Illumina_sequence_identifiers) or on the
 [GATK read groups page](https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups).
 
 [Go back to the tips and tricks](#Tips-and-tricks).
+
+#### Octopus is taking too long!
+
+The [Octopus variant caller](https://github.com/luntergroup/octopus) can take a long time to do its work - hopefully reflecting that it is trying its best to make high-quality variant calls.  This might take too long to run on your laptop.  If so, here are some options for speeding it up:
+
+* If you have a multi-core CPU, you can use more threads (`--threads` argument).
+
+* Restrict to a set of regions.  You can add the `--regions` option to tell Octopus to only work on specified regions.  For this tutorial, please include these regions: `--regions Pf3D7_02_v3:616190-656190 Pf3D7_02_v3:779288-859288 Pf3D7_11_v3:1023035-1081305`.
+
+* You could also try the Octopus 'fast' or 'very fast' modes - though I haven't tried this.
+
+See `octopus --help` for a full list of options.
+
+(In general this might be less of a problem for real work as you might run it a compute cluster.)
+
+[Go back to the tips and tricks](#Tips-and-tricks).
+
 
 ## Good luck!
 
