@@ -80,6 +80,7 @@ If you are running this as part of a [WHG course](www.well.ox.ac.uk), we'll disc
 
 Here is some guidance to help you write your pipeline.  Click the links to jump to the relevant section.
 
+* [But I want to run the yellow bits too!](#But-I-want-to-run-the-yellow-bits-too)
 * [How should I put sample information in?](#How-should-I-put-sample-information-in)
 * [How should I organise my pipeline files?](#How-should-I-organise-my-pipeline-files)
 * [My snakefiles are getting too big!](#My-snakefiles-are-getting-too-big)
@@ -90,6 +91,12 @@ Here is some guidance to help you write your pipeline.  Click the links to jump 
 * [Octopus is taking too long!](#octopus-is-taking-too-long)
 * [What ploidy?](#what-ploidy)
 * [Tools that use temporary directories](#tools-that-use-temporary-directories)
+* [Tips on using `bwa mem`](#tips-on-using-bwa-mem).
+* [Tips on using `samtools`](#tips-on-using-samtools).
+
+#### But I want to run the yellow bits too!
+
+Be my guest! Running variant annotation in particular would be a good thing to do, as would looking at post-alignment QC metrics.
 
 #### How should I put sample information in?
 
@@ -377,7 +384,37 @@ temp dir - then send it somewhere different. For example:
 octopus [other options] --temp-directory-prefix results/variants/tmp/octopus/
 ```
 
-This will probably work here. (In general you may need to use snakemake wildcards etc. to name this temp directory so it doesn't clash if the same rule runs multiple jobs in parallel.)
+This will probably work here. (In general you may need to use snakemake wildcards etc. to name this temp directory so it doesn't clash if the same rule runs multiple jobs in parallel.)s
+
+#### Tips on using `bwa mem`
+
+Here are a few options you can use to `bwa mem` which you might want to consider using.
+
+* Run `bwa mem` for a list of options.
+
+* The basic usage is `bwa mem -o output.sam [path to indexed fasta file] read1.fq.gz read2.fq.gz`
+
+* The `-t` option tells `bwa` to use more than one thread.  (If doing this, make sure to also [tell snakemake the number of threads it will use](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#threads).)
+
+* The `-R` option specifies that `bwa` should include a read group header line and read groups tags in the output - this is [described above](#read-groups-what-now).
+
+* By default, `bwa` will output only the best alignment for each read.  However, if you specify the `-a` option then `bwa` will output multiple possible alignments for each read, but all except one will be marked as 'not a primary alignment' (using the [`SAM flags`](https://broadinstitute.github.io/picard/explain-flags.html)).  This can be useful in cases when you want to consider possible alternate alignments.
+
+There are also other aligners out there. [`minimap2`](https://github.com/lh3/minimap2) is another
+good choice. Nevertheless the field typically currently uses `bwa mem` for Illumina short-read NGS
+data.
+
+#### Tips on using `samtools`
+
+Here are some tips on using `samtools`:
+
+* Run `samtools` for a list of commands, and `samtools [command]` for a list of options for each command.
+
+* Some commands, like `samtools markdup`, take the output filename as a seperate argument.  But others, such as `samtools view` or `samtools sort`, want you to use the `-o` option to specify the output file (otherwise they output to standard output).
+
+* `multiqc` can read `samtools stats` output, useful for post-alignment QC.
+
+
 
 ## Good luck!
 
