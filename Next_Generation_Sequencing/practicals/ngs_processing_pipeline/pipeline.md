@@ -88,6 +88,7 @@ Here is some guidance to help you write your pipeline.  Click the links to jump 
 * [Read groups what now?](#Read-groups-what-now)
 * [What's in the fastq header?](#Whats-in-the-fastq-header)
 * [Octopus is taking too long!](#octopus-is-taking-too-long)
+* [What ploidy?](#what-ploidy)
 
 #### How should I put sample information in?
 
@@ -351,6 +352,15 @@ Another option is to try a different variant caller - [`GATK HaplotypeCaller`](h
 
 [Go back to the tips and tricks](#Tips-and-tricks).
 
+#### What ploidy?
+
+Blood-stage malaria parasites are [haploid](https://www.cdc.gov/malaria/about/biology/index.html).  So set octopus `--organism-ploidy 1`.
+
+On the other hand, mixed infections are common, and to handle this most projects actually treat samples as if they were diploid - they then treat heterozygote calls as 'mixed' calls.  This is *ad hoc* but works ok.  So you could set `--organism-ploidy 2`.
+
+For the purposes of this tutorial you could do either - or both so we can see the difference?
+
+[Go back to the tips and tricks](#Tips-and-tricks).
 
 ## Good luck!
 
