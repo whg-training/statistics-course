@@ -1,0 +1,19 @@
+rule compute_perbase_coverage:
+	input:
+		bam = "results/aligned/{name}.bam"
+	output:
+		bedgraph = "results/coverage/{name}.perbase.bedgraph"
+	shell: """
+		bedtools genomecov -ibam {input.bam} -bg > {output.bedgraph}
+	"""
+	
+rule compute_coverage_histogram:
+	input:
+		bam = "results/aligned/{name}.bam"
+	output:
+		histogram = "results/coverage/{name}.percontig.txt"
+	shell: """
+		# I like to add a header row
+		echo -e 'contig\tdepth_of_coverage\tnumber_of_bases_at_this_depth\tcontig_size\tproportion_of_bases_at_this_depth' > {output.histogram}
+		bedtools genomecov -ibam {input.bam} >> {output.histogram}
+	"""

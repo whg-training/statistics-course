@@ -1,0 +1,61 @@
+rule align_reads:
+	input:
+		fq1 = lambda wildcards: get_read_files( wildcards.ID )['read1'],
+		fq2 = lambda wildcards: get_read_files( wildcards.ID )['read2'],
+		reference = config["reference"],
+		index = "%s.bwt" % config["reference"]
+	output:
+		sam = temp( "results/aligned/tmp/{ID}.bwamem.sam" )
+	params:
+		read_group_line = lambda wildcards: get_read_group_line( wildcards.ID )
+	shell: """
+		bwa mem -o {output.sam} -a -R "{params.read_group_line}" {input.reference} {input.fq1} {input.fq2}
+	"""
+
+rule fix_matepair_information_and_convert_to_bam:
+	input:
+		sam = rules.align_reads.output.sam
+	output:
+		bam = temp( "results/aligned/tmp/{ID}.fixmate.bam" )
+	shell: """
+		~/Projects/Software/usr/bin/samtools fixmate -m {input.sam} {output.bam}
+	"""
+
+rule sort_reads_by_position:
+	input:
+		bam = rules.fix_matepair_information_and_convert_to_bam.output.bam
+	output:
+		bam = temp( "results/aligned/tmp/{ID}.sorted.bam" )
+	shell: """
+		~/Projects/Software/usr/bin/samtools sort -o {output.bam} {input.bam}
+	"""
+
+rule mark_duplicate_read_pairs:
+	input:
+		bam = rules.sort_reads_by_position.output.bam
+	output:
+		bam = temp( "results/aligned/tmp/{ID}.bam" )
+	shell: """
+		~/Projects/Software/usr/bin/samtools markdup {input.bam} {output.bam}
+	"""
+
+rule index_reads:
+	input:
+		bam = rules.mark_duplicate_read_pairs.output.bam
+	output:
+		bai = temp( "%s.bai" % rules.mark_duplicate_read_pairs.output.bam )
+	shell: """
+		~/Projects/Software/usr/bin/samtools index {input.bam}
+	"""
+
+rule rename_alignment_files:
+	input:
+		bam = lambda wildcards: "results/aligned/tmp/{ID}.bam".format( ID = find_sample_with_name( wildcards.name )['ID'] ),
+		bai = lambda wildcards: "results/aligned/tmp/{ID}.bam.bai".format( ID = find_sample_with_name( wildcards.name )['ID'] )
+	output:
+		bam = "results/aligned/{name}.bam",
+		bai = "results/aligned/{name}.bam.bai"
+	shell: """
+		mv {input.bam} {output.bam}
+		mv {input.bai} {output.bai}
+	"""

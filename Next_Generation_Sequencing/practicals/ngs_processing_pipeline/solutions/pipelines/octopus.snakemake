@@ -1,0 +1,37 @@
+rule unpack_reference_for_octopus:
+    input:
+        fasta = config['reference']
+    output:
+        fasta = temp( "results/variants/tmp/reference.fa" ),
+        fai = temp( "results/variants/tmp/reference.fa.fai" )
+    shell: """
+        gunzip -c {input.fasta} > {output.fasta}
+        ~gav/Projects/Software/usr/bin/samtools faidx {output.fasta}
+    """
+
+
+rule call_variants_using_octopus:
+    input:
+        fasta = rules.unpack_reference_for_octopus.output.fasta,
+        fai = rules.unpack_reference_for_octopus.output.fai,
+        alignments = expand(
+            "results/aligned/{name}.bam",
+            name = [ sample['name'] for sample in config['samples']]
+        )
+    output:
+        vcf = "results/variants/variants.vcf.gz",
+        log = "logs/octopus.log"
+    params:
+        regions = [ "Pf3D7_02_v3:616190-656190", "Pf3D7_02_v3:779288-859288", "Pf3D7_11_v3:1023035-1081305" ]
+    shell: """
+        octopus -R {input.fasta} -I {input.alignments} -P 1 -o {output.vcf} --debug {output.log} --regions {params.regions}
+    """
+
+rule index_variants_vcf:
+    input:
+        vcf = rules.call_variants_using_octopus.output.vcf
+    output:
+        vcf = "results/aligned/variants.vcf.gz.tbi"
+    shell: """
+        tabix -p vcf {input.vcf}
+    """

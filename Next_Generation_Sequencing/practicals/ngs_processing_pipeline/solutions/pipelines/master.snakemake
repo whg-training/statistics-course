@@ -1,0 +1,19 @@
+include: "functions.snakemake"
+include: "reference_assembly.snakemake"
+include: "qc.snakemake"
+include: "alignment.snakemake"
+include: "octopus.snakemake"
+include: "coverage.snakemake"
+include: "post_alignment_qc.snakemake"
+
+sample_names = [ sample['name'] for sample in config['samples'] ]
+
+rule all:
+	input:
+		bams = expand( "results/aligned/{name}.bam", name = sample_names ),
+		multiqc = rules.run_multiqc.output,
+		variants = "results/variants/variants.vcf.gz",
+		coverage = expand( "results/coverage/{name}.perbase.bedgraph", name = sample_names ),
+		coverage_histogram = expand( "results/coverage/{name}.percontig.txt", name = sample_names ),
+		postqc = "results/stats/post_alignment_multiqc_report.html"
+

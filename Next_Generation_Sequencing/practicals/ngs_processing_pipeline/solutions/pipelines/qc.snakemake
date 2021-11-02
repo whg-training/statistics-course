@@ -1,0 +1,29 @@
+rule run_fastqc:
+	input:
+		fq1 = lambda wildcards: get_read_files( wildcards.ID )['read1'],
+		fq2 = lambda wildcards: get_read_files( wildcards.ID )['read2']
+	output:
+		html1 = "results/qc/{ID}_1_fastqc.html",
+		zip1 = "results/qc/{ID}_1_fastqc.zip",
+		html2 = "results/qc/{ID}_2_fastqc.html",
+		zip2 = "results/qc/{ID}_2_fastqc.zip"
+	params:
+		outputdir = "results/qc/"
+	shell: """
+		fastqc -q -o {params.outputdir} {input.fq1} {input.fq2}
+	"""
+
+rule run_multiqc:
+	input:
+		fastqc_output = expand( 'results/qc/{ID}_{read}_fastqc.zip', ID = [ sample['ID'] for sample in config['samples'] ], read = [ "1", "2" ] )
+	output:
+		files = temp( "results/qc/tmp/fastqc_file_list.txt" ),
+		htmlreport = "results/qc/fastq_multiqc_report.html"
+	params:
+		outputdir = "results/qc",
+		title = "fastq"
+	shell: """
+		# make a list of files.
+		echo {input} | tr " " "\n" > {output.files}
+		multiqc -f -z -i {params.title} -o {params.outputdir} --file-list {output.files}
+	"""

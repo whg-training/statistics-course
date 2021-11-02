@@ -1,0 +1,9 @@
+rule index_reference_assembly:
+	input:
+		fasta = config["reference"]
+	output:
+		# This rule generates files outside results/
+		index = "%s.bwt" % config["reference"]
+	shell: """
+		bwa index {input.fasta}
+	"""

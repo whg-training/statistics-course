@@ -1,0 +1,27 @@
+def find_sample_with_name( name ):
+	samples = config['samples']
+	sample = [ sample for sample in samples if sample['name'] == name ]
+	if  len( sample ) != 1:
+		raise Exception( "Wrong number of samples found with name '%s' (%d, expected 1)." % ( id, len( sample )) )
+	return sample[0]
+
+def find_sample_with_ID( ID ):
+	samples = config['samples']
+	sample = [ sample for sample in samples if sample['ID'] == ID ]
+	if  len( sample ) != 1:
+		raise Exception( "Wrong number of samples found with ID '%s' (%d, expected 1)." % ( ID, len( sample )) )
+	return sample[0]
+
+def get_read_files( ID ):
+	template = config['fastq_filename_template']
+	return {
+		"read1": template.format( ID = ID, read = 1 ),
+		"read2": template.format( ID = ID, read = 2 )
+	}
+
+def get_read_group_line( ID ):
+	sample = find_sample_with_ID( ID )
+	return "@RG\\tID:{ID}\\tSM:{sample}\\tPL:ILLUMINA".format(
+		ID = sample['ID'],
+		sample = sample['name']
+	)
