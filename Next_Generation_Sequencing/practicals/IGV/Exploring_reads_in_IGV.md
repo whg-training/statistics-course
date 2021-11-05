@@ -35,7 +35,7 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 **Question.** The mutation that causes [chloroquine resistance](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2954758/) is `CRT K76>T`, at `Pf3D7_07_v3:403,625`.  (It actually involves a small haplotype including other nearby mutations).  
 
 * Can you find these mutations?
-* Parasites with the non-reference allele are resistant to chloroquine - are your parasites resistant or susceptible?  (NB. all these samples come from DR Congo).
+* Parasites with the non-reference allele are resistant to chloroquine - are your parasites resistant or susceptible?  (NB. all these samples come from [Democratic Republic of The Congo](https://www.google.com/maps)).
 * Zoom into this location to look at the sequence.  Can you figure out the amino acid change(s)?
 * How many reads support this in each sample?  What alleles do they carry?  What are their IDs?  Are they well mapped?  Are they properly paired?  Where is their pair?
 
