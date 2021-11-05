@@ -1,5 +1,7 @@
 # Exploring Reads in IGV
 
+**Contributors:** Annie Forster, Gavin Band
+
 ## Getting started
 
 In this tutorial you are going to be inspecting the alignments you have created in a program called Integrative Genomics Viewer (IGV). IGV is a very handy piece of software which allows you to visually inspect alignments across the genome. 
@@ -35,8 +37,11 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 **Question.** The mutation that causes [chloroquine resistance](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2954758/) is `CRT K76>T`, at `Pf3D7_07_v3:403,625`.  (It actually involves a small haplotype including other nearby mutations).  
 
 * Can you find these mutations?
-* Parasites with the non-reference allele are resistant to chloroquine - are your parasites resistant or susceptible?  (NB. all these samples come from [Democratic Republic of The Congo](https://www.google.com/maps)).
+
+* Parasites with the non-reference allele are resistant to chloroquine - are your parasites resistant or susceptible?  (NB. all these samples come from [Democratic Republic of The Congo](https://www.google.com/maps/place/Democratic+Republic+of+the+Congo/@-3.9835365,12.6862829,5z/data=!3m1!4b1!4m5!3m4!1s0x1979facf9a7546bd:0x4c63e5eac93f141!8m2!3d-4.038333!4d21.758664)).
+
 * Zoom into this location to look at the sequence.  Can you figure out the amino acid change(s)?
+
 * How many reads support this in each sample?  What alleles do they carry?  What are their IDs?  Are they well mapped?  Are they properly paired?  Where is their pair?
 
 **Note.** By default you are looking at all reads (including those that didn't map very well.)  There's an option hidden away under `Preferences` -> `Alignment` that lets you set a mapping quality threshold.  A good default value to put here is 20 (but remember that by doing this you are filtering some reads!)
