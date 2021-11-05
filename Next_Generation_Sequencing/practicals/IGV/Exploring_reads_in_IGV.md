@@ -80,7 +80,7 @@ The samples from this tutorial were chosen because some of them contain a large 
 
 **Hints.**
 
-* One way to find structural vairants is by looking at their effects on copy number (i.e. on read coverage.)  Do any samples have unusual copy number profiles?  (NB. this is generally easier in human sequence data because in P.falciparum the coverage varies a lot anyway due to varying AT content.)
+* One way to find structural variants is by looking at their effects on copy number (i.e. on read coverage.)  Do any samples have unusual copy number profiles?  (NB. this is generally easier in human sequence data because in P.falciparum the coverage varies a lot anyway due to varying AT content.)
 
 * Your reads are paired-end reads.  If the genome has a different structure to the reference, then these might not align close together in the right orientation or insert size.  Can you find reads like this?  (Hint: the 'view as pairs', 'group by' and/or 'color by' options are very useful here.)  What is their orientation - are the read pairs the 'right' way round or the 'wrong' way round?  What does this mean?  Are these single reads or are they supported by others?
 
