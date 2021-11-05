@@ -13,6 +13,15 @@ Next load one of your bam files. You will be prompted to download the appropriat
 
 (You are also welcome to load the other three.)
 
+If you followed the [snakemake tutorial](), you should also be able to load:
+
+* Your coverage (`.bedgraph`) files for the above samples (this isn't very important because IGV shows you coverage anyway.)
+* Your `variants.vcf.gz` file containing the variant calls from Octopus.
+
+Load these in now.  Here are a few things to try:
+
+## Looking at reads.
+
 To see reads you will need to zoom into a location on the genome.  For example, let's zoom into the gene that harbours the famous chloroquine resistance mutation, [Chloroquine resistance transporter (*CRT*)](https://plasmodb.org/plasmo/app/record/gene/PF3D7_0709000).  To search for it you will need its ID, which is `PF3D7_0709000`.  Voila!  Some reads.
 
 IGV has lots of options that let you visualise reads in different ways.  Here are some things to try (most available by right-clicking on the reads panel).
@@ -34,7 +43,7 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 
 **Note.** 'properly paired' means that the two reads in the pair align to the same region in the right orientation, and roughly fall within the distribution of insert sizes inferred from all the read pairs in the data.  The aligner (`bwa` in this case) sets a flag in the BAM file to reflect this.
 
-#### Looking at insertions and deletions
+## Looking at insertions and deletions
 
 **Question.** The variants above are single nucleotide polymorphisms (SNPs) - or rather multiple nucleotide polymorphisms (MNPs) since several come together.  What about other types of variation?  Scroll around a bit and see if you can find a deletion.  (If stuck, try looking around the gene [`PF3D7_0215300`](https://plasmodb.org/plasmo/app/search?q=PF3D7_0220300).  What read evidence supports this deletion?
 
@@ -57,32 +66,34 @@ and then pasted the above into the [Nucleotide BLAST page](https://blast.ncbi.nl
 
 ## Examining larger structural variants
 
-Let's have a look at a larger structural variant.  Zoom your IGV to the region 
+Let's have a look at a larger structural variant.  Zoom your IGV to the region around the gene [`Pf3D7_1127000`](https://plasmodb.org/plasmo/app/record/gene/PF3D7_1127000).  And zoom out a bit so you can see the whole region including the two flanking genes.
 
+The samples from this tutorial were chosen because some of them contain a large structural variant in this region. 
 
+**Challenge.** Can you find this structural variant in one or more of the samples you've loaded?
 
-Have a fiddle with viewing options by right-clicking on the reads and selecting from the drop-down menu. Your data was sequenced using paired end technology and by selecting “View as pairs” you’ll be shown reads joined in their respective couples. If your sample resembles the reference sequence, read pairs will fall in order along the reference with roughly a similar length of sequence between them (known as the “insert size”). However, sample genomes often don’t resemble the arbitrary reference sequences we use. Insertions, deletions and rearrangements can be inferred from read pairs that align in the “wrong” order, or with greater or smaller than expected insert sizes. This can help us define the structure of the genome in our samples. Try grouping alignments by read-pair orientation (I also like to sort by start location but try a few options and see what you like).
+**Hints.**
 
-### **Task 1**: Have a look at your bam files and answer the following questions. 
+* One way to find structural vairants is by looking at their effects on copy number (i.e. on read coverage.)  Do any samples have unusual copy number profiles?  (NB. this is generally easier in human sequence data because in P.falciparum the coverage varies a lot anyway due to varying AT content.)
 
-Questions:
-1.	Find a region of the genome where nothing aligns and note down the co-ordinates. Zoom into that region – why do you think no reads have aligned there? 
-1.	Find a read where its pair is mapped to a different chromosome and note down its co-ordinates – can you think of reasons why this might happen?
-1.  Find an example of a split read and a split read pair and note down their co-ordinates.
-1.	Find an example of (i) a SNP and (ii) an indel in your reads compared to the reference and note down their co-ordinates.
+* Your reads are paired-end reads.  If the genome has a different structure to the reference, then these might not align close together in the right orientation or insert size.  Can you find reads like this?  (Hint: the 'view as pairs', 'group by' and/or 'color by' options are very useful here.)  What is their orientation - are the read pairs the 'right' way round or the 'wrong' way round?  What does this mean?  Are these single reads or are they supported by others?
 
-We are interested in a particular region of chromosome 11 in the P. falciparum genome as there is evidence of a copy number variant (CNV) in previously published long read data.
+## Examining structural variant breakpoints
 
-### **Task 2**: use IGV to zoom into Pf3D7_11_v3:1,053,625-1,060,268 in your bam files. 
+By a 'breakpoint' we mean the points where the segments of the sequenced genome are connected together in a different way to the reference genome.  The long, wrongly oriented / wrong insert size reads above potentially span these breakpoints.
 
-Compare your bam files across this region - you may notice that some samples look a bit different. See if you can answer the following questions. You may want to use [this link](https://software.broadinstitute.org/software/igv/interpreting_insert_size) and [this link](https://software.broadinstitute.org/software/igv/interpreting_pair_orientations) to help you.
+A good way to look at this is as follows.  First zoom into one of the reads in the pair. Now right-click on a read and choose 'View mate region in split screen'.  Voila!  You are now looking at both ends of the same read pair.
 
-Questions:
-1.	Which of your alignments show evidence of a CNV in this region?
-1.	In these samples do you see evidence of any deletions? How many? 
-1.  Zoom into the edges of segments where you think deletions have occurred, can you tell where the breakpoints are? Do these differ between CNV samples? 
-(P.S reads which only partially align to the reference are called "clipped reads" - use the internet to work out the difference between "soft" and "hard" clipping, which type do you think is being used at the edges of your deletions?)
-1.	In these samples do you see any evidence of duplications? Again see if you can work out where the breakpoints are.
-1.	Can you infer the structure of the CNV(s) present in this region?
+To take this further there is an additional option.  If the read in the pair actually crosses a structural variant breakpoint, it could be that the end of the read does not align well.  If so it will typically be 'soft-clipped' by the aligner.  (The [`CIGAR string`](https://sites.google.com/site/bioinformaticsremarks/bioinfo/sam-bam-format/what-is-a-cigar) for the alignment will have a sequence of 'S's at the end).  Under `Preferences` -> `Alignments` there is an option 'Show soft-clipped bases' to visualise these.  Go and turn this on.  Does this help figure out the basepair location of the possible breakpoint?
 
+**NB.** In the current data this works best for the reads at `Pf3D7_11_v3:1,058,745-1,058,915` - if you processed the [full coverage data]() then it might work at all the breakpoints.
 
+## Figuring out the structural variant structure
+
+**Extra hard challenge.** Can you figure out the structure of the structural variant genomes from these reads?
+
+**Warning.** This really is hard!  If you want some inspiration, see Figure 6 of [this paper on the Dantu blood group](https://doi.org/10.1126/science.aam6393) to see a similar process applied to a human structural variant.
+
+## Summary
+
+Congratulations!  You are now an IGV expert!
