@@ -16,7 +16,7 @@ Next load one of your bam files. You will be prompted to download the appropriat
 If you followed the [snakemake tutorial](), you should also be able to load:
 
 * Your coverage (`.bedgraph`) files for the above samples (this isn't very important because IGV shows you coverage anyway.)
-* Your `variants.vcf.gz` file containing the variant calls from Octopus.
+* Your `variants.vcf.gz` file containing the variant calls from Octopus.  (If yours doesn't work, this may be due to an Octopus issue that has now been fixed.  I filtered out the problem variants in [my version](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Next_Generation_Sequencing/practicals/ngs_processing_pipeline/solutions/results/variants/) - feel free to download this one.)
 
 Load these in now.  Here are a few things to try:
 
@@ -32,7 +32,7 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 
 ## Looking at SNPs
 
-**Question.** The mutation that causes [chloroquine resistance](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2954758/) is CRT K76>T, at chr7:403,625.  (It actually involves a small haplotype including other nearby mutations).  
+**Question.** The mutation that causes [chloroquine resistance](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2954758/) is `CRT K76>T`, at `Pf3D7_07_v3:403,625`.  (It actually involves a small haplotype including other nearby mutations).  
 
 * Can you find these mutations?
 * Parasites with the non-reference allele are resistant to chloroquine - are your parasites resistant or susceptible?
