@@ -56,11 +56,12 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 **Hint.** Try searching for the relevant piece of genome sequence using [NCBI BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi).  For example, I tried this:
 
 ```
-$ samtools faidx data/reference/Pf3D7_v3.fa.gz Pf3D7_07_v3:342,540-342,680
->Pf3D7_07_v3:342,540-342,680
-aaaaaaaaaaaaaaagttataaaactgtataccgatattataatatatatttatataagt
-atttaatacaggaatattccttgaacaaaaaaagaaatataaatataaatatatatatat
-gtatatatatatatatatata
+$ samtools faidx data/reference/Pf3D7_v3.fa.gz Pf3D7_07_v3:343,180-343,380
+>Pf3D7_07_v3:343,180-343,380
+tatatatatatatatatatatatatatatatatatatataaatatatatatatgtatgta
+tgtatgtaatattttagtgcaaaaaaaaaaaaaaaaaaaaaaaaaaagtatataatgaaa
+aattattatatatatatatattatatatatatatatatatatatatatatatatatatat
+atatatatatatatatatata
 ```
 and then pasted the above into the [Nucleotide BLAST page](https://blast.ncbi.nlm.nih.gov/Blast.cgi).  (Another version of this can be found [on PlasmoDB](https://plasmodb.org/plasmo/app/search/transcript/UnifiedBlast).  **Note.** you may need to turn off the 'low complexity region' filter to get useful results.
 
