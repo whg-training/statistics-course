@@ -1,5 +1,7 @@
 # Exploring Reads in IGV
 
+## Getting started
+
 In this tutorial you are going to be inspecting the alignments you have created in a program called Integrative Genomics Viewer (IGV). IGV is a very handy piece of software which allows you to visually inspect alignments across the genome. 
 
 First you will need to download IGV. You can find the software [here.](https://software.broadinstitute.org/software/igv/download)
@@ -19,7 +21,7 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 * Often there are too many reads to see.  Try using 'squished' mode to squish them up.
 * On the other hand the `genes` track can be annoying when it is squished.  Right-click and choose 'expanded' to see the genes.
 
-#### Looking at SNPs
+## Looking at SNPs
 
 **Question.** The mutation that causes [chloroquine resistance](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2954758/) is CRT K76>T, at chr7:403,625.  (It actually involves a small haplotype including other nearby mutations).  
 
@@ -38,7 +40,7 @@ IGV has lots of options that let you visualise reads in different ways.  Here ar
 
 **Note.** There might also be insertions, which are denoted by a purple bar across a read in IGV.  Can you find any of these?
 
-#### The trouble with mapping is...
+## The trouble with mapping is...
 
 **Question.** If you scroll around a bit, after a while you'll come across regions where no reads (or very few reads) seem to align.  Can you find one?  What could cause this? 
 
@@ -53,7 +55,7 @@ gtatatatatatatatatata
 ```
 and then pasted the above into the [Nucleotide BLAST page](https://blast.ncbi.nlm.nih.gov/Blast.cgi).  (Another version of this can be found [on PlasmoDB](https://plasmodb.org/plasmo/app/search/transcript/UnifiedBlast).  **Note.** you may need to turn off the 'low complexity region' filter to get useful results.
 
-#### Examining larger structural variants
+## Examining larger structural variants
 
 Let's have a look at a larger structural variant.  Zoom your IGV to the region 
 
