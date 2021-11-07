@@ -115,11 +115,10 @@ When you plot this you should see something like this:
 
 **Question.** Can you make a grid of these plots, one per population?  One per ethnicity?
 
-### Plotting the (normalised) posterior
+### Plotting the (fully normalised) posterior
 
-In principle computing the fully normalised posterior is not hard. We just need to compute the denominator of Bayes
-theorem above, which (using the *law of total probability* from the [probability cheatsheet](../../notes/Probability
-cheatsheet.pdf)) is:
+In principle computing the posterior is not hard. We just need to compute the denominator of Bayes
+theorem above, which (using the *law of total probability* from the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf)) is:
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\text{data}) = \int_y P(\text{data}|\theta=y) P(\theta=y)">
 
