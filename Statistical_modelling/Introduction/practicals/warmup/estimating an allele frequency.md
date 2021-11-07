@@ -51,8 +51,8 @@ But hang on... some of them vary quite a bit, don't they?
 
 **Question.** How much do you trust these estimates? Do you trust them all as much as each other?  Why?
 
-This course is all about handling uncertainty. We want to know, not just what a good estimate is, but also how
-uncertain we are about that estimate.  This is what statistical models are for.
+This course is all about handling uncertainty. We want to know **both** a good estimate, and how
+uncertain that estimate is.  This is what statistical models are for!
 
 Let's focus on a single population first - say Tanzania:
 
@@ -64,7 +64,7 @@ w = which( data$country == "Tanzania" )
   Tanzania 51 47
 ```
 
-Counts like this can be modelled well using a [binomial distribution](../../notes/Distributions%20cheatsheet.pdf).
+Counts like this can be modelled well using a [binomial distribution](../../notes/Distributions%20cheatsheet.pdf).  Let's do that now.
 
 **Question**. If we use a binomial distribution to model these counts, what assumptions are we making?
 
