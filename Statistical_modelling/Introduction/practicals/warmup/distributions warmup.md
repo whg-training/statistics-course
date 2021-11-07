@@ -1,17 +1,20 @@
 ## Probability distribution questions
 
-The following can be solved using the [distributions cheatsheet](../notes/Distributions
-cheatsheat.pdf) and the relevant functions in R.
+The following can be solved using the [distributions cheatsheet](../notes/Distributions%20cheatsheat.pdf) and the relevant functions in R.
 
 ### Exploring distributions
 
-**Question.** Pick a distribution from the [distributions cheatsheet](../notes/Distributions
-cheatsheat.pdf) and explore it using the ["distributions zoo"](https://ben18785.shinyapps.io/distribution-zoo/).
+**Question.** Pick a distribution from the [distributions cheatsheet](../notes/Distributions%20cheatsheat.pdf) and explore it using the ["distributions zoo"](https://ben18785.shinyapps.io/distribution-zoo/).
 
-**Question.** Pick a distribution from the [distributions cheatsheet](../notes/Distributions
-cheatsheat.pdf) and plot its pdf and its cdf for a few different parameter values using R.
+**Question.** Pick a distribution from the [distributions cheatsheet](../notes/Distributions%20cheatsheat.pdf) and plot its pdf and its cdf for a few different parameter values using R.
 
-**Challenge question.** Plot a multivariate normal distribution density using using R.
+### 
+
+**Question.** I toss a coin 100 times.  What's the chance I see at least 60 heads?
+
+### Multivariate distributions.
+
+**Question.** Plot a multivariate normal distribution density using using R.
 
 **Hint.** This can be done using the `mvtnorm` package and the `ellipse` package.  Here is one way using base R graphics - experiment with different :
 
@@ -73,8 +76,3 @@ ggplot2( data = samples, mapping = aes( x = x, y = y )) + geom_bin2d()
 What happens as you change the mean and/or the covariance?  (Note: the covariance matrix must have positive diagonal entries: these are the variances of *x* and *y*.  And it must be **symmetric**, i.e it should have the same value in the upper-right and lower-left entries.  This value is the *covariance* between *x* and *y*.)
 
 What do you notice about the contours?
-
-### 
-
-**Question.** I toss a coin 100 times.  What's the chance I see at least 60 heads?
-
