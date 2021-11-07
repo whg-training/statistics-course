@@ -47,7 +47,7 @@ each population? In each ethnic group?
 You probably estimated the allele frequency as: the number of O individuals divided by the total
 number of individuals.  If so congratulations - that's a sensible estimate!
 
-But hang on...
+But hang on... some of them vary quite a bit, don't they?
 
 **Question.** How much do you trust these estimates? Do you trust them all as much as each other?  Why?
 
