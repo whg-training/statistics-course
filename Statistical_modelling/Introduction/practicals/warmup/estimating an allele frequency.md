@@ -196,7 +196,7 @@ points( x, dbeta( x, shape1 = 51+1, shape2 = 47+1 ), type = 'l', lty = 2, col = 
 
 Having this analytical version of the posterior is good news. Here are two ways it helps. 
 
-1. it makes it easy to make some quantitative statements about our parameter.
+#### easily summarising our inference about the parameter.
 
 For example, we could summarise our inference by computing a **credible interval** for our parameter. A good interval
 to take is a 95% posterior mass interavls, which you can form by chopping of 2.5% of the mass from both tails of the
@@ -253,51 +253,49 @@ ethnicities = unique( data$country_ethnicity )
 map_dfr( ethnicities, function(ethnicity) { summarise( data[ data$country_ethnicity == ethnicity, ], ethnicity ) })
 ```
 
-We could also add these to our plots:
+We could also add these to our plots - see the code in [`solutions/solutions.R`](solutions/solutions.R) for a working
+version:
+
+```
+source( "solutions/solutions.R")
+plot.bygroup( data, "country_ethnicity" )
+```
 
 <img src="solutions/all_ethnicities_o_blood_group_beta_posterior.svg">
 
 
-Another way the conjugate prior / analytical formulation helps is:
+#### Dealing with very uncertain estimates
 
-2. It lets us deal with  very uncertain estimates.
+Another way the conjugate prior / analytical formulation helps is in dealing with very uncertain estimates. For
+example, the estimate for the `AKANS[ASHANTI_EASTERN]` has a point estimate of > 0.6 even though most of the others are
+< 0.8. But this is based on only 21 observations. And what about the `Ghana:NORTHENER` or other groups where the
+estimate is one or zero, but the counts are tiny?
 
-If you look at some ethnic groups, they have small counts and fairly uncertain estimates - and in some cases the point
-estimates are quite different to those from other populations. For example - the `AKANS[ASHANTI_EASTERN]` which has
-only 21 individuals, and has a point estimate of > 0.6 even though most of the others are < 0.8. Is O blood group
-really at such high frequency in those populations?
+One way we can deal with this is give up on the point estimate - just satisfy ourselves that there isn't much evidence.
+For example, across all samples the joint estimate is `0.425`. How likely is it that the `AKANS[ASHANTI_EASTERN]`
+estimate is larger than this?
+```
+> 1 - pbeta( 0.425, shape1 = 9, shape2 = 13 ) 
+[1] 0.4301758
+```
 
-Or what about the `FRAFRA_NANKANA_GRUSHIE_KUSASI[UER]` or other ethnicities where the point estimate is zero? Clearly
-we shouldn't believe there are no O blood group individuals in those groups based on these data.
+There's only 43% chance - that's a 57% chance the estimate is at or lower than the joint estimate.  
 
-One way to deal with this is simply to look at our posterior.  For these populations it says:
+However, it can nevertheless be useful in lots of contexts to get a sensible point estimate, even when there is little
+data. To do this let's replace our uniform prior with a *weakly informative prior*. This prior will say that we believe
+O blood group is not at 0 or 100% frequency. If you followed the above, you'll see that we can just replace our uniform
+prior with a `Beta(2,2)` prior.  Equivalently, we add 1 to boht the non-O and O counts in the data.  Try this:
 
-However, it is often useful to get a sensible point estimate even when there isn't much data. Our framework above
-allows us to do this. Specifically, let's 
+```
+plot.bygroup( data, "country_ethnicity", prior.counts = c(1,1) )
+```
 
+Now none of the estimates are 1 or zero, and all the credible intervals look at least somewhat sensible. Our prior has
+**regularised** the estimation.
 
-### Going further
+**Question**. Try adjusting the prior counts and seeing what happens to the estimates. Does it affect all populations
+equally? How much prior data do you need to get all the estimates within 0.1 of each other?
 
-If you've followed 
-
-
-
-If you follow the above through you'll see that:
-
-* Starting with a flat (uniform) prior distribution, and adding some data, we end up with a beta posterior.
-* If we start with a beta posterior 
-
-## A note on binomial assumptions
-
-Above I asked what assumptions we make in choosing a binomial distribution. We are making quite a few:
-
-* We are assuming that the total number of samples (e.g. 98 in the case of Tanzania) was known beforehand. (This could
-  be violated by sampling. For example this would be violated if we had chosen to up-sample ethnic groups with higher O
-  blood group frequency.)
-  
-* We are assuming that the data points from different individuals can be treated as independent. (This assumption would
-  be violated, for example, if we sampled within families, since they share DNA.)
-
-
-
-
+**Note.** This technique is often used in practice. For example, the famous [EIGENSTRAT
+software](https://www.nature.com/articles/ng1847) for computing principal components analysis estimates
+allele frequencies in just this way - with a Beta(2,2) prior.

@@ -23,29 +23,39 @@ plot_unnormalised_posterior <- function( k, n ) {
 	axis( 2, las = 1 )
 }
 
+counts = table( data$country, data$O.bld.grp )['Tanzania',]
+k = counts[2]
+n = sum(counts)
+
 svg( filename = "solutions/Tanzania_o_blood_group_inference.svg", width = 4, height = 2 )
 par( mar = c(4,5,1,0.1) )
-plot_unnormalised_posterior( 47, 98 )
+plot_unnormalised_posterior( k, n )
 dev.off()
 
-layout( matrix( 1:8, ncol = 2 ))
-countries = unique( data$country )
-for( country in countries ) {
-	par( mar = c(4,2,1,0.1) )
-	w = which( data$country == country )
-	counts = table( data$O.bld.grp[w] )
-	plot_unnormalised_posterior( counts[1], counts[1] + counts[2] )
-	legend( "topleft", legend = c( country, sprintf( "(%d, %d)", counts[1], counts[2] )), bty = 'n' )
+plot.countries <- function( data ) {
+	countries = unique( data$country )
+	layout( matrix( 1:(ceiling(length(countries)/3)*3), ncol = 3 ))
+	for( country in countries ) {
+		par( mar = c(4,2,1,0.1) )
+		w = which( data$country == country )
+		counts = table( data$O.bld.grp[w] )
+		k = counts[2]
+		n = sum(counts)
+		plot_unnormalised_posterior( k, n )
+		legend( "topleft", legend = c( country, sprintf( "(%d, %d)", counts[1], counts[2] )), bty = 'n' )
+	}
 }
 
-layout( matrix( 1:24, ncol = 3 ))
-ethnicities = unique( data$ethnicity )
-for( ethnicity in ethnicities ) {
-	par( mar = c(2,2,1,0.1) )
-	w = which( data$ethnicity == ethnicity )
-	counts = table( data$O.bld.grp[w] )
-	plot_unnormalised_posterior( counts[1], counts[1] + counts[2] )
-	legend( "topleft", legend = c( ethnicity, sprintf( "(%d, %d)", counts[1], counts[2] )), bty = 'n' )
+plot.ethnicities <- function( data ) {
+	ethnicities = unique( data$ethnicity )
+	layout( matrix( 1:(ceiling(length(ethnicities)/3)*3), ncol = 3 ))
+	for( ethnicity in ethnicities ) {
+		par( mar = c(2,2,1,0.1) )
+		w = which( data$ethnicity == ethnicity )
+		counts = table( data$O.bld.grp[w] )
+		plot_unnormalised_posterior( counts[2], counts[1] + counts[2] )
+		legend( "topleft", legend = c( ethnicity, sprintf( "(%d, %d)", counts[1], counts[2] )), bty = 'n' )
+	}
 }
 
 plot_normalised_posterior <- function( k, n ) {
@@ -66,9 +76,6 @@ plot_normalised_posterior <- function( k, n ) {
 	axis( 2, las = 1 )
 }
 
-counts = table( data$country, data$O.bld.grp )['Tanzania',]
-k = counts[1]
-n = sum(counts)
 svg( filename = "solutions/Tanzania_o_blood_group_posterior.svg", width = 4, height = 2 )
 par( mar = c(4,5,1,0.1) )
 plot_normalised_posterior( k, sum(counts) )
@@ -96,15 +103,22 @@ plot_beta_density( k, sum(counts) )
 dev.off()
 
 compute.credible.interval <- function( k, n, mass = 0.95 ) {
-	tail = 1-mass
+	tail = 1 - mass
 	return( qbeta( c( lower = tail/2, median = 0.5, upper = 1.0-(tail/2) ), shape1 = k+1, shape2 = n-k+1 ))
 }
 
+# table() doesn't work well if one of the counts is zero
+compute.counts <- function( data ) {
+	return( c(
+		nonO = length( which( data$O.bld.grp == 0 )),
+		O = length( which( data$O.bld.grp == 1 ))
+	))
+}
 summarise <- function( data.subset, name ) {
-	counts = table( data.subset$O.bld.grp )
+	counts = compute.counts( data.subset )
 	credible = compute.credible.interval( counts[2], sum(counts ))
 	return( c(
-		list( name = name, nonO = counts[1], O = counts[2] ),
+		list( name = name, nonO = counts[1], O = counts[2], estimate = counts[2]/sum(counts) ),
 		credible
 	))
 }
@@ -113,5 +127,21 @@ summarise <- function( data.subset, name ) {
 map_dfr( countries, function( country ) { summarise( data[ data$country == country, ], country ) } )
 map_dfr( ethnicities, function( ethnicity ) { summarise( data[ data$ethnicity == ethnicity, ], ethnicity ) } )
 
-sapply(
-	countries
+plot.ethnicities <- function( data, prior.counts = c( 0, 0 ) ) {
+	ethnicities = unique( data$country_ethnicity )
+	layout( matrix( 1:(ceiling(length(ethnicities)/3)*3), ncol = 3 ))
+	for( ethnicity in ethnicities ) {
+		par( mar = c(2,2,1,0.1) )
+		w = which( data$country_ethnicity == ethnicity )
+		summary = summarise( data[w,], ethnicity )
+		counts = compute.counts( data[w,] )
+		plot_unnormalised_posterior( counts[2], counts[1] + counts[2] + sum(prior.counts) )
+		rect( xleft = summary$lower, xright = summary$upper, ybottom = 0, ytop = 1, col = rgb(0,0,0,0.1), border = NA )
+		legend( "topleft", legend = c( ethnicity, sprintf( "(%d, %d)", counts[1], counts[2] )), bty = 'n' )
+	}
+}
+
+svg( filename = "solutions/all_ethnicities_o_blood_group_beta_posterior.svg", width = 8, height = 8 )
+par( mar = c(4,5,1,0.1) )
+plot.ethnicities( data )
+dev.off()
