@@ -9,7 +9,7 @@ gene](https://www.ensembl.org/Homo_sapiens/Variation/Explore?v=rs8176719), in mu
 The ABO blood group system was the first genetic polymorphism discovered in humans - [long before
 the structure of DNA was solved](https://www.ncbi.nlm.nih.gov/books/NBK2267/). It was discovered by
 studying agglutination patterns of red cells in serum from other individuals and is of course of
-extreme relevance to blood transfusion. Beyond this, however, ABO is an interesting gene; the A/B
+extreme relevance to blood transfusion. Beyond this, however, *ABO* is an interesting gene; the A/B
 split seems to have been preserved [under balancing
 selection](https://www.pnas.org/content/109/45/18493) across primates, while the O mutation itself
 may be a recurrent polymorphism. ABO is also [one of the most pleiotropic loci in the human
@@ -36,24 +36,23 @@ data = read_csv( "o_bld_grp.csv" )
 The O blood group data is in the column called `O.bld.grp`. A `1` in this column means the
 individual has O blood group (which happens if they have two copies of the above rs8176719
 deletion). A `0` generally means they will have either A, AB, or B blood group depending on the
-alleles they carry. (There are actually a few other mutations that cause loss of function of `ABO`,
+alleles they carry. (There are actually a few other mutations that cause loss of function of the *ABO* gene,
 but we're ignoring them here.)
 
 **Question**. Table this data for each population or ethnicity. Can you estimate the frequency in
 each population? In each ethnic group?
 
-
 ### Building a model
 
 You probably estimated the allele frequency as: the number of O individuals divided by the total
-number of individuals.  If so good - that's a sensible estimate!
+number of individuals.  If so congratulations - that's a sensible estimate!
 
-But hang on...
+But hang on... some of them vary quite a bit, don't they?
 
 **Question.** How much do you trust these estimates? Do you trust them all as much as each other?  Why?
 
-This course is all about handling uncertainty. We want to know, not just what a good estimate is, but also how
-uncertain we are about that estimate.  This is what statistical models are for.
+This course is all about handling uncertainty. We want to know **both** a good estimate, and how
+uncertain that estimate is.  This is what statistical models are for!
 
 Let's focus on a single population first - say Tanzania:
 
@@ -65,12 +64,12 @@ w = which( data$country == "Tanzania" )
   Tanzania 51 47
 ```
 
-Counts like this can be modelled well using a [binomial distribution](../../notes/Distributions%20cheatsheet.pdf).
+Counts like this can be modelled well using a [binomial distribution](../../notes/Distributions%20cheatsheet.pdf).  Let's do that now.
 
 **Question**. If we use a binomial distribution to model these counts, what assumptions are we making?
 
 The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and *&theta;*, the
-frequency. (&theta; is called *p* on the [probability cheatsheet](../../notes/Probability cheatsheet.pdf), but we'll
+frequency. (&theta; is called *p* on the [probability%20cheatsheet](../../notes/Probability%20cheatsheet.pdf), but we'll
 call it &theta; here.)
 
 The data is *k* - the number of O blood group alleles observed. Our conceptual model is that the population 'emits' O
@@ -80,10 +79,10 @@ The basic inference formula (Bayes rule) is:
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\theta=x|\text{data}) = \frac{P(\text{data}|\theta=x) \cdot P(\theta=x)}{P(\text{data})}">
 
-For the moment let us ignore the prior term *P(&theta;=x)*. (This is the same as assuming it is uniform).
+For the moment let us ignore the prior term *P(&theta;=x)*. Or to put it another way, we will assume it is uniform.
 
 The term P(data|&theta;=x) is our *likelihood function*. This is what we will model with a binomial distribution. That
-is, we will assume:
+is, for the Tanzania data above we will assume:
 
 <img src="https://render.githubusercontent.com/render/math?math=P\left(\text{data}|\theta=x\right) = \text{binom}\left( k=47 | n=98, \theta=x \right)">
 
@@ -116,15 +115,14 @@ When you plot this you should see something like this:
 
 **Question.** Can you make a grid of these plots, one per population?  One per ethnicity?
 
-### Plotting the (normalised) posterior
+### Plotting the (fully normalised) posterior
 
-In principle computing the fully normalised posterior is not hard. We just need to compute the denominator of Bayes
-theorem above, which (using the *law of total probability* from the [probability cheatsheet](../../notes/Probability
-cheatsheet.pdf)) is:
+In principle computing the posterior is not hard. We just need to compute the denominator of Bayes
+theorem above, which (using the *law of total probability* from the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf)) is:
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\text{data}) = \int_y P(\text{data}|\theta=y) P(\theta=y)">
 
-You could for example numerically could this using the `integrate()` function - e.g. using the Tanzania counts above:
+You could for example numerically compute this using the `integrate()` function - e.g. using the Tanzania counts above:
 
 ```
 f <- function( y ) { return( binomial.likelihood( 47, 98, y ) ) ; }
@@ -151,7 +149,7 @@ plot_normalised_posterior <- function( k, n ) {
 	abline( v = k/n, col = 'red' )
 	axis( 2, las = 1 )
 }
-plot_normalised_posterior( 51, 98 )
+plot_normalised_posterior( 47, 98 )
 ```
 <img src="solutions/Tanzania_o_blood_group_posterior.svg">
 
