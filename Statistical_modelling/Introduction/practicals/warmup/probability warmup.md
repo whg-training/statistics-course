@@ -1,7 +1,7 @@
 ## Probability warm-up questions
 
 Can you answer (or start to answer) these using the rules on the left side of the [probability
-cheatsheet](../notes/Probability_cheatsheet.pdf)?
+cheatsheet](../notes/Probability\ cheatsheet.pdf)?
 
 ### DNA inheritance
 
