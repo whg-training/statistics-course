@@ -28,7 +28,7 @@ have it installed, either install it or use base R (e.g. `read.csv()`) instead.
 
 ```
 library( tidyverse )
-data = read_csv( "../o_bld_grp/o_bld_grp.csv" )
+data = read_csv( "o_bld_grp.csv" )
 ```
 
 **Question**.  What countries are in the data?  What ethnic groups?
@@ -42,29 +42,57 @@ but we're ignoring them here.)
 **Question**. Table this data for each population or ethnicity. Can you estimate the frequency in
 each population? In each ethnic group?
 
+
 ### Building a model
 
 You probably estimated the allele frequency as: the number of O individuals divided by the total
-number of individuals - a good choice.
+number of individuals.  If so, good work!
 
-But in this course we are all about handling uncertainty, and these point estimates aren't good
-enough for this.  Instead we need a statistical model to quantify uncertainty.
+**Question.** Do you trust these estimates? How much? Do you trust your estimates for all the populations the same
+amount? Why?
 
-**Question.** Focus on a single population first, for example Tanzania. 
+In this course we are all about handling uncertainty. What we want to do is, not just generate a point estimate of the
+frequency, but also quantify the uncertainty we have about it.
+
+To do this let's focus on a single population first - say Tanzania:
+
 ```
-> w = which( data$country == "Tanzania" )
+w = which( data$country == "Tanzania" )
 > table( data$country[w], data$O.bld.grp[w] )
           
-             0   1
-  Tanzania 438 368
+            0  1
+  Tanzania 61 41
 ```
 
-What distribution should we use to model these counts?
+Counts like this can be modelled well using a [binomial distribution](../../notes/Distributions%20cheatsheet.pdf).
+
+**Question**. Suppose we use a binomial distribution to model these counts.  What assumptions are we making?
+
+The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and &theta;, the frequency.
+In our setting we imagine &theta; to be the 'true' frequency, which is what we want to infer.
+
+The basic inference formula (Bayes rule) is:
+
+<img src="https://render.githubusercontent.com/render/math?math=P(\theta=x|\text{data}) = \frac{P(\text{data}|\theta=x) \cdot P(\theta=x)}{P(\text{data})}">
+
+For the moment let us **assume the prior term *P(&theta;)* is uniform (i.e. ignore it).  
 
 
+**Note.** As in the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf) I should stress that all
+probability is conditional.  Foir example, 
 
+###
 
+## A note on binomial assumptions
 
+Above I asked what assumptions we make in choosing a binomial distribution. We are making quite a few:
+
+* We are assuming that the total number of samples (e.g. 102 in the case of Tanzania) was known beforehand. (This could
+  be violated by sampling. For example this would be violated if we had chosen to up-sample ethnic groups with higher O
+  blood group frequency.)
+  
+* We are assuming that the data points from different individuals can be treated as independent. (This assumption would
+  be violated, for example, if we sampled within families, since they share DNA.)
 
 
 
