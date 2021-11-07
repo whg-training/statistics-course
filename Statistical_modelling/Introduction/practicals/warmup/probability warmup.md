@@ -19,16 +19,16 @@ Sofiane and Ignacy are siblings. What is the probability they have inherited the
 ### COVID testing
 
 **Question.** Covid-19 lateral flow tests currently in use [are thought to be pretty
-accurate](https://www.ox.ac.uk/news/2020-11-11-oxford-university-and-phe-confirm-lateral-flow-tests-
- show-high-specificity-and-are). According to that article, the false positive rate is around 0.32%:
-
+accurate](https://www.ox.ac.uk/news/2020-11-11-oxford-university-and-phe-confirm-lateral-flow-tests-show-high-specificity-and-are). According to that article, the false positive rate is around 0.32% 
 <img src="https://render.githubusercontent.com/render/math?math=P(\text{positive}|\text{not infected}) = 0.0032">
 
-and the specificity is around 80%:
+and the sensitivity is around 80%:
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\text{positive}|\text{infected}) = 0.8">
 
-Currently [about 0.4% of people in Oxfordshire are infected](https://phdashboard.oxfordshire.gov.uk):
+Currently [about 0.4% of people in Oxfordshire are confirmed positive every
+week](https://phdashboard.oxfordshire.gov.uk). That number will only capture the people who are
+tested, so let's suppose around twice that number (0.8%) are currently infected.
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\text{infected}) = 0.004">
 
@@ -38,5 +38,7 @@ Suppose you test positive.  How worried are you that you have COVID?
 
 **Question.** I toss a coin ten times and get ten heads.  How likely is it that the coin is fair?
 
-**Note.** The first question above is of a different type than the other two. In the first
-question, we have a model for what's going on and are simply asked to calculate using the model.  In the other two questions, we have some *data* (the positive test in the first question, or the sequence of heads in the second) and we are asked to reason about the world from that data.  This is the typical form of of scientific questions.
+**Note.** The inheritance question above is of a different type than the other two. In the
+inheritance question, we have a model of what's going on and are simply asked to calculate a
+probability using the model. In the other two questions, we have some actual *data* - the positive
+test in the first question, or the sequence of heads in the second - and we are asked to draw inference using that data. This is the usual form of of scientific questions and it is typical that Bayes' theorem is needed to answer them.
