@@ -9,7 +9,7 @@ gene](https://www.ensembl.org/Homo_sapiens/Variation/Explore?v=rs8176719), in mu
 The ABO blood group system was the first genetic polymorphism discovered in humans - [long before
 the structure of DNA was solved](https://www.ncbi.nlm.nih.gov/books/NBK2267/). It was discovered by
 studying agglutination patterns of red cells in serum from other individuals and is of course of
-extreme relevance to blood transfusion. Beyond this, however, ABO is an interesting gene; the A/B
+extreme relevance to blood transfusion. Beyond this, however, *ABO* is an interesting gene; the A/B
 split seems to have been preserved [under balancing
 selection](https://www.pnas.org/content/109/45/18493) across primates, while the O mutation itself
 may be a recurrent polymorphism. ABO is also [one of the most pleiotropic loci in the human
@@ -36,17 +36,16 @@ data = read_csv( "o_bld_grp.csv" )
 The O blood group data is in the column called `O.bld.grp`. A `1` in this column means the
 individual has O blood group (which happens if they have two copies of the above rs8176719
 deletion). A `0` generally means they will have either A, AB, or B blood group depending on the
-alleles they carry. (There are actually a few other mutations that cause loss of function of `ABO`,
+alleles they carry. (There are actually a few other mutations that cause loss of function of the *ABO* gene,
 but we're ignoring them here.)
 
 **Question**. Table this data for each population or ethnicity. Can you estimate the frequency in
 each population? In each ethnic group?
 
-
 ### Building a model
 
 You probably estimated the allele frequency as: the number of O individuals divided by the total
-number of individuals.  If so good - that's a sensible estimate!
+number of individuals.  If so congratulations - that's a sensible estimate!
 
 But hang on...
 
