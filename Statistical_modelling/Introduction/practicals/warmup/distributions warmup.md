@@ -1,12 +1,12 @@
 ## Probability distribution questions
 
-The following can be solved using the [distributions cheatsheet](../notes/Distributions%20cheatsheat.pdf) and the relevant functions in R.
+The following can be solved using the [distributions cheatsheet](../../notes/Distributions%20cheatsheat.pdf) and the relevant functions in R.
 
 ### Exploring distributions
 
-**Question.** Pick a distribution from the [distributions cheatsheet](../notes/Distributions%20cheatsheat.pdf) and explore it using the ["distributions zoo"](https://ben18785.shinyapps.io/distribution-zoo/).
+**Question.** Pick a distribution from the [distributions cheatsheet](../../notes/Distributions%20cheatsheat.pdf) and explore it using the ["distributions zoo"](https://ben18785.shinyapps.io/distribution-zoo/).
 
-**Question.** Pick a distribution from the [distributions cheatsheet](../notes/Distributions%20cheatsheat.pdf) and plot its pdf and its cdf for a few different parameter values using R.
+**Question.** Pick a distribution from the [distributions cheatsheet](../../notes/Distributions%20cheatsheat.pdf) and plot its pdf and its cdf for a few different parameter values using R.
 
 ### 
 
