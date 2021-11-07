@@ -4,7 +4,7 @@ In this section we will estimate the frequency of O blood group (as encoded by t
 loss-of-function deletion in the ABO
 gene](https://www.ensembl.org/Homo_sapiens/Variation/Explore?v=rs8176719), in multiple populations.
 
-#### An aside on the ABO blood group system.
+### An aside on the ABO blood group system.
 
 The ABO blood group system was the first genetic polymorphism discovered in humans - [long before
 the structure of DNA was solved](https://www.ncbi.nlm.nih.gov/books/NBK2267/). It was discovered by
@@ -68,20 +68,111 @@ Counts like this can be modelled well using a [binomial distribution](../../note
 
 **Question**. Suppose we use a binomial distribution to model these counts.  What assumptions are we making?
 
-The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and &theta;, the frequency.
-In our setting we imagine &theta; to be the 'true' frequency, which is what we want to infer.
+The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and *&theta;*, the frequency. The
+data is *k* - here the number of O blood group alleles observed. Our model is that the population 'emits' O blood group
+alleles at frequency &theta;. It is this frequency that we want to infer.
 
 The basic inference formula (Bayes rule) is:
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\theta=x|\text{data}) = \frac{P(\text{data}|\theta=x) \cdot P(\theta=x)}{P(\text{data})}">
 
-For the moment let us **assume the prior term *P(&theta;)* is uniform (i.e. ignore it).  
+For the moment let us ignore the prior term *P(&theta;=x)*. (This is the same as assuming it is uniform).
+
+The term P(data|&theta;=x) is our *likelihood function*. This is what we will model with a binomial distribution. That
+is, we will assume:
+
+<img src="https://render.githubusercontent.com/render/math?math=P\left(\text{data}|\theta=x\right) = \text{binom}\left( k=41 | n=102, \theta=x \right)">
 
 
-**Note.** As in the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf) I should stress that all
-probability is conditional.  Foir example, 
+**Note.** As in the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf) you must remember that all
+probability is conditional. In all probabilities above we are assuming this *highly unrealistic* but *hopefully useful*
+model in which a single frequency parameter governs O blood group in an entire human population. The probabilities
+don't exist in the real world, but only in the model.
 
-###
+### Plotting the unnormalised posterior
+
+**Question.** Given the counts for Tanzania above, plot the unnormalised posterior of the parameter &theta;. Also add
+on a line showing your point estimate.
+
+**Note.** Because we are ignoring the prior and the normalising constant here, this is the same as plotting the
+likelihood function - the only function you need for this is `dbinom()`. For readability it can be nice to make a
+friendlier function matching the notation above:
+
+```
+binomial.likelihood <- function( k, n, theta ) {
+    return( dbinom( x = k, size = n, prob = theta ) )
+}
+```
+
+When you plot this you should see something like this:
+
+<img src="solutions/Tanzania_o_blood_group_likelihood.svg">
+
+**Note.** You did label your axes, right?  Hey, you must always label your axes!
+
+**Question.** Can you make a grid of these plots, one per population?
+
+### Plotting the (normalised) posterior
+
+In principle computing the fully normalised posterior is not hard. We just need to compute the denominator of Bayes
+theorem above, which (using the *law of total probability* from the [probability cheatsheet](../../notes/Probability
+cheatsheet.pdf)) is:
+
+<img src="https://render.githubusercontent.com/render/math?math=P(\text{data}) = \int_y P(\text{data}|\theta=y) P(\theta=y)">
+
+You could for example numerically could this using the `integrate()` function - e.g. using the Tanzania counts above:
+
+```
+f <- function( y ) { return( binomial.likelihood( 41, 102, y ) ) ; }
+denominator = integrate( f, 0, 1 )$value
+```
+
+It we plot the (normalised) posterior, it looks the same as the likelihood but the y axis scale is different:
+
+<img src="solutions/Tanzania_o_blood_group_posterior.svg">
+
+(If you stare at this a bit you'll see it looks about right in terms of the total mass under the function - which
+should sum to 1).
+
+However for the binomial it turns out there's an easier way. This is because the binomial is 'conjugate' distribution
+to the [Beta distribution](../../notes/Distributions%20cheatsheet.pdf).
+
+If you stare at the two distributions [on the cheatsheet](../../notes/Distributions%20cheatsheet.pdf) you'll see how
+this works. Using our notation here, the parameter &theta; (called *p* on the cheatsheet) enters the binomial
+distribution in term:
+
+<img src="https://render.githubusercontent.com/render/math?math=\theta^k (1-\theta)^n-k">
+
+on the other hand, the frequency parameter of the Beta distribution (called *x) on the cheatsheet) enters in a very
+similar term:
+
+<img src="https://render.githubusercontent.com/render/math?math=\theta^{\alpha-1} (1-\theta)^{\beta-1}">
+
+The other terms are constant as far as the parameter is concerned. What all this means is that **for a uniform (or
+Beta) prior, the posterior distribution when using a binomial likelihood is Beta**:
+
+<img src="https://render.githubusercontent.com/render/math?math=\text{Beta prior} \rightarrow \text{Binomial likelihood} \rightarrow \text{Beta posterior}">
+
+This relationship is known as 'conjugacy' - the Beta prior is conjugate to the Binomial likelihood.  
+
+We can prove this for our data by plotting it:
+```
+x = seq( from = 0, to = 1, by = 0.01 )
+plot( x, dbeta( x, shape1 = 41+1, shape2 = 61+1 ), type = 'l', ylab = "Beta density", xlab = "O blood group frequency (θ)" )
+grid()
+abline( v = 41/102, col = 'red' )
+```
+As expected - it looks just the same:
+
+<img src="solutions/Tanzania_o_blood_group_beta_posterior.svg">
+
+
+
+
+
+ (Ignore the normalisation for now - we are interested in relative values of the )
+
+**Hint.** the binomial density is 
 
 ## A note on binomial assumptions
 
