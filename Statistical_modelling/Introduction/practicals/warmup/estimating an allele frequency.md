@@ -79,7 +79,7 @@ The basic inference formula (Bayes rule) is:
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\theta=x|\text{data}) = \frac{P(\text{data}|\theta=x) \cdot P(\theta=x)}{P(\text{data})}">
 
-For the moment let us ignore the prior term *P(&theta;=x)*. (This is the same as assuming it is uniform).
+For the moment let us ignore the prior term *P(&theta;=x)*. Or to put it another way, we will assume it is uniform.
 
 The term P(data|&theta;=x) is our *likelihood function*. This is what we will model with a binomial distribution. That
 is, we will assume:
