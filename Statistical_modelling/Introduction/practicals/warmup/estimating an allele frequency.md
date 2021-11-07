@@ -82,7 +82,7 @@ The basic inference formula (Bayes rule) is:
 For the moment let us ignore the prior term *P(&theta;=x)*. Or to put it another way, we will assume it is uniform.
 
 The term P(data|&theta;=x) is our *likelihood function*. This is what we will model with a binomial distribution. That
-is, we will assume:
+is, for the Tanzania data above we will assume:
 
 <img src="https://render.githubusercontent.com/render/math?math=P\left(\text{data}|\theta=x\right) = \text{binom}\left( k=47 | n=98, \theta=x \right)">
 
