@@ -44,9 +44,9 @@ plot_bivariate_gaussian <- function(
   # Plot the samples
   points(
     samples$x, samples$y,
-    col = rgb( 0, 0, 0, 0.2 ), # use transparent black
-    pch = 19, # small round filled dots
-    cex = 0.75 # make points 75% of default size
+    col = rgb( 0, 0, 0, 0.2 ),  # use transparent black
+    pch = 19,                   # small round filled dots
+    cex = 0.75                  # make points 75% of default size
   )
 
   # Plot quantiles as contours
@@ -54,6 +54,7 @@ plot_bivariate_gaussian <- function(
       e = ellipse( covariance, centre = mean, level = quantile )
       points( e[,1], e[,2], type = 'l', col = 'red', lwd = 2 )
   }
+  # draw some grid lines etc.
   grid()
   abline( h = 0, col = rgb( 0, 0, 0, 0.2 ) )
   abline( v = 0, col = rgb( 0, 0, 0, 0.2 ) )
