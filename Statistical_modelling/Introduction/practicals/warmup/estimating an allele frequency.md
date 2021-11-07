@@ -149,7 +149,7 @@ plot_normalised_posterior <- function( k, n ) {
 	abline( v = k/n, col = 'red' )
 	axis( 2, las = 1 )
 }
-plot_normalised_posterior( 51, 98 )
+plot_normalised_posterior( 47, 98 )
 ```
 <img src="solutions/Tanzania_o_blood_group_posterior.svg">
 
