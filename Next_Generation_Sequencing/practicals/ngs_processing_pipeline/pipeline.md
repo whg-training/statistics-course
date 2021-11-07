@@ -106,7 +106,7 @@ is a file called (say) `config.json` that you pass in using the `--configfile` a
 ```
 {
 	"reference": "data/reference/Pf3D7_v3.fa.gz",
-	"fastq_filename_template": "data/reads/subsampled/{id}_{read}.fastq.gz",
+	"fastq_filename_template": "data/reads/subsampled/{ID}_{read}.fastq.gz",
 	"samples": [
 		{ "name": "QG0033-C", "ID": "ERR377582" },
 		{ "name": "QG0041-C", "ID": "ERR377591" },
