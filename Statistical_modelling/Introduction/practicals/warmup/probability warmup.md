@@ -34,7 +34,7 @@ tested, so let's suppose around twice that number (0.8%) are currently infected.
 
 Suppose you test positive.  How worried are you that you have COVID?
 
-### How fair is unfair?
+### An unfair question.
 
 **Question.** I toss a coin ten times and get ten heads.  How likely is it that the coin is fair?
 
