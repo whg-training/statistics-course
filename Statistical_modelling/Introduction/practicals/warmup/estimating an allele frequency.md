@@ -122,7 +122,7 @@ theorem above, which (using the *law of total probability* from the [probability
 
 <img src="https://render.githubusercontent.com/render/math?math=P(\text{data}) = \int_y P(\text{data}|\theta=y) P(\theta=y)">
 
-You could for example numerically could this using the `integrate()` function - e.g. using the Tanzania counts above:
+You could for example numerically compute this using the `integrate()` function - e.g. using the Tanzania counts above:
 
 ```
 f <- function( y ) { return( binomial.likelihood( 47, 98, y ) ) ; }
