@@ -69,7 +69,7 @@ Counts like this can be modelled well using a [binomial distribution](../../note
 **Question**. If we use a binomial distribution to model these counts, what assumptions are we making?
 
 The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and *&theta;*, the
-frequency. (&theta; is called *p* on the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf), but we'll
+frequency. (&theta; is called *p* on the [probability%20cheatsheet](../../notes/Probability%20cheatsheet.pdf), but we'll
 call it &theta; here.)
 
 The data is *k* - the number of O blood group alleles observed. Our conceptual model is that the population 'emits' O
