@@ -46,31 +46,35 @@ each population? In each ethnic group?
 ### Building a model
 
 You probably estimated the allele frequency as: the number of O individuals divided by the total
-number of individuals.  If so, good work!
+number of individuals.  If so good - that's a sensible estimate!
 
-**Question.** Do you trust these estimates? How much? Do you trust your estimates for all the populations the same
-amount? Why?
+But hang on...
 
-In this course we are all about handling uncertainty. What we want to do is, not just generate a point estimate of the
-frequency, but also quantify the uncertainty we have about it.
+**Question.** How much do you trust these estimates? Do you trust them all as much as each other?  Why?
 
-To do this let's focus on a single population first - say Tanzania:
+This course is all about handling uncertainty. We want to know, not just what a good estimate is, but also how
+uncertain we are about that estimate.  This is what statistical models are for.
+
+Let's focus on a single population first - say Tanzania:
 
 ```
 w = which( data$country == "Tanzania" )
 > table( data$country[w], data$O.bld.grp[w] )
           
             0  1
-  Tanzania 61 41
+  Tanzania 51 47
 ```
 
 Counts like this can be modelled well using a [binomial distribution](../../notes/Distributions%20cheatsheet.pdf).
 
-**Question**. Suppose we use a binomial distribution to model these counts.  What assumptions are we making?
+**Question**. If we use a binomial distribution to model these counts, what assumptions are we making?
 
-The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and *&theta;*, the frequency. The
-data is *k* - here the number of O blood group alleles observed. Our model is that the population 'emits' O blood group
-alleles at frequency &theta;. It is this frequency that we want to infer.
+The binomial distribution takes two parameters: `n`, the number of 'trials' (i.e. samples), and *&theta;*, the
+frequency. (&theta; is called *p* on the [probability cheatsheet](../../notes/Probability cheatsheet.pdf), but we'll
+call it &theta; here.)
+
+The data is *k* - the number of O blood group alleles observed. Our conceptual model is that the population 'emits' O
+blood group alleles at frequency &theta;. It is this frequency that we want to infer.
 
 The basic inference formula (Bayes rule) is:
 
@@ -81,7 +85,7 @@ For the moment let us ignore the prior term *P(&theta;=x)*. (This is the same as
 The term P(data|&theta;=x) is our *likelihood function*. This is what we will model with a binomial distribution. That
 is, we will assume:
 
-<img src="https://render.githubusercontent.com/render/math?math=P\left(\text{data}|\theta=x\right) = \text{binom}\left( k=41 | n=102, \theta=x \right)">
+<img src="https://render.githubusercontent.com/render/math?math=P\left(\text{data}|\theta=x\right) = \text{binom}\left( k=47 | n=98, \theta=x \right)">
 
 
 **Note.** As in the [probability cheatsheet](../../notes/Probability%20cheatsheet.pdf) you must remember that all
@@ -94,9 +98,9 @@ don't exist in the real world, but only in the model.
 **Question.** Given the counts for Tanzania above, plot the unnormalised posterior of the parameter &theta;. Also add
 on a line showing your point estimate.
 
-**Note.** Because we are ignoring the prior and the normalising constant here, this is the same as plotting the
-likelihood function - the only function you need for this is `dbinom()`. For readability it can be nice to make a
-friendlier function matching the notation above:
+**Note.** Because we are using a flat prior and the normalising constant here, this is the same as plotting the
+likelihood function - the only R function you really need for this is `dbinom()`. For readability it can be nice to
+make a friendlier function matching the notation above:
 
 ```
 binomial.likelihood <- function( k, n, theta ) {
@@ -110,7 +114,7 @@ When you plot this you should see something like this:
 
 **Note.** You did label your axes, right?  Hey, you must always label your axes!
 
-**Question.** Can you make a grid of these plots, one per population?
+**Question.** Can you make a grid of these plots, one per population?  One per ethnicity?
 
 ### Plotting the (normalised) posterior
 
@@ -123,62 +127,171 @@ cheatsheet.pdf)) is:
 You could for example numerically could this using the `integrate()` function - e.g. using the Tanzania counts above:
 
 ```
-f <- function( y ) { return( binomial.likelihood( 41, 102, y ) ) ; }
+f <- function( y ) { return( binomial.likelihood( 47, 98, y ) ) ; }
 denominator = integrate( f, 0, 1 )$value
 ```
 
-It we plot the (normalised) posterior, it looks the same as the likelihood but the y axis scale is different:
+It we now plot the (normalised) posterior, it looks the same as the likelihood but the y axis scale is different:
 
+```
+plot_normalised_posterior <- function( k, n ) {
+	f <- function( y ) { return( binomial.likelihood( k, n, y ) ) ; }
+	denominator = integrate( f, 0, 1 )$value
+
+	x = seq( from = 0, to = 1, by = 0.01 )
+	plot(
+		x, binomial.likelihood( k = k, n = n, theta = x ) / denominator,
+		type = 'l',
+		xlab = "O blood group frequency (θ)",
+		ylab = "Normalised posterior",
+		yaxt = 'n',
+		bty = 'n'
+	)
+	grid()
+	abline( v = k/n, col = 'red' )
+	axis( 2, las = 1 )
+}
+plot_normalised_posterior( 51, 98 )
+```
 <img src="solutions/Tanzania_o_blood_group_posterior.svg">
 
 (If you stare at this a bit you'll see it looks about right in terms of the total mass under the function - which
 should sum to 1).
 
-However for the binomial it turns out there's an easier way. This is because the binomial is 'conjugate' distribution
-to the [Beta distribution](../../notes/Distributions%20cheatsheet.pdf).
+### A Beta way to do it
 
-If you stare at the two distributions [on the cheatsheet](../../notes/Distributions%20cheatsheet.pdf) you'll see how
-this works. Using our notation here, the parameter &theta; (called *p* on the cheatsheet) enters the binomial
-distribution in term:
+In the general case solving the denominator can indeed be hard and require numerical integration like the above.
+However, for this binomial model it turns out to be much easier. This is because the binomial has a 'conjugate' family of prior
+distributions - the [Beta distribution](../../notes/Distributions%20cheatsheet.pdf).
+
+If you stare at the Beta and binomial distributions [on the cheatsheet](../../notes/Distributions%20cheatsheet.pdf)
+you'll see why this works. Using our notation here, the parameter &theta; (called *p* on the cheatsheet) enters the
+binomial distribution pdf in the term:
 
 <img src="https://render.githubusercontent.com/render/math?math=\theta^k (1-\theta)^n-k">
 
-on the other hand, the frequency parameter of the Beta distribution (called *x) on the cheatsheet) enters in a very
+on the other hand, the frequency parameter of the Beta distribution (called *x*) on the cheatsheet) enters its pdf in the
 similar term:
 
 <img src="https://render.githubusercontent.com/render/math?math=\theta^{\alpha-1} (1-\theta)^{\beta-1}">
 
-The other terms are constant as far as the parameter is concerned. What all this means is that **for a uniform (or
-Beta) prior, the posterior distribution when using a binomial likelihood is Beta**:
+All the other terms are constant as far as the frequency parameter is concerned. What all this means is that **for a uniform (or
+Beta) prior, and a binomial likelihood, the posterior distribution is a Beta distribution**:
 
-<img src="https://render.githubusercontent.com/render/math?math=\text{Beta prior} \rightarrow \text{Binomial likelihood} \rightarrow \text{Beta posterior}">
+<img src="https://render.githubusercontent.com/render/math?math=\text{Beta prior} \rightarrow \text{Binomial likelihood} \Rightarrow \text{Beta posterior}">
 
-This relationship is known as 'conjugacy' - the Beta prior is conjugate to the Binomial likelihood.  
+This relationship between prior and likelihood is known as 'conjugacy' - we say the Beta prior is conjugate to the Binomial
+likelihood.
 
-We can prove this for our data by plotting it:
+We can prove this for our data by adding it to our plot:
+
 ```
 x = seq( from = 0, to = 1, by = 0.01 )
-plot( x, dbeta( x, shape1 = 41+1, shape2 = 61+1 ), type = 'l', ylab = "Beta density", xlab = "O blood group frequency (θ)" )
-grid()
-abline( v = 41/102, col = 'red' )
+points( x, dbeta( x, shape1 = 51+1, shape2 = 47+1 ), type = 'l', lty = 2, col = 'blue' )
 ```
-As expected - it looks just the same:
 
-<img src="solutions/Tanzania_o_blood_group_beta_posterior.svg">
+<img src="solutions/Tanzania_o_blood_group_posterior+beta.svg">
+
+### Comparing estimates
+
+Having this analytical version of the posterior is good news. Here are two ways it helps. 
+
+1. it makes it easy to make some quantitative statements about our parameter.
+
+For example, we could summarise our inference by computing a **credible interval** for our parameter. A good interval
+to take is a 95% posterior mass interavls, which you can form by chopping of 2.5% of the mass from both tails of the
+distribution. If you want to see how to do this, look at the diagram [on the probability
+cheatsheet](../../notes/Distributions%20cheatsheet.pdf). In R, the beta cdf is given by `pbeta()`, and its inverse (the
+quantile function) by `qbeta()`. So we can do something like this:
+
+```
+compute.credible.interval <- function( k, n, mass = 0.95 ) {
+	tail = 1-mass
+	return( qbeta(
+        c(
+            lower = tail/2,
+            median = 0.5,
+            upper = 1.0-(tail/2)
+        ),
+        shape1 = k+1,
+        shape2 = n-k+1
+    ))
+}
+```
+
+And let's use it to make a function to easily summarise any given subset of the data:
+```
+compute.counts <- function( data ) {
+	return( c(
+		nonO = length( which( data$O.bld.grp == 0 )),
+		O = length( which( data$O.bld.grp == 1 ))
+	))
+}
+summarise <- function( data.subset, name ) {
+	counts = compute.counts( data.subset )
+	credible = compute.credible.interval( counts[2], sum(counts ))
+	return( c(
+		list( name = name, nonO = counts[1], O = counts[2], estimate = counts[2]/sum(counts) ),
+		credible
+	))
+}
+```
+
+**Question** Compute the 95% credible interval for all the populations. Compare to the sample size. (For example - can
+you plot sample size vs size of credible interval?). What is the pattern?
+
+**Question.** Do all the 95% credible intervals overlap? What about for individual ethnicities?
+
+**Hint.** A neat way to do this is to use `map_dfr()` from the [purr package](https://github.com/rstudio/cheatsheets/blob/main/purrr.pdf):
+
+```
+countries = unique( data$country )
+map_dfr( countries, function(country) { summarise( data[ data$country == country, ], country ) })
+
+data$country_ethnicity = sprintf( "%s:%s", data$country, data$ethnicity )
+ethnicities = unique( data$country_ethnicity )
+map_dfr( ethnicities, function(ethnicity) { summarise( data[ data$country_ethnicity == ethnicity, ], ethnicity ) })
+```
+
+We could also add these to our plots:
+
+<img src="solutions/all_ethnicities_o_blood_group_beta_posterior.svg">
+
+
+Another way the conjugate prior / analytical formulation helps is:
+
+2. It lets us deal with  very uncertain estimates.
+
+If you look at some ethnic groups, they have small counts and fairly uncertain estimates - and in some cases the point
+estimates are quite different to those from other populations. For example - the `AKANS[ASHANTI_EASTERN]` which has
+only 21 individuals, and has a point estimate of > 0.6 even though most of the others are < 0.8. Is O blood group
+really at such high frequency in those populations?
+
+Or what about the `FRAFRA_NANKANA_GRUSHIE_KUSASI[UER]` or other ethnicities where the point estimate is zero? Clearly
+we shouldn't believe there are no O blood group individuals in those groups based on these data.
+
+One way to deal with this is simply to look at our posterior.  For these populations it says:
+
+However, it is often useful to get a sensible point estimate even when there isn't much data. Our framework above
+allows us to do this. Specifically, let's 
+
+
+### Going further
+
+If you've followed 
 
 
 
+If you follow the above through you'll see that:
 
-
- (Ignore the normalisation for now - we are interested in relative values of the )
-
-**Hint.** the binomial density is 
+* Starting with a flat (uniform) prior distribution, and adding some data, we end up with a beta posterior.
+* If we start with a beta posterior 
 
 ## A note on binomial assumptions
 
 Above I asked what assumptions we make in choosing a binomial distribution. We are making quite a few:
 
-* We are assuming that the total number of samples (e.g. 102 in the case of Tanzania) was known beforehand. (This could
+* We are assuming that the total number of samples (e.g. 98 in the case of Tanzania) was known beforehand. (This could
   be violated by sampling. For example this would be violated if we had chosen to up-sample ethnic groups with higher O
   blood group frequency.)
   
