@@ -196,7 +196,7 @@ points( x, dbeta( x, shape1 = 51+1, shape2 = 47+1 ), type = 'l', lty = 2, col = 
 
 Having this analytical version of the posterior is good news. Here are two ways it helps. 
 
-#### easily summarising our inference about the parameter.
+#### Easily summarising our inference about the parameter.
 
 For example, we could summarise our inference by computing a **credible interval** for our parameter. A good interval
 to take is a 95% posterior mass interavls, which you can form by chopping of 2.5% of the mass from both tails of the
