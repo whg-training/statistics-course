@@ -7,8 +7,6 @@ Sofiane and Ignacy are siblings. What is the probability they have inherited the
 
 **Note.** 'Identity by descent' (or **IBD**) is the name used for DNA segments that are identical because they are inherited from the same copy in this way.
 
-<img src="https://render.githubusercontent.com/render/math?math=P(IBD) = P(v_1 \text{inherited IBD, and no recombination}) = P(\text{no recombination}|v_1 \text{inherited IBD}) \cdot P(\text{IBD at $v1$}) = P(\text{no recombination}) \cdot 0.5 = 0.7 * 0.5 = 0.35">
-
 ### Testing COVID
 
 **Question.** Covid-19 lateral flow tests currently in use [are thought to be pretty
