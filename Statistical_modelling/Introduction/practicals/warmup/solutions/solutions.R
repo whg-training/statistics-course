@@ -46,7 +46,7 @@ plot.bygroup <- function( data, column, prior.counts = c( 0, 0 )) {
 		par( mar = c(2,2,1,0.1) )
 		w = which( data[,column] == level )
 		summary = summarise( data[w,], level, prior.counts )
-		plot_unnormalised_posterior( summary$O + prior.counts[2], summary$O + summary$nonO + sum(prior.counts))
+		plot_normalised_posterior( summary$O + prior.counts[2], summary$O + summary$nonO + sum(prior.counts))
 		rect( xleft = summary$lower, xright = summary$upper, ybottom = 0, ytop = 1, col = rgb(0,0,0,0.1), border = NA )
 		legend( "topleft", legend = c( level, sprintf( "(%d, %d)", summary$nonO, summary$O )), bty = 'n' )
 	}
