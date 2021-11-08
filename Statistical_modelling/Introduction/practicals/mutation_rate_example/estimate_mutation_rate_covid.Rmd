@@ -33,7 +33,7 @@ To read nucleotide sequences into `R` you need to install a package called `seqi
 library('seqinr')
 
 # read the sequences
-sars_seqs = read.fasta('~/Projects/nCoV/sars_cov_2_seqs/small_dataset/covid_3_sequences_from_sep_2021_and_original_wuhan_sequence.fasta')
+sars_seqs = read.fasta('./covid_3_sequences_from_sep_2021_and_original_wuhan_sequence.fasta')
 summary(sars_seqs) # View a summary of the sequence data.
 
 # calculate the number of nucleotide differences between Wuhan and each of the new sequences.
