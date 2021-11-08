@@ -3,6 +3,14 @@
 Can you answer (or start to answer) these using the rules on the left side of the [probability
 cheatsheet](../../notes/Probability%20cheatsheet.pdf)?
 
+### Dice rolls
+
+**Question.** Draw (as a barplot) the distribution of a dice roll.  Or of the sum of two dice rolls?
+
+**Question.** Write down the expression for the mean and compute it for the dice roll example above.  And the variance?
+
+**Question.** ...and the entropy?
+
 ### DNA inheritance
 
 When copies of the same ancestral stretch of DNA are inherited by two individuals, we say they have
