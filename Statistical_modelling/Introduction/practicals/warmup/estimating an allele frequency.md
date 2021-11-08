@@ -185,7 +185,7 @@ We can prove this for our data by adding it to our plot:
 
 ```
 x = seq( from = 0, to = 1, by = 0.01 )
-points( x, dbeta( x, shape1 = 51+1, shape2 = 47+1 ), type = 'l', lty = 2, col = 'blue' )
+points( x, dbeta( x, shape1 = 47+1, shape2 = 51+1 ), type = 'l', lty = 2, col = 'blue' )
 ```
 
 <img src="solutions/Tanzania_o_blood_group_posterior+beta.svg">
