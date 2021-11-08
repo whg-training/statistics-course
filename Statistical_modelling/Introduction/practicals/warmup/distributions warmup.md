@@ -8,7 +8,13 @@ The following can be solved using the [distributions cheatsheet](../../notes/Dis
 
 **Question.** Pick a distribution from the [distributions cheatsheet](../../notes/Distributions%20cheatsheet.pdf) and plot its pdf and its cdf for a few different parameter values using R.
 
-### 
+###
+
+**Question.** What is the mean and variance of a binomial variable (like a coin toss) with parameters *n* (number of trials) and *p* (success probability?)
+
+**Hint.** A binomial variable is a sum of *n* Bernoulli variables (i.e. single coin tosses).  And the [variance of a sum of independent variables is the sum of the variances](https://en.wikipedia.org/wiki/Variance#Basic_properties) (and similarly for the mean).  So you only need to work it out for a single trial and add up.
+
+### Using distribution functions
 
 **Question.** I toss a coin 100 times.  What's the chance I see at least 60 heads?
 
