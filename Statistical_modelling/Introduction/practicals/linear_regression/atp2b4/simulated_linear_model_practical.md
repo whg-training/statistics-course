@@ -27,6 +27,10 @@ plot( data$X, data$Y, xlab = "X", ylab = "Y", pch = 19 )
 **Note.** I am using the [tidyverse](https://www.tidyverse.org) for these examples. If you can't install it (or don't
 want to), you can use `data.frame()` instead of `tibble()` above.
 
+### What is linear regression?
+
+See the ![linear regression diagram](https://github.com/whg-gms/statistics-course/raw/main/Statistical_modelling/Introduction/notes/Linear%20regression.pdf)
+
 ### fitting the regression
 
 The function `lm()` in R fits a linear regression model.  The syntax is:
