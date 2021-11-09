@@ -1,0 +1,429 @@
+<style>
+  .reveal pre {font-size: 12px;}
+</style>
+
+Introduction to Modelling and MCMC
+========================================================
+author: Azim Ansari
+date: 4 November 2021
+font-family: Garamond
+autosize: true
+
+Agenda
+========================================================
+
+
+- Introduction to Bayes Theorem
+- Introduction to Modeling
+- Introduction to MCMC
+
+
+Conditional probability: Definition
+========================================================
+
+If A and B are events with P(B)>0, then the conditional probability of A given B, denoted by P(A|B), is defined as  
+
+$$
+P(A|B) = \frac{P(A,B)}{P(B)}
+$$
+
+- A is the event whose uncertainty we want to update.
+- B is the evidence we observe (or want to treat as given).
+- P(A) the prior probability of A. (“prior” means before updating based on the evidence).
+- P(A|B) the posterior probability of A. (“posterior” means after updating based on the evidence).
+
+
+Conditional probability: Definition
+========================================================
+```{r, echo=FALSE,out.height = "600px"}
+   knitr::include_graphics('./conditional_prob.png')
+```
+
+Conditional probability example: Two cards.
+========================================================
+A standard deck of cards is shuffled well. Two cards are drawn randomly, one at a time without replacement. Let $A$ be the event that the first card is a heart, and $B$ be the event that the second card is red. Find $P(A|B)$ and $P(B|A)$.
+
+$$
+\begin{aligned}
+P(A) &= \frac{1}{4} \\
+P(B) &=  \frac{26 \times 51}{52 \times 51} = \frac{1}{2} \\
+P(A,B) &= \frac{13 \times 25}{52 \times 51} \\
+P(A|B) &= \frac{P(A,B)}{P(B)} = \frac{25/204}{1/2} = \frac{25}{102} \\
+P(B|A) &= \frac{P(A,B)}{P(A)} = \frac{25/204}{1/4} = \frac{25}{51}
+\end{aligned}
+$$
+
+
+Bayes Theorem: Definition
+========================================================
+
+$$
+\begin{aligned}
+P(A|B) &= \frac{P(A,B)}{P(B)}\\
+P(B|A) &= \frac{P(A,B)}{P(A)}\\
+\\
+P(A|B) &= \frac{P(B|A) P(A)}{P(B)}\\
+\end{aligned}
+$$
+
+Bayes Theorem example: Random coin
+========================================================
+
+You have one fair coin, and one biased coin which lands Heads with probability 3/4. You pick one of the coins at random and flip it three times. We observe (H,T,H). Given this information, what is the probability that the coin you picked is the fair one?
+
+- p = probability of heads.
+  * p = 1/2 or p = 3/4
+
+Example: Random coin:
+========================================================
+
+A = event that the chosen coin lands (H,T,H)  
+F = event that we picked the fair coin (event that p = 1/2)
+
+We are interested in $P(F|A)$, but it is easier to find $P(A|F)$ and $P(A|F^c)$. This suggests using Bayes' rule and the law of total probability.  
+
+$$
+\begin{aligned}
+P(F|A)   &= \frac{P(A|F) P(F)}{P(A)}\\
+      &= \frac{P(A|F) P(F)}{P(A|F) P(F) + P(A|F^c) P(F^c)}\\
+        &= \frac{((1/2)^2 \times (1/2)) \times 1/2}{((1/2)^2 \times (1/2))  \times 1/2 + ((3/4)^2 \times (1/2)) \times 1/2} \\
+        &\approx 0.23
+\end{aligned}
+$$
+
+Example: Random coin version 2.
+========================================================
+
+There is a bag with 5 coins in it. They consist of 
+- A coin where probability of heads is 1. (B0), p = 1
+- A coin where probability of heads is 1/4. (B1), p = 1/4
+- A coin where probability of heads is 1/2. (B2), p = 2/4
+- A coin where probability of heads is 3/4. (B3), p = 3/4
+- A coin where probability of heads is 0. (B4)  , p = 0
+
+We take a random coin out and throw it three times and observe (H,T,H). What is the probability that we picked the coin where the probability of heads is 1/4 (p = 1/4)?
+
+Example: Random coin version 2.
+========================================================
+
+A = event that we observe (H,T,H).  
+B1 = event that we pick coin B1.  p = 1/4
+
+We are interested in the $P(B1|A)$, but calculating $P(A|B1)$ is easier. Use Bayes' rule and law of total probability. Looking at the observed data we immediately can eliminate two possibilities:
+
+- A coin where probability of heads is 1. (B0). Impossible as we have observed both heads and tails.
+- A coin where probability of heads is 0. (B4). Impossible as we have observed both heads and tails.
+
+
+Example: Random coin version 2.
+========================================================
+A = event that we observe (H,T,H).  
+B1 = event that we pick coin B1. p = 1/4  
+B2 = event that we pick coin B2. p = 2/4  
+B3 = event that we pick coin B3. p = 3/4  
+
+$$
+\begin{aligned}
+P(B1|A)   &= \frac{P(A|B1) P(B1)}{P(A)}\\
+      &= \frac{P(A|B1) P(B1)}{P(A|B1) P(B1)+ P(A|B2) P(B2) + P(A|B3) P(B3)}\\
+        &= \frac{(1/4)^2 \times (3/4) \times 1/3 }{[(1/4)^2 \times (3/4) \times 1/3] + [(1/2)^2 \times (1/2)^ \times 1/3] + [(3/4)^2 \times(1/4) \times 1/3]} \\
+        &= 0.15 \\
+        P(B2|A) &= 0.4 \\
+        P(B3|A) &=  0.45 
+\end{aligned}
+$$
+
+Example: Random coin version 3.
+========================================================
+
+We have a coin where we don't know what is the probability of heads (p). It could be anything between 0 and 1. We throw the coin three times and observe (H,T,H). Given this information what is the distribution of p?
+
+- We are moving from discrete space to continuous space.
+- We are moving from probabilities to probability density functions (PDF).
+- We replace summation with integration.
+
+
+Example: Random coin version 3.
+========================================================
+
+$$
+X \sim \text{Binomial}(N,p)\\
+p \sim \text{Uniform}(0,1)
+$$
+
+Read the above statment as: The count X is distributed binomially with sample size N and probability p. The prior for p is assumed to be uniform between zero and one.
+
+$\sim$ means the relationship is stochastic. A stochastic relationship is just a mapping of a variable or parameter onto a distribution. 
+- It is stochastic because no single instance of the variable on the left is known with certainty. 
+- Instead, the mapping is probabilistic: Some values are more plausible than others, but very many different values are plausible under any model.
+
+Example: Random coin version 3.
+========================================================
+
+Use Bayes' theorem:
+
+$$
+P(p|n,x) = \frac{\text{Binomial}(x|p,n)\times \text{Uniform}(p|0,1)}{\int_0^1 \text{Binomial}(x|p,n)\times \text{Uniform}(p|0,1) dp}
+$$
+
+
+```{r}
+x <- 2; n <- 3;
+
+p_grid <- seq(from=0,to=1,length.out=100) 
+
+likelihood_prior <- dbinom(x,n,p_grid) * dunif(p_grid,0,1) 
+
+posterior <- likelihood_prior/sum(likelihood_prior)
+```
+
+Example: Random coin version 3.
+========================================================
+
+```{r}
+plot(p_grid,posterior)
+```
+
+
+Example: Random coin version 3.
+========================================================
+
+Now we have a posterior distribution for $p$. Can we tell what is the probability of observing 7 Heads in 10 throws?
+
+```{r}
+post_samples = sample(p_grid,size = 1e3,replace = TRUE, prob = posterior )
+post_predictions = rbinom(n =1e4,prob = post_samples,size = 10)
+sum(post_predictions == 7 ) / 1e4
+plot(table(post_predictions))
+```
+
+
+Inference: A very generic problem
+========================================================
+We have some data and would like to model it:  
+- We assume a model $\color{blue}{p(\text{data}|\theta)}$ for how the data was generated. 
+- The unknowns in our model are the parameters of the model.
+- We set prior distribution $\color{teal}{p(\theta)}$ on the parameters of the model.
+- This means we have assumed a joint distribution over the space of data and parameters. $p(\text{data},\theta)$.
+- We estimate the posterior distribution of the parameters given the data.
+
+By Bayes' Theorem:  
+$$
+\begin{aligned}
+    \color{red}{p(\theta|data)} &= \frac{\color{blue}{p(data|\theta)}\color{teal}{p(\theta)}}{\int_\theta                                       {\color{blue}{p(data|\theta)}}{\color{teal}{p(\theta)}} d\theta} =  \frac{\color{blue}{p(data|\theta)}\color{teal}{p(\theta)}}{P(data)}
+ \end{aligned}
+$$
+
+Bayes' Theorem
+========================================================
+
+$$
+\begin{aligned}
+    \color{red}{p(\theta|data)} &= \frac{\color{blue}{p(data|\theta)}\color{teal}{p(\theta)}}{\int_\theta                                       {\color{blue}{p(data|\theta)}}{\color{teal}{p(\theta)}} d\theta}\\
+    &= \frac{\color{blue}{p(data|\theta)}\color{teal}{p(\theta)}}{P(data)}\\
+    \\
+   \color{red}{Posterior}  &= \frac{\color{blue}{\text{Probability of the data}} \times \color{teal}{\text{Prior}}}{\text{Average probability of the data}}
+ \end{aligned}
+$$
+
+
+Bayes' Theorem
+========================================================
+
+```{r, echo=FALSE,out.height = "600px"}
+   knitr::include_graphics('./likelihood_prior.png')
+```
+
+
+Example: Random coin version 3.
+========================================================
+We have a coin where we don't know what is the probability of heads (p). It could be anything between 0 and 1. We throw the coin three times and observe (H,T,H). Given this information what is the distribution of p?
+
+- What is your data? X = number of Heads.
+- Decide on how data was generated (likelihood):  $X|p \sim \text{Binom}(3,p)$ or $P(X = 2|p) = 3 \times p^2 \times (1-p)$.
+- Decide on a prior distribution for $p$. We can assume $p \sim \text{Unif}(0,1)$.
+- Estimate the posterior distribution of $p$.
+$$
+\color{red}{f(p|X = 2) }= \frac{\color{blue}{3 p^2(1-p)} \times \color{teal}{1}}{\int_0^1 (3 p^2(1-p) \times 1) dp}= \color{red}{\frac{p^2(1-p)}{0.08333}}
+$$
+
+Example: Random coin version 3.
+========================================================
+```{r, echo=FALSE,out.height = "600px"}
+p = seq(0,1,by = 0.001)
+plot(p,3*(p^2 *(1-p)),ylab = '',col='blue',ylim=c(0,2))
+points(p,1*rep(1,length(p)),col='green')
+points(p,(p^2 *(1-p))/0.08333,col = 'red')
+legend(0.0,2,c('likelihood','prior','posterior'),col = c('blue','green','red'),pch=19)
+```
+
+
+
+Example: Random coin version 3.
+========================================================
+```{r, echo=FALSE,out.height = "300px"}
+p = seq(0,1,by = 0.001)
+plot(p,(p^2 *(1-p))/0.08333,ylab = 'distribution (probability)(density function)',main = 'plot(p,(p^2 *(1-p))/0.08333)')
+```
+
+$f(p|X=2)$ has a name. It is called a $\text{Beta}(3,2)$ distribution which has two parameters and in `R` if we use `dbeta(p,3,2)` it produces the same pdf at point `p`.
+***
+```{r, echo=FALSE,out.height = "300px"}
+p = seq(0,1,by = 0.001)
+plot(p,dbeta(p,3,2),ylab = 'distribution (probability)(density function)',main ='plot(p,dbeta(p,3,2)' )
+```
+
+
+Example:  height
+========================================================
+```{r}
+#install.packages("devtools") 
+#library(devtools) 
+#devtools::install_github("rmcelreath/rethinking")
+library('rethinking')
+
+data(Howell1)
+d <- Howell1
+str(d)
+
+d2 <- d[ d$age >= 18 , ]
+```
+
+Our model:
+
+$$
+\begin{aligned}
+h_i &\sim \text{Normal}(\mu,\sigma)\\
+\mu &\sim \text{Normal}(178,20)\\
+\sigma &\sim \text{Normal}(0,50)\\
+\end{aligned}
+$$
+
+Example: height
+========================================================
+Let's plot the priors and do prior predictive checks:  
+
+```{r}
+par(mfrow=c(2,2)) 
+curve( dnorm( x , 178 , 20 ) , from=100 , to=250 )
+curve( dunif( x , 0 , 50 ) , from=-10 , to=60 )
+
+sample_mu <- rnorm( 1e4 , 178 , 20 )
+sample_sigma <- runif( 1e4 , 0 , 50 )
+prior_h <- rnorm( 1e4 , sample_mu , sample_sigma ) 
+hist(prior_h,50)
+dens( prior_h )
+```
+
+Example: height
+========================================================
+What happens if we use a diffrent prior:  
+$$
+\begin{aligned}
+h_i &\sim \text{Normal}(\mu,\sigma)\\
+\mu &\sim \text{Normal}(178,100)\\
+\sigma &\sim \text{Normal}(0,50)\\
+\end{aligned}
+$$
+
+```{r}
+sample_mu <- rnorm( 1e4 , 178 , 100 )
+sample_sigma <- runif( 1e4 , 0 , 50 )
+prior_h <- rnorm( 1e4 , sample_mu , sample_sigma )
+par(mfrow=c(1,2)) 
+hist(prior_h,50)
+dens( prior_h )
+```
+
+Example: height
+========================================================
+let's get the posterior distribution for $\mu$ and $\sigma$.  
+We can create a grid and use grid approximation:
+
+```{r}
+mu.list <- seq( from=150, to=160 , length.out=100 ) 
+sigma.list <- seq( from=7 , to=9 , length.out=100 ) 
+post <- expand.grid( mu=mu.list , sigma=sigma.list ) 
+post$LL <- sapply( 1:nrow(post) , function(i) sum(dnorm( d2$height , post$mu[i] , post$sigma[i] , log=TRUE )))
+post$prod <- post$LL + dnorm( post$mu , 178 , 20 , TRUE ) + dunif( post$sigma , 0 , 50 , TRUE ) 
+post$prob <- exp( post$prod - max(post$prod) )
+
+image_xyz( post$mu , post$sigma , post$prob,xlab = 'mu',ylab = 'sigma' )
+```
+
+
+Example: height: Linear regression
+========================================================
+How height in these Kalahri Foragers covaries with weight:  
+
+```{r}
+library(rethinking)
+data(Howell1); 
+d <- Howell1; 
+d2 <- d[ d$age >= 18 , ] 
+plot( d2$height ~ d2$weight )
+```
+
+Example: height: Linear regression
+========================================================
+
+The strategy is to make the parameter for the mean of a Gaussian distribution, $\mu$, into a linear function of the predictor variable. 
+
+$$
+\begin{aligned}
+h_i &\sim \text{Normal}(\mu,\sigma)\\
+\mu &\sim \text{Normal}(178,100)\\
+\sigma &\sim \text{Normal}(0,50)\\
+\end{aligned}
+$$
+
+Linear Regression:
+
+$$
+\begin{aligned}
+h_i &\sim \text{Normal}(\mu_i,\sigma)\\
+\mu_i &= \alpha + \beta(x_i -\bar{x})\\
+\alpha &\sim \text{Normal}(178,20)\\
+\beta &\sim \text{Normal}(0,10) \\
+\sigma &\sim \text{Normal}(0,50)\\
+\end{aligned}
+$$
+
+
+Example: height: Linear regression
+========================================================
+We will use quadratic approximation instead of using a grid in this case.
+
+```{r}
+flist <- alist(
+height ~ dnorm( mu , sigma ) , 
+mu ~ dnorm( 178 , 20 ) , 
+sigma ~ dunif( 0 , 50 )
+)
+Model_1<- quap( flist , data=d2 )
+
+
+xbar <- mean(d2$weight)
+Model_2 <- quap( alist(
+                height ~ dnorm( mu , sigma ) , 
+                mu <- a + b*( weight - xbar ) , 
+                a ~ dnorm( 178 , 20 ) ,
+                b ~ dnorm( 0 , 10 ) ,
+                sigma ~ dunif( 0 , 50 ) 
+            ) , data=d2 )
+```
+
+
+
+Example: height: Linear regression
+========================================================
+
+```{r}
+plot( height ~ weight , data=d2 , col=rangi2 ) 
+post <- extract.samples( Model_2)
+a_map <- mean(post$a)
+b_map <- mean(post$b)
+curve( a_map + b_map*(x - xbar) , add=TRUE )
+
+```
+
