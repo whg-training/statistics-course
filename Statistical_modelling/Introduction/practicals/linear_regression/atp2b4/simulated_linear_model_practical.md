@@ -14,12 +14,22 @@ Now let's make a gaussian outcome variable that is correlated with X. To do this
 Y = 0.5*X + rnorm( N, sd = sqrt(0.75) )
 ```
 
-(I chose that standard deviation because of way variance scales.  If X has variance 1, then 0.5*X has variance 0.25.  Therefore we need to add a variable with variant 0.75 to get back to variance 1.)
+(I chose that standard deviation because of way variance scales.  If *X* has variance 1, then 0.5 × *X* has variance 0.25.  Therefore we need to add a variable with variance 0.75 to get back to variance 1.  And of course the standard deviation is the square root of the variance.)
+
+Let's see what that looks like
 
 ```
+library( tidyverse )
 data = tibble( X = X, Y = Y )
 plot( data$X, data$Y, xlab = "X", ylab = "Y", pch = 19 )
-````
+```
+
+**Note.** I am using the [tidyverse](https://www.tidyverse.org) for these examples. If you can't install it (or don't
+want to), you can use `data.frame()` instead of `tibble()` above.
+
+### What is linear regression?
+
+Linear regression models the outcome *Y* in terms of a **linear effect of the predictor** *X*.  In the simplest form with one predictor variable, it estimates the slope of the best-fitting line.  See the [linear regression outline](../../../notes/Linear%20regression.pdf) for a diagram.
 
 ### fitting the regression
 
