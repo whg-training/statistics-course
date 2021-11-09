@@ -29,7 +29,8 @@ want to), you can use `data.frame()` instead of `tibble()` above.
 
 ### What is linear regression?
 
-See the ![linear regression diagram](https://github.com/whg-gms/statistics-course/raw/main/Statistical_modelling/Introduction/notes/Linear%20regression.pdf)
+See the linear regression diagram:
+<img src="https://github.com/whg-gms/statistics-course/raw/main/Statistical_modelling/Introduction/notes/Linear%20regression.pdf">
 
 ### fitting the regression
 
