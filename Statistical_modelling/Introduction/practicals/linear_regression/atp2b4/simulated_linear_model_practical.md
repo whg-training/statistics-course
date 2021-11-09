@@ -29,8 +29,7 @@ want to), you can use `data.frame()` instead of `tibble()` above.
 
 ### What is linear regression?
 
-See the linear regression diagram:
-<img src="https://github.com/whg-gms/statistics-course/raw/main/Statistical_modelling/Introduction/notes/Linear%20regression.pdf">
+Linear regression models the outcome *Y* in terms of a **linear effect of the predictor** *X*.  In the simplest form with one predictor variable, it estimates the slope of the best-fitting line.  See the [linear regression outline](../../notes/Linear%20regression.pdf) for a diagram.
 
 ### fitting the regression
 
