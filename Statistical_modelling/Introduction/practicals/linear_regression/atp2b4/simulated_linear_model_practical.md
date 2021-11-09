@@ -14,8 +14,9 @@ Now let's make a gaussian outcome variable that is correlated with X. To do this
 Y = 0.5*X + rnorm( N, sd = sqrt(0.75) )
 ```
 
-(I chose that standard deviation because of way variance scales.  If X has variance 1, then 0.5*X has variance 0.25.  Therefore we need to add a variable with variant 0.75 to get back to variance 1.)
+(I chose that standard deviation because of way variance scales.  If *X* has variance 1, then 0.5 × *X* has variance 0.25.  Therefore we need to add a variable with variance 0.75 to get back to variance 1.  And of course the standard deviation is the square root of the variance.)
 
+It looks like this:
 ```
 data = tibble( X = X, Y = Y )
 plot( data$X, data$Y, xlab = "X", ylab = "Y", pch = 19 )
