@@ -15,6 +15,7 @@ We are grateful to the following people who have contributed to the material on 
 * Stefania Benonisdottir
 * Daniel Crouch
 * Teresa Ferreira
+* Jason Hendry
 * Valentina Iotchkova
 * Augustine Kong
 * Gerton Lunter
