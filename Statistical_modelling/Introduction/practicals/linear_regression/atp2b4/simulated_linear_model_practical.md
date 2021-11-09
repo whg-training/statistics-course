@@ -29,7 +29,7 @@ want to), you can use `data.frame()` instead of `tibble()` above.
 
 ### What is linear regression?
 
-Linear regression models the outcome *Y* in terms of a **linear effect of the predictor** *X*.  In the simplest form with one predictor variable, it estimates the slope of the best-fitting line.  See the [linear regression outline](../../notes/Linear%20regression.pdf) for a diagram.
+Linear regression models the outcome *Y* in terms of a **linear effect of the predictor** *X*.  In the simplest form with one predictor variable, it estimates the slope of the best-fitting line.  See the [linear regression outline](../../../notes/Linear%20regression.pdf) for a diagram.
 
 ### fitting the regression
 
