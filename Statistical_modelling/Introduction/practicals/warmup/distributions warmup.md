@@ -22,7 +22,7 @@ The following can be solved using the [distributions cheatsheet](../../notes/Dis
 
 **Question.** Plot a multivariate normal distribution density using using R.
 
-**Hint.** This can be done using the `mvtnorm` package and the `ellipse` package.  Here is one way using base R graphics - experiment with different :
+**Hint.** This can be done using the `mvtnorm` package and the `ellipse` package.  Here is one way using base R graphics - try experimenting with different covariances:
 
 ```
 
