@@ -6,20 +6,32 @@ In this practical we will do principal component analysis (PCA), which is one of
 
 ### Getting set up
 
-We will be using the software `PLINK` written by Christopher Chang:
-[https://www.cog-genomics.org/](https://www.cog-genomics.org/)).  Before we start, please make sure you have downloaded this software and can run it in a terminal window on your system.
 
-You will also need to get the data.  For this practical we will work with a file called `chr19-clean.vcf.gz`.  Please download `chr19-clean.vcf.gz` [from this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/) now.
+**Getting the software**. We will be using the software `PLINK` written by Christopher Chang:
+[https://www.cog-genomics.org/](https://www.cog-genomics.org/)).  Before we start, please make sure you have downloaded this software and can run it in a terminal window on your system.  To check this, try running this in your terminal window:
+```
+    $ plink
+    PLINK v1.90b6.17 64-bit (28 Apr 2020)          www.cog-genomics.org/plink/1.9/
+    (C) 2005-2020 Shaun Purcell, Christopher Chang   GNU General Public License v3
+
+      plink <input flag(s)...> [command flag(s)...] [other flag(s)...]
+      plink --help [flag name(s)...]
+
+    Commands include --make-bed, --recode, --flip-scan, --merge-list, [...]
+
+    "plink --help | more" describes all functions (warning: long).
+
+**Getting the data**.  You will also need to get the data.  For this practical we will work with a file called `chr19-clean.vcf.gz`.  To get started, please make a new empty folder on your system, `cd` into it, and then download `chr19-clean.vcf.gz` [from this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/).
 
 ### The Practical
 
-We will use plink:
+We will use `plink`:
 
 * to remove closely-related samples
 * to compute principal components
 * and to compute the SNP weights or loadings that tell us how principal components are weighted across the genome.
 
-We'll also use R (we recommend [RStudio](https://www.rstudio.com)) to inspect and plot results.
+We'll also use `R` (we recommend [`RStudio`](https://www.rstudio.com)) to inspect and plot results.
 
 `plink`
 
