@@ -6,11 +6,17 @@ In this practical we will do principal component analysis (PCA), which is one of
 
 ### Getting set up
 
-
 **Getting the software**. We will be using the software `PLINK` written by Christopher Chang:
 [https://www.cog-genomics.org/](https://www.cog-genomics.org/)).  Before we start, please make sure you have downloaded this software and can run it in a terminal window on your system.  To check this, try running this in your terminal window:
+
 ```
-    $ plink
+$ plink
+```
+
+**Note.** The `$` in the above command indicates the command prompt - don't type that in!
+
+You should see something like this:
+
     PLINK v1.90b6.17 64-bit (28 Apr 2020)          www.cog-genomics.org/plink/1.9/
     (C) 2005-2020 Shaun Purcell, Christopher Chang   GNU General Public License v3
 
@@ -21,7 +27,15 @@ In this practical we will do principal component analysis (PCA), which is one of
 
     "plink --help | more" describes all functions (warning: long).
 
-**Getting the data**.  You will also need to get the data.  For this practical we will work with a file called `chr19-clean.vcf.gz`.  To get started, please make a new empty folder on your system, `cd` into it, and then download `chr19-clean.vcf.gz` [from this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/).
+**Getting the data**.  The data files for this practical can be found [in this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/).  Please download these now.  For the first part of the practical we will use the `chr19-clean.vcf.gz` file, and later on we will use the other files as well.
+
+For the practical we recommend making a new empty folder to put these in.  So when you're ready to go your folder should look something like this:
+
+    PCA_practical/
+        chr19-clean.vcf.gz
+        merged.with.1000G.vcf.gz
+        resources/
+            1000GP_Phase3.sample
 
 ### The Practical
 
@@ -35,42 +49,56 @@ We'll also use `R` (we recommend [`RStudio`](https://www.rstudio.com)) to inspec
 
 `plink`
 
-To get started, open a terminal window and navigate to the practical directory:
+To get started, open a terminal window and make sure you are in the right directory:
 
 ```
-cd /path/to/the/practical
+cd /path/to/PCA_practical
 ```
 
+Also, in R / RStudio please set this directory as your current directory (either using the `setwd()` command or by using the menu option `Session`->`Set working directory`->`Choose Directory`).  Like this:
 
-In this practical, commands that should be run in the terminal will be printed in typewriter font, like the one above.
-
-Also, in RStudio set this directory as your current directory (either using the setwd command or by using the menu option Session->Set working directory->Choose Directory).  Commands that should be run in RStudio will be written in a greyed out box, like this:
-
-In RStudio:
-
+*In RStudio:*
 ```
-setwd('/media/ubuntu/data/GEIA/Practicals/06_PCA')
+> setwd( '/path/to/PCA_practical' )
 ```
 
-###A note on quality control
-Before carrying out a genetic analysis, like PCA, it's important to have a good-quality dataset, and this typically means carrying out careful quality control (QC) first.  On this course we'll cover QC in the lectures and practicals tomorrow.  For this practical we'll use an already-cleaned dataset contained in the file chr19-clean.vcf.gz.  You can look at the data in this file by typing
+**Note.** The `>` indicates the `R` command prompt here - don't type that bit in!
+
+## A note on quality control
+
+Before carrying out a genetic analysis like PCA, it's important to have a good-quality dataset, and
+this typically means carrying out careful quality control (QC) first. On this course we'll cover QC
+in later lectures and practicals. For this practical we'll use an already-cleaned dataset contained
+in the file `chr19-clean.vcf.gz`. You can look at the data in this file by typing
 
 ```
 less -S chr19-clean.vcf.gz
 ```
 
-in the terminal, and scroll around using the arrow keys.  The data consists of genotype calls at different sites.  When you've finished, press the 'q' key to quit back to the terminal prompt.
-##LD pruning of SNPs
+**Note.** If you are using Mac OS X, you will need to use `zless` instead of `less`.
 
-As described in the population genetics lecture this morning, genetic drift and other processes lead to linkage disequilibrium (LD) between SNPs along a chromosome.  To ensure the PCs we compute represent genome-wide structure (not local LD) we'll first carry out LD pruning of our SNP set.  This removes correlated pairs of SNPs so that the remaining SNPs are roughly independent.  (It also makes subsequent computations quicker.)  Run the following command to prune the dataset:
+The data consists of genotype calls at different sites (rows) for different samples (columns).  Feel free to look at the data by scrolling around using the arrow keys. When you've finished, press the 'q' key to quit back to the terminal prompt.
+
+**Note.** This is a [Variant Call Format](https://samtools.github.io/hts-specs/VCFv4.2.pdf) file.
+If you followed our earlier [next-generation sequencing
+practical](../../../Next_Generation_Sequencing/practicals/ngs_processing_pipeline/) you will have
+created a VCF file of variant calls from some sequence reads.  The VCF file for this practical is much simpler, though, because we have only included genotype calls.
+
+## LD pruning of SNPs
+
+As described in the population genetics lecture this morning, genetic drift and other processes
+lead to linkage disequilibrium (LD) between SNPs along a chromosome. To ensure the PCs we compute
+represent genome-wide structure (not local LD) we'll first carry out LD pruning of our SNP set.
+This removes correlated pairs of SNPs so that the remaining SNPs are roughly independent. (It also
+helps to make subsequent computations quicker.) Run the following command to prune the dataset:
 
 ```
-plink --vcf chr19-clean.vcf.gz --maf 0.01 --indep-pairwise 50 5 0.2 --out chr19-clean 
+$ plink --vcf chr19-clean.vcf.gz --maf 0.01 --indep-pairwise 50 5 0.2 --out chr19-clean 
 ```
 
-Note: commands like this should be typed out or pasted onto a single line in the terminal window.  Then press <Enter> to run the command.  If all goes well you'll see a bunch of output on the screen, starting with some information about the version of plink that is running.
+**Note**: commands like this should be typed out or pasted onto a single line in the terminal window (omitting the `$` of course!).  Then press <Enter> to run the command.  If all goes well you'll see a bunch of output on the screen, starting with some information about the version of plink that is running.
 
-The above command tells plink to load the file chr19-clean.vcf.gz and to prune SNPs to leave SNPs with MAF at least 1%, with no pairs remaining with r2>0.2.  (The other parameters, here 50 and 5, affect how the computation works in windows across the genome.  You can read about the behaviour here: [http://www.cog-genomics.org/plink2/ld](http://www.cog-genomics.org/plink2/ld)).
+The above command tells plink to load the file `chr19-clean.vcf.gz` and to prune SNPs, leaving SNPs with minor allele frequency (MAF) at least 1%, and with no pairs remaining with pairwise r<sup>2</sup>>0.2.  (The other parameters, here 50 and 5, affect how the computation works in windows across the genome.  You can read about the behaviour here: [http://www.cog-genomics.org/plink2/ld](http://www.cog-genomics.org/plink2/ld)).
 
 **Question**. Look at the screen output from the above plink command.  How many variants were in the original dataset?  How many were removed because their frequency was below 1%?  How many variants were removed due to LD pruning?  How many variants remain?
 
