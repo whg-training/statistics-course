@@ -29,15 +29,23 @@ genotypes at the `L` genetic variants (rows) and `N` samples (in columns).
 It is typical to always standardise the genotypes at by dividing by each variant (row) in *X* by its standard deviation, i.e. by <img src="https://render.githubusercontent.com/render/math?math=\sqrt{f(1-f)}"> where *f* is the
 allele frequency of the variant - and then subtracting the mean.  So do that first.
 
-Now there are two possible square matrices you can make out of *X*. You can form:
+Now there are two possible square matrices you can make out of *X*:
 
-* The *relatedness matrix* <img src="https://render.githubusercontent.com/render/math?math=R =
-  \frac{1}{L} X^t X">. *R* is an *N &times; N* matrix i.e. has one row and one column for each
+1. You can form the *relatedness matrix*:
+
+<img src="https://render.githubusercontent.com/render/math?math=R =
+  \frac{1}{L} X^t X">.
+  
+  *R* is an *N &times; N* matrix i.e. has one row and one column for each
   sample. The motivation is that each entry *r<sub>i,j</sub>* captures the degree of allele sharing
   (covariance) between individual i and j. Also, because of the frequency scaling, sharing of rarer
   variants has greater weight *r<sub>i,j</sub>*.
 
-* Or you can form the *LD matrix* <img src="https://render.githubusercontent.com/render/math?math=Z = \frac{1}{N} X X^t">.  Again because of the scaling to unit variance, entry *z<sub>i,j</sub>* is the LD (correlation) between genotypes at variants i and j, and the diagonal entries are *1*.
+2. Or you can form the *LD matrix*:
+
+<img src="https://render.githubusercontent.com/render/math?math=Z = \frac{1}{N} X X^t">.
+
+Again because of the scaling to unit variance, entry *z<sub>i,j</sub>* is the LD (correlation) between genotypes at variants i and j, and the diagonal entries are *1*.
 
 If you followed the tutorial this morning you will realise that *relatedness* and *LD* are in some sense dual to each other due to the way genetic drift works.  This duality appears in principal components analysis too.  Namely:
 
