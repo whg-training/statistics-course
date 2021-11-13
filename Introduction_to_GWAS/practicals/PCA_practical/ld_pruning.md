@@ -4,13 +4,14 @@
 
 [Forward to the next page](relatedness_pruning.md)
 
-## LD pruning of SNPs
-
 As described in the population genetics lecture this morning, genetic drift and other processes
 lead to linkage disequilibrium (LD) between SNPs along a chromosome. To ensure the PCs we compute
 represent genome-wide structure (not local LD) we'll first carry out LD pruning of our SNP set.
-This removes correlated pairs of SNPs so that the remaining SNPs are roughly independent. (It also
-helps to make subsequent computations quicker.) Run the following command to prune the dataset:
+
+## LD pruning of SNPs
+
+LD pruning removes correlated pairs of SNPs so that the remaining SNPs are roughly independent. (It
+also helps to make subsequent computations quicker.) Run the following command to prune the dataset:
 
 ```
 $ plink --vcf chr19-clean.vcf.gz --maf 0.01 --indep-pairwise 50 5 0.2 --out chr19-clean 
