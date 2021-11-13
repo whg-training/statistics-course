@@ -10,11 +10,13 @@ In this practical we will use `plink` to do several things to the data:
 
 We'll also use `R` (we recommend [`RStudio`](https://www.rstudio.com)) to inspect and plot results.
 
-To get started, open a terminal window and make sure you are in the right directory:
+Open a terminal window and first make sure you are in the right directory:
 
 ```
 cd /path/to/PCA_practical
 ```
+
+**Note.** This should be the folder where [you downloaded the data](getting_setup.md).
 
 Also, in R / RStudio please set this directory as your current directory (either using the `setwd()` command or by using the menu option `Session`->`Set working directory`->`Choose Directory`).  Like this:
 
