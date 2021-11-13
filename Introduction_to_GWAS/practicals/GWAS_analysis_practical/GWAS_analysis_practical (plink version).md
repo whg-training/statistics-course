@@ -6,11 +6,19 @@ November 2019
 Authors: Luke Jostins, Gavin Band
 
 ##  Introduction
-This practical will introduce you to analyzing Genome Wide Association Study (GWAS) datasets using a program called PLINK, which is a freely available GWAS analysis toolkit. PLINK has many functions including those related to data organization, formatting, quality control, association testing, population stratification and much more. Details about PLINK and its documentation are available at the reference section at the end of these practicals.
 
-We will use the chr19-example.vcf.gz/.samples files in the `4_Introduction_to_GWAS/GWAS_practical/` folder. These files have been simulated and do not represent any real data, but instead serve to illustrate important points in working with GWAS data. We will use PLINK commands in the terminal to perform analyses. We can use the text editor, spreadsheet and R to help interpret results. 
+This practical will introduce you to analyzing Genome Wide Association Study (GWAS) datasets using
+a program called PLINK, which is a freely available GWAS analysis toolkit. PLINK has many functions
+including those related to data organization, formatting, quality control, association testing,
+population stratification and much more. Details about PLINK and its documentation are available at
+the reference section at the end of these practicals.
 
-Checkpoint questions in the practicals are shown in bold.  Please check you can answer these!
+We will use the chr19-example.vcf.gz/.samples files in the `4_Introduction_to_GWAS/GWAS_practical/`
+folder. These files have been simulated and do not represent any real data, but instead serve to
+illustrate important points in working with GWAS data. We will use PLINK commands in the terminal
+to perform analyses. We can use the text editor, spreadsheet and R to help interpret results.
+
+Checkpoint questions in the practicals are shown in bold. Please check you can answer these!
 
 ## Help!
 
@@ -18,35 +26,49 @@ If stuck you can email the gms-stats list.  This goes to all the students and te
 
 ## Getting set up
 
-In this practical we will run command-line programs to perform the analyses, and R to interpret them.  You have two options for running this.  The simplest way is to log in to the WHG compute cluster and run the practical there.  If you have a linux or Mac OS X laptop, you should instead be able to run the practical on your laptop - but be prepared for a bit of setup.  **It essential you have access to a suitable UNIX command-line environment** - if you have problems getting this set up, please let me know as soon as possible.
+In this practical we will run command-line programs to perform the analyses, and R to interpret
+them. You have two options for running this. The simplest way is to log in to the WHG compute
+cluster and run the practical there. If you have a linux or Mac OS X laptop, you should instead be
+able to run the practical on your laptop - but be prepared for a bit of setup. **It essential you
+have access to a suitable UNIX command-line environment** - if you have problems getting this set
+up, please let me know as soon as possible.
 
 In this practical, commands to run are shown like this:
 ```sh
 $ ls
 ```
-which runs the `ls` command.  (For avoidance of doubt - the $ is the command prompt; you should type or paste in all of the rest of the line, and then press <enter>.)
+
+which runs the `ls` command. (For avoidance of doubt - the $ is the command prompt; you should type
+or paste in all of the rest of the line, and then press <enter>.)
 
 To get set up, you need
 
 - the datasets from the practical folder.
 - the command-line programs we'll use
 
-open a terminal and navigate to your workspace for the practical.  You can either work on the WHG compute cluster or, if you are happy to do your own setup, on your own laptop.
+open a terminal and navigate to your workspace for the practical. You can either work on the WHG
+compute cluster or, if you are happy to do your own setup, on your own laptop.
 
 ```sh
 $ cd /path/to/working/folder/
 ```
 
-If you are using one of the workshop training logins, the path will be `/well/workshop/workshop<N>` if you are logged in as `workshop<N>`.
+If you are using one of the workshop training logins, the path will be `/well/workshop/workshop<N>`
+if you are logged in as `workshop<N>`.
 
-The practical dataset is available along side this file on the github site.
-You'll need to download everything, including the `.vcf` and `.samples` files, and the `scripts/` and `resources/` folders.
+The practical dataset is available along side this file on the github site. You'll need to download
+everything, including the `.vcf` and `.samples` files, and the `scripts/` and `resources/` folders.
 
-Second, let's get the plink program we need.  Navigate to `https://www.cog-genomics.org/plink/1.9/` and download the appropriate version.  Then move the plink executable into the top-level folder:
+Second, let's get the plink program we need. Navigate to `https://www.cog-genomics.org/plink/1.9/`
+and download the appropriate version. Then move the plink executable into the top-level folder:
+
 ```sh
 $ mv plink_[version]/plink ./
 ```
-If you are using the WHG cluster you should instead be able to copy it from `/apps/well` (which contains many useful applications compliled for the cluster):
+
+If you are using the WHG cluster you should instead be able to copy it from `/apps/well` (which
+contains many useful applications compliled for the cluster):
+
 ```sh
 $ cp /apps/well/plink/1.90b3/plink ./
 ```
@@ -60,27 +82,42 @@ Plink will tell you its version, and when it was last updated.
 
 ## Getting started
 
-Plink is a tool for analysis of genome-wide genotype data.  A basic first task is to compute allele frequencies.  We can do that like this:
+Plink is a tool for analysis of genome-wide genotype data. A basic first task is to compute allele
+frequencies. We can do that like this:
 
 ```sh
 $ ./plink --freq  --vcf snp-example.vcf
 ```
 
-The `--freq` command asks PLINK to calculate allele frequencies. `--vcf snp-example.vcf` tells PLINK to read in data from the VCF file `snp-example.vcf`. 
+The `--freq` command asks PLINK to calculate allele frequencies. `--vcf snp-example.vcf` tells
+PLINK to read in data from the VCF file `snp-example.vcf`.
 
-PLINK has written two output files in the directory we are working in, 1. a log file called `plink.log` that summarizes what it has done (this is the same as the output that appeared in the terminal window), and 2. `plink.frq`, which contains the allele frequency information. You can look at all input and output files in your text editor, using UNIX commands like `less`, or if preferred you can load them into R.
+PLINK has written two output files in the directory we are working in, 1. a log file called
+`plink.log` that summarizes what it has done (this is the same as the output that appeared in the
+terminal window), and 2. `plink.frq`, which contains the allele frequency information. You can look
+at all input and output files in your text editor, using UNIX commands like `less`, or if preferred
+you can load them into R.
 
-*Q*. How many SNPs were in this dataset?  What are their names?  What are their allele frequencies?
+*Q*. How many SNPs were in this dataset? What are their names? What are their allele frequencies?
 
 *Q*. How many samples are included in total?
 
 *Advanced Question*. The column names can be frankly somewhat cryptic.  Can you find out what `NCHROBS` means from the documentation?  (You may find you need to look at the documentation for the original version of plink (http://zzz.bwh.harvard.edu/plink/summary.shtml).  On the other hand, looking at the documentation on https://www.cog-genomics.org/plink/1.9/, are there other or better `--freq`-like commands you can run?  What do they output?  Which version do you like?
 
-A basic GWAS study begins by running regression (usually linear regression for quantitative traits, or logistic regression for case/control traits) between each genetic variant in the genome and the phenotype of interest.  We can run our first tiny GWAS by running:
+A basic GWAS study begins by running regression (usually linear regression for quantitative traits,
+or logistic regression for case/control traits) between each genetic variant in the genome and the
+phenotype of interest. We can run our first tiny GWAS by running:
+
 ```sh
 $ ./plink --vcf snp-example.vcf --logistic --pheno snp-example.samples --allow-no-sex
 ```
-(The `--allow-no-sex` is needed when working with VCF files, to work around plink's default behaviour where it removes samples without a sex assignment).  Now PLINK has generated two files in the directory we are working in: `plink.log` and `plink.assoc.logistic`. The log file simply captures the status information that PLINK reports with each run.  The other gives the logistic regression output.
+
+(The `--allow-no-sex` is needed when working with VCF files, to work around plink's default
+behaviour where it removes samples without a sex assignment). Now PLINK has generated two files in
+the directory we are working in: `plink.log` and `plink.assoc.logistic`. The log file simply
+captures the status information that PLINK reports with each run. The other gives the logistic
+regression output.
+
 *Q*. How many cases and controls are included in this data?
 
 If we look in the assoc file we will see that this SNP, rs8135996, is associated with our phenotype.
@@ -89,11 +126,19 @@ If we look in the assoc file we will see that this SNP, rs8135996, is associated
 *Advanced Question*.  What does `ADD` mean in the output?  Can you figure out how to run a non-additive test?  Which mode of inheritance has the greatest evidence?
 
 ## Forest plotting
-If you followed the Statistical modelling module earlier, we argued that what you want is to summarise the likelihood by its maximum (here the log odds ratio) and its standard error - thus approximating the likelihood by a gaussian function.  How can you get this out of plink's output? Can you figure this out from the [documentation for --logistic](https://www.cog-genomics.org/plink/1.9/assoc#linear)?
 
-Here's my take: using `--logistic beta` makes plink output the regression estimate (log odds ratio) instead of the odds ratio.  Plink also outputs what turns out to be a Wald test P-value.  (See [the notes](https://github.com/whg-gms/statistics-course/blob/main/2_Statistical_modelling_I:Introduction/notes/computing_pvalues.md) on computing P-values for a definition of this).
+If you followed the Statistical modelling module earlier, we argued that what you want is to
+summarise the likelihood by its maximum (here the log odds ratio) and its standard error - thus
+approximating the likelihood by a gaussian function. How can you get this out of plink's output?
+Can you figure this out from the [documentation for
+--logistic](https://www.cog-genomics.org/plink/1.9/assoc#linear)?
 
-If you know this, you can use it to work out the standard error.  For example:
+Here's my take: using `--logistic beta` makes plink output the regression estimate (log odds ratio)
+instead of the odds ratio. Plink also outputs what turns out to be a Wald test P-value. (See [the
+notes](https://github.com/whg-gms/statistics-course/blob/main/2_Statistical_modelling_I:Introduction
+/notes/computing_pvalues.md) on computing P-values for a definition of this).
+
+If you know this, you can use it to work out the standard error. For example:
 
 ```sh
 $ ./plink --vcf snp-example.vcf --logistic beta --pheno snp-example.samples --allow-no-sex
@@ -129,13 +174,16 @@ plot.betas <- function( betas, ses ) {
 }
 plot.betas( beta, se )
 ```
-Congratulations!  This is your first GWAS forest plot (albeit with only one row).
 
-(*Note*: I think adding the `--ci 0.95` option to the plink command line also makes plink output the standard errors.)
+Congratulations! This is your first GWAS forest plot (albeit with only one row).
+
+(*Note*: I think adding the `--ci 0.95` option to the plink command line also makes plink output
+the standard errors.)
 
 ## Renaming output files
 
-The final step in this introduction is to learn to rename PLINK’s output files, since we’ll be generating lots of them in the practicals.
+The final step in this introduction is to learn to rename PLINK’s output files, since we’ll be
+generating lots of them in the practicals.
 
 ```sh
 $ ./plink \
@@ -362,13 +410,21 @@ $ ./plink \
 ```
 
 
-We have now produced an analysis corrected for population structure.   Congratulations!
+We have now produced an analysis corrected for population structure. Congratulations!
 
-*Note*: We've used a couple of options above that will make the output consistent across studies.  Firstly, as above we've used the --keep-allele-order option to make plink output odds ratios for the non-reference allele.  (By default it will output test statistics for the minor, i.e. less common allele, but that's problematic as it might vary between studies.)  We've also used the `--ci` option to tell plink to output a standard error along with the odds ratio.  These options are particularly useful if you are using the output in a meta-analysis with other studies.
+*Note*: We've used a couple of options above that will make the output consistent across studies.
+Firstly, as above we've used the --keep-allele-order option to make plink output odds ratios for
+the non-reference allele. (By default it will output test statistics for the minor, i.e. less
+common allele, but that's problematic as it might vary between studies.) We've also used the `--ci`
+option to tell plink to output a standard error along with the odds ratio. These options are
+particularly useful if you are using the output in a meta-analysis with other studies.
 
-For now, let's use the text editor, spreadsheet and R (as in the sections above) to examine these results.
+For now, let's use the text editor, spreadsheet and R (as in the sections above) to examine these
+results.
 
-Note that the output file “pccorrected-test.assoc.logistic” contains information for the SNPs and also all the principal components. Make sure you extract just the SNP lines (those that have “ADD” in the TEST column):
+Note that the output file “pccorrected-test.assoc.logistic” contains information for the SNPs and
+also all the principal components. Make sure you extract just the SNP lines (those that have “ADD”
+in the TEST column):
 
 ```R
 # In R:
@@ -392,16 +448,18 @@ data <- data[data$TEST == "ADD",]
 
 ## Making a regional association plot
 
-Note to students: this bit has not been recently road tested!  Please use your ingenuity to make it work!
-
-In this part of the practical, we will hone our R plotting skills to make beautiful regional association plots (‘hitplots’) of the most associated regions in our scan.  This section of the practical is optional – you should only carry it out if you’ve successfully completed the other parts and have time to go on.  A good hitplot shows several things:
+In this part of the practical, we will hone our R plotting skills to make beautiful regional
+association plots (‘hitplots’) of the most associated regions in our scan. This section of the
+practical is optional – you should only carry it out if you’ve successfully completed the other
+parts and have time to go on. A good hitplot shows several things:
 
 - The evidence for association across the region
 - Information about the recombination landscape and LD 
 - Regional genes and other potentially interesting annotations.
 - Information on the variants being tested – such as whether they are directly typed or imputed (in this practical, we assume all variants are directly typed) or whether they have predicted function.
 
-To make a hitplot we need to load data on all of these things.  To begin, make sure you have loaded the association scan from the last part of the practical: 
+To make a hitplot we need to load data on all of these things. To begin, make sure you have loaded
+the association scan from the last part of the practical:
 
 ```R
 # In R:
