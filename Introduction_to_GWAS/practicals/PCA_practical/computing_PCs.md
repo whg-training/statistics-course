@@ -54,7 +54,7 @@ If you followed the tutorial this morning you will realise that *relatedness* an
 
 * The two are closely related, since the projection of each sample's genotypes onto the *i*th principal component loading vector, is the *i*th principal component for that sample.
 
-Finally, the important property of these vectors is that the first loading vector picks out the direction in genotype space (a linear combinations of SNPs) so that the first principal component has the maximum possible variance.  The second loading vector then picks out the direction in genotype space *orthogonal to the first* that makes the second principal component have the maximum possible variance - and so on.
+Finally, the important property of these vectors is that the first loading vector picks out the direction in genotype space (a linear combinations of SNPs) so that the first principal component has the maximum possible variance.  The second loading vector then picks out the direction in genotype space *orthogonal to the first* that makes the second principal component have the maximum possible variance - and so on.  So these vectors pick out *the directions of greatest variance in the genotype data*.
 
 **Computation in practice**. Typically *Z* is huge, while *R* is somewhat smaller.  So tools like
 `plink` compute *R*, use this to compute the principal components, and then compute loadings using
