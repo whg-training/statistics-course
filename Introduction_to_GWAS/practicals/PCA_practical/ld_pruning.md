@@ -24,4 +24,5 @@ The above command tells plink to load the file `chr19-clean.vcf.gz` and to prune
 
 Type `ls` or use the file manager to view the directory.  The command above produced a number of files that all begin with the `chr19-clean` prefix.  For our purposes, the most important one is `chr19-clean.prune.in`, as this lists the SNPs that remain after pruning.  Feel free to look at all these files using less or a text editor.
 
-When you're ready, [go to the next page](Relatedness_pruning.md).
+### Relatedness pruning
+We still need to prune closely-related samples.  When you're ready, [go here](Relatedness_pruning.md).
