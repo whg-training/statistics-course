@@ -1,17 +1,16 @@
 [Up to the table of contents](Introduction.md) - [Back to the previous page](ld_pruning.md) - [Forward to the next page](computing_PCs.md)
 
-We will want our top PCs to reflect the relatedness structure across the majority of samples in our
+### IBD pruning of samples and identification of close relationships
+
+We want our top PCs to reflect the relatedness structure across the majority of samples in our
 GWAS dataset. Although all samples in our dataset are nominally unrelated, a few duplicated or
 related samples may have slipped in through the sampling process or through sample handling. As
 described in the lectures, this can seriously affect principal components. We'll therefore first
 identify and remove any close relationships before computing PCs.
 
-## IBD pruning of samples and identification of close relationships
-
-Let's use plink to compute the relatedness between samples. A simple way to do this
-would be to use the relatedness matrix that we will construct to compute PCA. However, here we'll
-use genome-wide estimates of identity by descent (IBD) instead. To do this we use the following
-command:
+Let's use plink to compute the relatedness between samples. A simple way to do this would be to use
+the relatedness matrix that we will construct to compute PCA. However, here we'll use genome-wide
+estimates of identity by descent (IBD) instead. To do this we use the following command:
 
 ```
 $ plink --vcf chr19-clean.vcf.gz --genome gz --out chr19-clean --extract chr19-clean.prune.in
