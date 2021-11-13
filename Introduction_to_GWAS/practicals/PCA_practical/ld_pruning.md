@@ -2,7 +2,7 @@
 
 [Back to the previous page](Introduction.md)
 
-[Forward to the next page](Relatedness_pruning.md)
+[Forward to the next page](relatedness_pruning.md)
 
 ## LD pruning of SNPs
 
