@@ -25,10 +25,13 @@ stores the SNP weights or loadings, reflecting how much each SNP contributes to 
 
 The maths of PCA works like this.  Suppose `X` is a big matrix of genotypes at the `L` genetic variants (rows) and `N` samples (in columns).  Then:
 
-* First, standardise the genotypes at each variant by dividing by <img src="https://render.githubusercontent.com/render/math?math=\sqrt{f(1-f)}">, where *f* is the frequency, and then subtracting the mean.
-* Second, compute the big <img src="https://render.githubusercontent.com/render/math?math=N\times N"> matrix <img src="https://render.githubusercontent.com/render/math?math=R = \frac{1}{L} X^t X">.  The motivation is that each entry r<sub>i,j</sub> captures the degree of allele sharing (covariance) between individual i and j, with sharing of rarer variants having greater weight.
-* The **principal components** are the entries of the (right) eigenvectors of *R*.
+* First, standardise the genotypes at by dividing by each variant (row) in *X* by <img
+  src="https://render.githubusercontent.com/render/math?math=\sqrt{f(1-f)}">, where *f* is the
+  allele frequency of the variant - and then subtracting the mean.
 
+* Second, compute the big <img src="https://render.githubusercontent.com/render/math?math=N\times N"> matrix <img src="https://render.githubusercontent.com/render/math?math=R = \frac{1}{L} X^t X">.  The motivation is that each entry r<sub>i,j</sub> captures the degree of allele sharing (covariance) between individual i and j.  Because of the frequency scaling, sharing of rarer variants having greater weight.
+
+* The **principal components** are now the entries of the (right) eigenvectors of *R*.
 
 ### Plotting the principal components
 
