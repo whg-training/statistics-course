@@ -1,22 +1,32 @@
-#PCA practical
-Introduction
+# PCA practical
+
+## Introduction
+
 In this practical we will do principal component analysis (PCA), which is one of the fundamental tools of population genetics for identifying sample clustering and outliers. As explained in the talk by Gavin PCA is way of reducing a multidimensional space of data points to a set of orthogonal principal components that represent "directions" of greatest variance.  These may reflect population structure, but might also reflect cryptic relationships, poor QC, or other effects that lead to differences in genotype distribution.
 
-###The Practical
-We will be using the software PLINK written by Christopher Chang:
-[https://www.cog-genomics.org/](https://www.cog-genomics.org/)).
+### Getting set up
 
-We will use plink
-to remove closely-related samples
-to compute principal components
-and to compute the SNP weights or loadings that tell us how principal components are weighted across the genome.
+We will be using the software `PLINK` written by Christopher Chang:
+[https://www.cog-genomics.org/](https://www.cog-genomics.org/)).  Before we start, please make sure you have downloaded this software and can run it in a terminal window on your system.
 
-We'll also use RStudio to inspect and plot results.
+You will also need to get the data.  For this practical we will work with a file called `chr19-clean.vcf.gz`.  Please download `chr19-clean.vcf.gz` [from this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/).
 
-Open a terminal window and navigate to the practical directory:
+### The Practical
+
+We will use plink:
+
+* to remove closely-related samples
+* to compute principal components
+* and to compute the SNP weights or loadings that tell us how principal components are weighted across the genome.
+
+We'll also use R (we recommend [RStudio](https://www.rstudio.com)) to inspect and plot results.
+
+`plink`
+
+To get started, open a terminal window and navigate to the practical directory:
 
 ```
-cd /media/ubuntu/data/GEIA/Practicals/06_PCA
+cd /path/to/the/practical
 ```
 
 
