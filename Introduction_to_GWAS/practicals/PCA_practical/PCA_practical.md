@@ -9,7 +9,7 @@ In this practical we will do principal component analysis (PCA), which is one of
 We will be using the software `PLINK` written by Christopher Chang:
 [https://www.cog-genomics.org/](https://www.cog-genomics.org/)).  Before we start, please make sure you have downloaded this software and can run it in a terminal window on your system.
 
-You will also need to get the data.  For this practical we will work with a file called `chr19-clean.vcf.gz`.  Please download `chr19-clean.vcf.gz` [from this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/).
+You will also need to get the data.  For this practical we will work with a file called `chr19-clean.vcf.gz`.  Please download `chr19-clean.vcf.gz` [from this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/PCA_practical/) now.
 
 ### The Practical
 
