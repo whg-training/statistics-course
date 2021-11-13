@@ -18,14 +18,16 @@ cd /path/to/PCA_practical
 
 **Note.** This should be the folder where [you downloaded the data](getting_setup.md).
 
-Also, in R / RStudio please set this directory as your current directory (either using the `setwd()` command or by using the menu option `Session`->`Set working directory`->`Choose Directory`).  Like this:
+Also, in R / RStudio please set this directory as your current directory - either using the `setwd()` command like this:
 
-*In RStudio:*
+*In R/RStudio:*
 ```
 > setwd( '/path/to/PCA_practical' )
 ```
 
-**Note.** The `>` indicates the `R` command prompt here - don't type that bit in!
+or by using the menu option `Session`->`Set working directory`->`Choose Directory`) in RStudio.
+
+**Note.** The `>` indicates the `R` command prompt above - don't type that bit in!
 
 ### A note on quality control
 
@@ -38,7 +40,7 @@ in the file `chr19-clean.vcf.gz`. You can look at the data in this file by typin
 less -S chr19-clean.vcf.gz
 ```
 
-**Note.** If you are using Mac OS X, you will need to use `zless` instead of `less`.
+**Note.** If you are using Mac OS X, you will need to use `zless` instead of `less` because the file is gzipped.
 
 The data consists of genotype calls at different sites (rows) for different samples (columns).  Feel free to look at the data by scrolling around using the arrow keys. When you've finished, press the 'q' key to quit back to the terminal prompt.
 
