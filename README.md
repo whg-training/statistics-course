@@ -17,6 +17,7 @@ We are grateful to the following people who have contributed to the material on 
 * Teresa Ferreira
 * Jason Hendry
 * Valentina Iotchkova
+* Luke Jostins
 * Augustine Kong
 * Gerton Lunter
 * Andre Python
