@@ -102,29 +102,36 @@ The above command tells plink to load the file `chr19-clean.vcf.gz` and to prune
 
 **Question**. Look at the screen output from the above plink command.  How many variants were in the original dataset?  How many were removed because their frequency was below 1%?  How many variants were removed due to LD pruning?  How many variants remain?
 
-Type ls or use the file manager to view the directory.  The command above produced a number of files that all begin with the chr19-clean prefix.  For our purposes, the most important one is chr19-clean.prune.in, as this lists the SNPs that remain after pruning.  Feel free to look at these files using less or a text editor.
+Type `ls` or use the file manager to view the directory.  The command above produced a number of files that all begin with the `chr19-clean` prefix.  For our purposes, the most important one is `chr19-clean.prune.in`, as this lists the SNPs that remain after pruning.  Feel free to look at all these files using less or a text editor.
 
-##IBD pruning of samples / identification of close relationships
+## IBD pruning of samples / identification of close relationships
 
-We want our top PCs to reflect structure across the majority of our GWAS dataset.  Although all samples in our dataset are nominally unrelated, a few duplicated or related samples may have slipped in through the sampling process or through sample handling.  We'll therefore first identify and remove any close relationships before computing PCs.  
+We want our top PCs to reflect the relatedness structure across the majority of samples in our GWAS
+dataset. Although all samples in our dataset are nominally unrelated, a few duplicated or related
+samples may have slipped in through the sampling process or through sample handling and, as
+described in the lectures, this can seriously affect principal components. We'll therefore first
+identify and remove any close relationships before computing PCs.
 
-To do this, let's use plink to compute the relatedness between samples.  We could do this using the relatedness matrix that we will construct to compute PCA.  However, here we'll use genome-wide estimates of identity by descent (IBD) instead.  To do this we use the following command:
-
-```
-plink --vcf chr19-clean.vcf.gz --genome gz --out chr19-clean --extract chr19-clean.prune.in
-```
-
-The `--genome` option tells plink to compute genome-wide IBD estimates (as this file is rather large, we ask plink to store it in a gzipped file).  We've used the `--extract` option to tell plink to only use the LD-pruned set of SNPs we computed above.  Further details of the options for computing relatedness and file formats are described here: https://www.cog-genomics.org/plink2/ibd.
-
-The output file from the command above is in chr19-clean.genome.gz. Let's load that into RStudio and have a look at it.
-
-
-In RStudio:
+To do this, let's use plink to compute the relatedness between samples. A simple way to do this
+would be to use the relatedness matrix that we will construct to compute PCA. However, here we'll
+use genome-wide estimates of identity by descent (IBD) instead. To do this we use the following
+command:
 
 ```
-ibd <- read.table("chr19-clean.genome.gz", hea=T, as.is=T)
-View(ibd)
-hist( ibd$PI_HAT, breaks = 100 )
+$ plink --vcf chr19-clean.vcf.gz --genome gz --out chr19-clean --extract chr19-clean.prune.in
+```
+
+Here, the `--genome` option tells plink to compute genome-wide IBD estimates (as this file is rather large, we ask plink to store it in a gzipped file).  We've used the `--extract` option to tell plink to only use the LD-pruned set of SNPs we computed above.  Further details of the options for computing relatedness and file formats are described [on the plink documentation page](https://www.cog-genomics.org/plink2/ibd).
+
+The output file from the command above is in `chr19-clean.genome.gz`. Let's load that into `R`
+and have a look at it.
+
+In R/RStudio:
+
+```
+> ibd <- read.table("chr19-clean.genome.gz", hea=T, as.is=T)
+> View(ibd)
+> hist( ibd$PI_HAT, breaks = 100 )
 ```
 
 You can also zoom in along the y-axis to see any close relationships:
@@ -133,38 +140,55 @@ You can also zoom in along the y-axis to see any close relationships:
 hist( ibd$PI_HAT, breaks = 100, ylim = c(0,1000) )
 ```
 
+**Question**. What is `PI_HAT`? Can you figure it out from [the documentation
+page](https://www.cog-genomics.org/plink2/ibd)?
+
 **Question**. Which samples have the closest relationship in the dataset?  What is the average relationship between samples in this dataset?
 
 **Question**. In the histogram, there's a tail or 'bump' of relationships up to about 0.2.  What could this represent?
 
+**Note.** The above is one way to compute relatedness estimates - many other methods are available.
+For example, [KING](https://www.kingrelatedness.com) is a popular choice.  More computationally demanding methods also exist that can [identify actual segments inherited IBD](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7553009/).
+
+## Computing principal components
 
 To compute PCs, we'll pick one sample from each closely-related pair and exclude it.  (For now we'll just pick the second sample; a more refined approach might look at genotyping performance across the genome and exclude the sample with greater missingness).  We'll store the results in a file that we can tell plink about in later steps.
 
-In RStudio:
+*In R/RStudio*:
 
 ```
-exclusions = ibd[ ibd$PI_HAT > 0.2, c('FID2','IID2')]
-write.table( exclusions, file="related_samples.txt", col.names = F, row.names = F, quote = F )
+> exclusions = ibd[ ibd$PI_HAT > 0.2, c('FID2','IID2')]
+> write.table( exclusions, file="related_samples.txt", col.names = F, row.names = F, quote = F )
 ```
 
 **Question**. How many samples will be excluded?
 
-Note: the same sample might appear twice in the exclusions data frame.  This would happen if they are closely related to more than one other sample.  Are there any samples like that?  You can use unique(exclusions) to get a list of unique samples to exclude.
+**Note**: the same sample might appear twice in the exclusions data frame.  This would happen if they are closely related to more than one other sample.  Are there any samples like that?  You can use unique(exclusions) to get a list of unique samples to exclude.
 
-##Calculation of principal components
+## Calculation of principal components
 We have now carried out LD and MAF pruning of the variants and we have also identified closely related samples. Now let's use plink to compute PCs.
 
 ```
-plink --vcf chr19-clean.vcf.gz --extract chr19-clean.prune.in --remove related_samples.txt --pca var-wts --out chr19-clean
+$ plink --vcf chr19-clean.vcf.gz --extract chr19-clean.prune.in --remove related_samples.txt --pca var-wts --out chr19-clean
 ```
 
 Leave this to run for a minute or so.  
 
 **Question**. It's always worth inspecting screen output to check things look right.  For example, has plink excluded the right number of samples we told it to?
 
-Towards the end of the output plink will tell us where it has saved the results.  These are in the files chr19-clean.eigenvec (which stores the actual PCs),  
-chr19-clean.eigenvec.var (which stores the SNP weights or loadings, reflecting how much each SNP contributes to each PC), 
-and chr19-clean.eigenval (which says how much of the overall genotypic variance each PC explains).
+Towards the end of the output plink will tell us where it has saved the results. These should be in
+the files `chr19-clean.eigenvec` (which stores the actual PCs), `chr19-clean.eigenvec.var` (which
+stores the SNP weights or loadings, reflecting how much each SNP contributes to each PC), and
+`chr19-clean.eigenval` (which says how much of the overall genotypic variance each PC explains).
+
+### An aside on the maths.
+
+The maths of PCA works like this.  Suppose `X` is a big matrix of genotypes at the `L` genetic variants (rows) and `N` samples (in columns).  Then:
+
+* First, standardise the genotypes at each variant by dividing by <img src="https://render.githubusercontent.com/render/math?math=\sqrt{f(1-f)}">, where *f* is the frequency, and then subtracting the mean.
+* Second, compute the big <img src="https://render.githubusercontent.com/render/math?math=N\times N"> matrix <img src="https://render.githubusercontent.com/render/math?math=R = \frac{1}{L} X^t X">.  The motivation is that each entry r<sub>i,j</sub> captures the degree of allele sharing (covariance) between individual i and j, with sharing of rarer variants having greater weight.
+* The **principal components** are the entries of the (right) eigenvectors of *R*.
+
 
 ##Plot the principal components
 
