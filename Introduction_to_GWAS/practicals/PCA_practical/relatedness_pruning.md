@@ -1,8 +1,4 @@
-[Up to the table of contents](Introduction.md)
-
-[Back to the previous page](ld_pruning.md)
-
-[Forward to the next page](computing_PCs.md)
+[Up to the table of contents](Introduction.md) - [Back to the previous page](ld_pruning.md) - [Forward to the next page](computing_PCs.md)
 
 We will want our top PCs to reflect the relatedness structure across the majority of samples in our
 GWAS dataset. Although all samples in our dataset are nominally unrelated, a few duplicated or
