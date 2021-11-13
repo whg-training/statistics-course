@@ -161,7 +161,7 @@ To compute PCs, we'll pick one sample from each closely-related pair and exclude
 > write.table( exclusions, file="related_samples.txt", col.names = F, row.names = F, quote = F )
 ```
 
-**Question**. How many samples will be excluded?
+**Question**. Look at the output.  How many samples will be excluded?
 
 **Note**: the same sample might appear twice in the exclusions data frame.  This would happen if they are closely related to more than one other sample.  Are there any samples like that?  You can use unique(exclusions) to get a list of unique samples to exclude.
 
@@ -190,7 +190,7 @@ The maths of PCA works like this.  Suppose `X` is a big matrix of genotypes at t
 * The **principal components** are the entries of the (right) eigenvectors of *R*.
 
 
-##Plot the principal components
+# Plot the principal components
 
 Let's load the PCs and plot them:
 
@@ -240,7 +240,7 @@ legend(0.1, 0.5, col=1:max(pcs$colour), legend = levels(pcs[,1]), pch=20, xpd=NA
 
 **Question**. Do any samples look especially genetically distinct from the other samples? What might be the reason for this?  Is the same set of samples outlying on all the PCs?  Use your R skills to identify these samples.  
 
-##SNP weights/loadings
+# SNP weights/loadings
 
 We would usually like to be able to interpret PCs as representing 'genome-wide' structure and ancestry of our samples. It's therefore wise to check the influence that each variant has on the principal components. To do this, let's examine the 
 chr19-clean.eigenvec.var file that plink produced.  We'll load it into R and plot loadings across the chromosome.
@@ -266,7 +266,7 @@ plot( 1:nrow(loadings), abs(loadings[,i+2]), ylab=paste("PC ", i, sep="" ), ylim
 **Question**. Go back and compute PCs without excluding related samples.  Then re-load and plot the PCs and loadings.  What drives the top PCs now?  What do the loadings look like?
 
 
-##Plotting samples against a global dataset
+# Plotting samples against a global dataset
 
 A common strategy for identifying samples with unusual ancestry is to plot samples against a global reference dataset, such as that produced by the 1000 Genomes project (1000G).  A common way to do this is to compute a PCA of the external samples and project the GWAS dataset onto it (this can be done in plink using the `--pca` and `--pca-cluster-names` options - see the plink website for details).  For this practical, however, we'll take a simpler approach and compute a PCA of all the data together.  
 
