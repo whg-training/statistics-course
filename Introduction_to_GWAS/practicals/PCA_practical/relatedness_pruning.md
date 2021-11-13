@@ -24,9 +24,9 @@ and have a look at it.
 In R/RStudio:
 
 ```
-> ibd <- read.table("chr19-clean.genome.gz", hea=T, as.is=T)
-> View(ibd)
-> hist( ibd$PI_HAT, breaks = 100 )
+ibd <- read.table("chr19-clean.genome.gz", hea=T, as.is=T)
+View(ibd)
+hist( ibd$PI_HAT, breaks = 100 )
 ```
 
 You can also zoom in along the y-axis to see any close relationships:
@@ -47,5 +47,5 @@ For example, [KING](https://www.kingrelatedness.com) is a popular choice.  More 
 
 #### Computing principal components
 
-Go [here](computing_PCs.md) to compute some PCs.
+When you're ready, go [here](computing_PCs.md) to start the principal component analysis proper.
 

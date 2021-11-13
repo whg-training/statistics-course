@@ -6,8 +6,14 @@ In this practical we will do principal component analysis (PCA), which is one of
 
 ### Table of contents
 
-* [Introduction and setup](Introduction.md) (this page)
-* [linkage disequilibrium pruning](ld_pruning.md)
-* [relatedness pruning](relatedness_pruning.md)
+* [Introduction](Introduction.md) (this page)
+* [Getting the software and data](getting_setup.md)
+* [Practical overview](overview.md)
+* [Linkage disequilibrium pruning](ld_pruning.md)
+* [Relatedness pruning](relatedness_pruning.md)
 * [Computing PCs](computing_PCs.md)
+* [An aside on the maths](the_maths.md)
+* [Analysing samples against a global panel](global_analysis.md)
 
+### Getting started
+When you're ready, [go and get the software and data you need](getting_setup.md).

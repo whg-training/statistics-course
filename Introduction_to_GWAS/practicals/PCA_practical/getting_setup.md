@@ -39,3 +39,6 @@ For the practical we recommend making a new empty folder to put these in.  So wh
         resources/
             1000GP_Phase3.sample
 
+### Overview
+
+When you have the data, [go and read the practical overview](overview.md).

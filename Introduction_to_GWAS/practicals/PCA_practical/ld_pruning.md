@@ -1,4 +1,4 @@
-[Up to the table of contents](Introduction.md) - [Back to the previous page](Introduction.md) - [Forward to the next page](relatedness_pruning.md)
+[Up to the table of contents](Introduction.md) - [Back to the previous page](overview.md) - [Forward to the next page](relatedness_pruning.md)
 
 ### LD pruning of SNPs
 

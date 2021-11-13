@@ -1,4 +1,4 @@
-[Up to the table of contents](Introduction.md) - [Back to the previous page](computing_PCs.md) - [Forward to the next page](plotting_against_a_global_dataset.md).
+[Up to the table of contents](Introduction.md) - [Back to the previous page](computing_PCs.md)
 
 ### Plotting samples against a global dataset
 
