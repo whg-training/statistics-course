@@ -1,8 +1,6 @@
-[Up to the table of contents](Introduction.md)
+[Up to the table of contents](Introduction.md) - [Back to the previous page](relatedness_pruning.md)
 
-[Back to the previous page](relatedness_pruning.md)
-
-## Computing principal components
+### Computing principal components
 
 If you've reached this page, you should now have downloaded the data, [computed an LD-pruned set of
 SNPs](ld_pruning.md), and also [computed a set of largely unrelated samples to work
@@ -23,7 +21,7 @@ the files `chr19-clean.eigenvec` (which stores the actual PCs), `chr19-clean.eig
 stores the SNP weights or loadings, reflecting how much each SNP contributes to each PC), and
 `chr19-clean.eigenval` (which says how much of the overall genotypic variance each PC explains).
 
-### An aside on the maths.
+#### An aside on the maths.
 
 The maths of PCA works like this.  Suppose `X` is a big matrix of genotypes at the `L` genetic variants (rows) and `N` samples (in columns).  Then:
 
@@ -32,7 +30,7 @@ The maths of PCA works like this.  Suppose `X` is a big matrix of genotypes at t
 * The **principal components** are the entries of the (right) eigenvectors of *R*.
 
 
-# Plot the principal components
+### Plotting the principal components
 
 Let's load the PCs and plot them:
 

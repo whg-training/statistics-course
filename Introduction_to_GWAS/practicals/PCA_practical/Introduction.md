@@ -71,7 +71,7 @@ Also, in R / RStudio please set this directory as your current directory (either
 
 **Note.** The `>` indicates the `R` command prompt here - don't type that bit in!
 
-## A note on quality control
+### A note on quality control
 
 Before carrying out a genetic analysis like PCA, it's important to have a good-quality dataset, and
 this typically means carrying out careful quality control (QC) first. On this course we'll cover QC
@@ -91,7 +91,7 @@ If you followed our earlier [next-generation sequencing
 practical](../../../Next_Generation_Sequencing/practicals/ngs_processing_pipeline/) you will have
 created a VCF file of variant calls from some sequence reads.  The VCF file for this practical is much simpler, though, because we have only included genotype calls.
 
-## Preparing data for PCA
+### Preparing data for PCA
 
 Before computing PCs we will need to do some pruning of the data.  We will:
 

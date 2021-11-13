@@ -1,14 +1,10 @@
-[Up to the table of contents](Introduction.md)
+[Up to the table of contents](Introduction.md) - [Back to the previous page](Introduction.md) - [Forward to the next page](relatedness_pruning.md)
 
-[Back to the previous page](Introduction.md)
-
-[Forward to the next page](relatedness_pruning.md)
+### LD pruning of SNPs
 
 As described in the population genetics lecture this morning, genetic drift and other processes
 lead to linkage disequilibrium (LD) between SNPs along a chromosome. To ensure the PCs we compute
 represent genome-wide structure (not local LD) we'll first carry out LD pruning of our SNP set.
-
-## LD pruning of SNPs
 
 LD pruning removes correlated pairs of SNPs so that the remaining SNPs are roughly independent. (It
 also helps to make subsequent computations quicker.) Run the following command to prune the dataset:
@@ -25,5 +21,5 @@ The above command tells plink to load the file `chr19-clean.vcf.gz` and to prune
 
 Type `ls` or use the file manager to view the directory.  The command above produced a number of files that all begin with the `chr19-clean` prefix.  For our purposes, the most important one is `chr19-clean.prune.in`, as this lists the SNPs that remain after pruning.  Feel free to look at all these files using less or a text editor.
 
-### Relatedness pruning
+#### Relatedness pruning
 When you're ready, [go to the next page to identify and remove close relationships](relatedness_pruning.md).

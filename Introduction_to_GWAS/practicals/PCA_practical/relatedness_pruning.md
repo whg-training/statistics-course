@@ -45,7 +45,7 @@ page](https://www.cog-genomics.org/plink2/ibd)?
 **Note.** The above is one way to compute relatedness estimates - many other methods are available.
 For example, [KING](https://www.kingrelatedness.com) is a popular choice.  More computationally demanding methods also exist that can [identify actual segments inherited IBD](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7553009/).
 
-### Computing principal components
+#### Computing principal components
 
 Go [here](computing_PCs.md) to compute some PCs.
 
