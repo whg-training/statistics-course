@@ -23,21 +23,51 @@ stores the SNP weights or loadings, reflecting how much each SNP contributes to 
 
 #### An aside on the maths.
 
-The maths of PCA works like this.  Suppose `X` is a big matrix of genotypes at the `L` genetic variants (rows) and `N` samples (in columns).  Then:
+The maths of PCA (in the way usually applied) works like this. Suppose `X` is a big matrix of
+genotypes at the `L` genetic variants (rows) and `N` samples (in columns).
 
-* First, standardise the genotypes at by dividing by each variant (row) in *X* by <img
-  src="https://render.githubusercontent.com/render/math?math=\sqrt{f(1-f)}">, where *f* is the
-  allele frequency of the variant - and then subtracting the mean.
+It is typical to always standardise the genotypes at by dividing by each variant (row) in *X* by
+<img src="https://render.githubusercontent.com/render/math?math=\sqrt{f(1-f)}">, where *f* is the
+allele frequency of the variant - and then subtracting the mean - so do that first.
 
-* Second, compute the big <img src="https://render.githubusercontent.com/render/math?math=N\times N"> matrix <img src="https://render.githubusercontent.com/render/math?math=R = \frac{1}{L} X^t X">.  The motivation is that each entry r<sub>i,j</sub> captures the degree of allele sharing (covariance) between individual i and j.  Because of the frequency scaling, sharing of rarer variants having greater weight.
+Now there are two possible square matrices you can make out of *X*. You can form:
 
-* The **principal components** are now the entries of the (right) eigenvectors of *R*.
+* The *relatedness matrix* <img src="https://render.githubusercontent.com/render/math?math=R = \frac{1}{L} X^t X">.  *R* is an *N &times; N* matrix i.e. has one row and one column for each sample. The motivation is that each entry *r<sub>i,j</sub>* captures the degree of allele sharing (covariance) between individual i and j.  Because of the frequency scaling, sharing of rarer variants having greater weight.
+
+* Or you can form the *LD matrix* <img src="https://render.githubusercontent.com/render/math?math=Z = \frac{1}{N} X X^t">.  Again because of the scaling to unit variance, entry *z<sub>i,j</sub>* is the LD (correlation) between genotypes at variants i and j.
+
+If you followed the tutorial this morning you will recall that *relatedness* and *LD* are in some sense dual to each other.  This works out for principal components analysis too.  Namely:
+
+* The right eigenvectors of *R* are the *principal component vectors* (or just "principal components").  
+
+* The right eigenvectors of *Z* are the *principal component loading vectors*.
+
+* The two are related: the projection of each sample's genotypes onto the *i*th principal component loading vector, is the *i*th principal component for that sample.
+
+Finally, the important property of these vectors is that the first loading vector picks out the direction in genotype space (a linear combinations of SNPs) so that the first principal component has the maximum possible variance.  The second loading vector then picks out the direction in genotype space *orthogonal to the first* that makes the second principal component have the maximum possible variance - and so on.
+
+**Computation in practice**. Typically *Z* is huge, while *R* is somewhat smaller.  So tools like
+`plink` compute *R*, use this to compute the principal components, and then compute loadings using
+a second pass through the data - and this is what we'll do below. 
+
+You could do this easily in R as well, for example:
+```
+X = (load data here, convert to a matrix and standardise...)
+L = nrow(X)
+R = (1/L) * t(X) %*% X
+PCs = eigen(R)$vectors
+plot( PCs[,1], PCs[,2], xlab = "PC 1", ylab = "PC 2" )
+# etc.
+```
+
+**Computing in big cohorts**. While the above works in many studies, very large cohorts such as the
+[UK Biobank[(https://www.nature.com/articles/s41586-018-0579-z) typically require other methods such as [flashPCA](https://github.com/gabraham/flashpca) that avoid computing either of the matrices directly.
 
 ### Plotting the principal components
 
 Let's load the PCs and plot them:
 
-In RStudio:
+In R/RStudio:
 
 ```
 pcs = read.table( "chr19-clean.eigenvec" )
@@ -49,7 +79,7 @@ plot( pcs[,3], pcs[,4], xlab = "PC1", ylab = "PC2" )
 
 We might also want to plot more than just the top two PCs.  Let's plot all pairs of the top 5 PCs:
 
-In RStudio:
+In R/RStudio:
 
 ```
 colnames(pcs)[3:7] = c( "PC1","PC2","PC3","PC4","PC5" )
@@ -70,7 +100,7 @@ Add a legend to the plot so we can see what is what.
 
 (The lower.panel and xpd arguments below are used to tweak the appearance of the plot and how the legend is plotted.  See ?pairs and ?par if you want more information, but don't worry about these for now.)
 
-In RStudio:
+In R/RStudio:
 
 ```
 pcs[,1] = as.factor(pcs[,1])
@@ -88,13 +118,13 @@ legend(0.1, 0.5, col=1:max(pcs$colour), legend = levels(pcs[,1]), pch=20, xpd=NA
 We would usually like to be able to interpret PCs as representing 'genome-wide' structure and ancestry of our samples. It's therefore wise to check the influence that each variant has on the principal components. To do this, let's examine the 
 chr19-clean.eigenvec.var file that plink produced.  We'll load it into R and plot loadings across the chromosome.
 
-In RStudio:
+In R/RStudio:
 loadings = read.table("chr19-clean.eigenvec.var")
 View(loadings)
 
 Columns 3-22 of this file represent the loadings on PCs 1-20, respectively.  Let's plot loadings for the first 5 PCs.  (Here we use mfrow to make a plot with multiple rows.  The mar command adjusts the plot margins.  Again, see ?par for details, but don't worry about these for now.)
 
-In RStudio:
+In R/RStudio:
 
 ```
 par(mfrow=c(5,1), mar = c( 1, 4, 1, 2 ))
@@ -123,7 +153,7 @@ As before this creates files names merged.with.1000G.eigenvec, etc.
 
 Let's load the merged PCs and plot them with coloured ethnicities as before.  It's worth being careful with colours here, so we'll plot points with a particular colour scheme and use different shapes to distinguish the GWAS and reference panel samples.
 
-In RStudio:
+In R/RStudio:
 
 ```
 pcs = read.table( "merged.with.1000G.eigenvec" )
