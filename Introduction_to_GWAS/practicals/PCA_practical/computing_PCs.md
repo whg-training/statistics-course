@@ -33,8 +33,7 @@ Now there are two possible square matrices you can make out of *X*:
 
 1. You can form the *relatedness matrix*:
 
-<img src="https://render.githubusercontent.com/render/math?math=R =
-  \frac{1}{L} X^t X">.
+<img src="https://render.githubusercontent.com/render/math?math=R=\frac{1}{L} X^t X">.
   
   *R* is an *N &times; N* matrix i.e. has one row and one column for each
   sample. The motivation is that each entry *r<sub>i,j</sub>* captures the degree of allele sharing
@@ -43,7 +42,7 @@ Now there are two possible square matrices you can make out of *X*:
 
 2. Or you can form the *LD matrix*:
 
-<img src="https://render.githubusercontent.com/render/math?math=Z = \frac{1}{N} X X^t">.
+<img src="https://render.githubusercontent.com/render/math?math=Z=\frac{1}{N} X X^t">.
 
 Again because of the scaling to unit variance, entry *z<sub>i,j</sub>* is the LD (correlation) between genotypes at variants i and j, and the diagonal entries are *1*.
 
