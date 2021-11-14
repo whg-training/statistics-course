@@ -1,4 +1,4 @@
-[Up to the table of contents](Introduction.md) - [Back to the previous page](ld_pruning.md) - [Forward to the next page](computing_PCs.md)
+[Up to the table of contents](Introduction.md) - [Back to the page on LD pruning](ld_pruning.md) - [Forward to start computing PCs](computing_PCs.md)
 
 ### IBD pruning of samples and identification of close relationships
 
