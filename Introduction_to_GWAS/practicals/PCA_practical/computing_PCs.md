@@ -37,8 +37,9 @@ In R/RStudio:
 
 ```
 pcs = read.table( "chr19-clean.eigenvec" )
+colnames(pcs)[1:7] = c( "group", "ID", "PC1","PC2","PC3","PC4","PC5" )
 View(pcs)
-plot( pcs[,3], pcs[,4], pch = 19, xlab = "PC1", ylab = "PC2" )
+plot( pcs$PC1, pcs$PC2, pch = 19, xlab = "PC1", ylab = "PC2" )
 ```
 
 **Question**. What do you see?  Is there any obvious structure in the dataset?  
@@ -50,7 +51,6 @@ We might also want to plot more than just the top two PCs. Let's plot all pairs 
 In R/RStudio:
 
 ```
-colnames(pcs)[1:7] = c( "group", "ID", "PC1","PC2","PC3","PC4","PC5" )
 pairs( pcs[, 3:7], pch = 19 )
 ```
 
@@ -119,19 +119,25 @@ par( mar = c( 1, 4, 1, 2 ))
 for( i in 1:5 ) {
   plot(
     1:nrow(loadings),
-
     # we plot the absolute value of the loading, so they all go up
-    abs( loadings[,i+2] ),  
-
+    abs( loadings[,i+4] ),  
     ylab = paste("PC ", i, sep = "" ),
-    ylim = c( 1, 10 )
+    ylim = c( 1, 10 ),
+    pch = 19
   )
+  legend( "topleft", legend = sprintf( "Loadings for PC %d", i ), bty = 'n' )
 }
 ```
 
 **Question**. Do any SNPs stand out as having high loadings for particular PCs?  Which PCs?  Look back at your plot of principal components.  Do these PCs pick out particular clusters of samples?
 
-**Question**. Go back and compute PCs without excluding related samples.  Then re-load and plot the PCs and loadings.  What drives the top PCs now?  What do the loadings look like?
+**Question**. Go back and compute PCs without excluding related samples.  E.g. something like this, without the `--remove` option:
+
+```
+$ plink --vcf chr19-clean.vcf.gz --extract chr19-clean.prune.in --pca var-wts --out chr19-all_samples
+```
+
+Then re-load and plot both the PCs and loadings.  What drives the top PCs now?  What do the loadings look like?
 
 ### Plotting samples against a global dataset
 
