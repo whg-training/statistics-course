@@ -57,6 +57,10 @@ file that we can tell plink about in later steps.
 In RStudio:
 
 ```
+# put a line on our plot so we can see what we'll exclude
+abline( v = 0.2, col = 'red' )
+
+# Write a list of excluded samples
 exclusions = ibd[ ibd$PI_HAT > 0.2, c('FID2','IID2') ]
 write.table( exclusions, file="related_samples.txt", col.names = F, row.names = F, quote = F )
 ```
