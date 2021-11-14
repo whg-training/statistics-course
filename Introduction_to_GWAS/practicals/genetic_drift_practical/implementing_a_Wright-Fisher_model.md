@@ -210,7 +210,9 @@ plot.ld( haplotypes[population[1,],] )
 plot.ld( haplotypes[population[G,],] )
 ```
 
-Depending on your simulation, you *might* see blocks of strong LD appearing.  (Or you might just see lots of white (missing) LD - it depends what happened in the simulation.)
+**Question.** What do you see?
+
+**Note.** Depending on your simulation, you *might* see patterns emerging.  On the other hand, you might just see lots of white (missing) LD - it depends what happened in the simulation.)
 
 #### Exploring the simulations.
 
