@@ -247,4 +247,20 @@ It produces a plot like this:
 
 **Question**. What does genetic drift do to LD?
 
+#### Population-genetic statistics
+
+Clearly genetic diversity is lost as the random inheritance patterns cause haplotypes to be lost, and others to increase in frequency.  It would be good to measure the amount of diversity and how it gets lost through the simulation.  Two measures of this are:
+
+* The *nucleotide diversity*.  This is the number of genotype differences between two samples, averaged over all pairs of samples in the data.
+
+* The *heterozygosity*.  This is the probability that two individuals carry the same haplotype.
+
+**Challenge question.** Implement these and add them to our plot.
+
+**Note.** A basic facts about population-genetic models like this is as follows. The heterozygosity
+is expected to decay at a rate that depends on the sample size:
+
+<img src="https://render.githubusercontent.com/render/math?math=H_g = H_1\left(1-\frac{1}{N}\right)^{g-1}">
+
+where *H<sub>1</sub>* is the heterozygosity in the first generation.  In particular, as you will have seen above, diversity is lost at a faster rate in smaller populations.
 
