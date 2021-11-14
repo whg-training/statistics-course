@@ -198,7 +198,7 @@ plot.ld( haplotypes[population[1,],])
 
 Here we've plotted *r<sup>2</sup>*; the colour scale is set up so *red points* are variants in high LD (also seen on the diagonal); yellow & orange points have intermediate LD; and grey points have *r<sup>2</sup> < 0.1*.  And white points have missing values (which occurs if one or other of the variants was actually monomorphic.)  It should look something like this:
 
-<img href="solutions/ld.png">
+<img src="solutions/ld.png">
 
 **Note.** As it turns out, even at this starting point in our simulation, there can be a bit of LD.
 It arises due to our finite set of starting haplotypes.
