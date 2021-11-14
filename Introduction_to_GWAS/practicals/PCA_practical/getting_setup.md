@@ -1,4 +1,4 @@
-[Back to the table of contents](Introduction.md) - [Forward to the next page](overview.md)
+[Back to the table of contents](Introduction.md) - [Forward to the overview](overview.md)
 
 ### Getting set up
 
