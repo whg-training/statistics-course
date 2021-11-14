@@ -6,7 +6,7 @@ The Wright-Fisher model is about the simplest population-genetic model there is.
 * non-overlapping generations
 * in each generation, each individual 'samples' its parent uniformly from individuals in the parent generation.
 
-It's pretty simple to implement (we'll do it below.)
+It's pretty simple to implement, but even so it turns out to have many of the key features of real populations.  We are going to implement it.
 
 As stated above there isnt really anything about *genetics* in the model.  So to give ourselves some genetic data to work with, we'll also generate a set of haplotypes and have them evolve through the model.
 
