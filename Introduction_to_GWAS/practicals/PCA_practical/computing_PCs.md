@@ -50,7 +50,7 @@ We might also want to plot more than just the top two PCs. Let's plot all pairs 
 In R/RStudio:
 
 ```
-colnames(pcs)[3:7] = c( "PC1","PC2","PC3","PC4","PC5" )
+colnames(pcs)[1:7] = c( "group", "ID", "PC1","PC2","PC3","PC4","PC5" )
 pairs( pcs[, 3:7], pch = 19 )
 ```
 
@@ -61,7 +61,7 @@ first column of the file (plink calls this a 'family ID' but here we've used it 
 ethnicities). Make a list of them using `table()`:
 
 ```
-table( pcs[,1] )
+table( pcs$group )
 ```
 
 Different ethnic groups might be genetically distinct, so they might separate on the PCs. Let's
@@ -76,7 +76,6 @@ replot colouring points by their ethnicity. We'll do this in three steps:
 In R/RStudio:
 
 ```
-colnames(pcs)[1] = "group"
 palette = c( CAN = "red2", FAN = "green2", JAN = "blue2", WAN = "yellow3" )
 pcs$colour = palette[ pcs$group ]
 pairs( pcs[,3:7], col = pcs$colour, pch=20, lower.panel = NULL )
