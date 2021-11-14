@@ -36,7 +36,7 @@ Now let's load the PCs and plot them:
 In R/RStudio:
 
 ```
-pcs = read.table( "chr19-clean.eigenvec" )
+pcs = read.table( "chr19-clean.eigenvec", as.is = T )
 colnames(pcs)[1:7] = c( "group", "ID", "PC1","PC2","PC3","PC4","PC5" )
 View(pcs)
 plot( pcs$PC1, pcs$PC2, pch = 19, xlab = "PC1", ylab = "PC2" )
@@ -76,6 +76,8 @@ replot colouring points by their ethnicity. We'll do this in three steps:
 In R/RStudio:
 
 ```
+# ensure group is not a factor!
+pcs$group = as.character( pcs$group )
 palette = c( CAN = "red2", FAN = "green2", JAN = "blue2", WAN = "yellow3" )
 pcs$colour = palette[ pcs$group ]
 pairs( pcs[,3:7], col = pcs$colour, pch=20, lower.panel = NULL )
