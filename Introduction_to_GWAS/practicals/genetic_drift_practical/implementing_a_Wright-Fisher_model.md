@@ -241,9 +241,9 @@ It produces a plot like this:
 
 <img src="solutions/simulation.png">
 
-**Note.** Remember that *L* is the number of variants, *N* is the population size, and *G* is the number of generations.  (You can also specify *H*, the number of haplotypes we created at the simulation start, if you want to.)
-
 **Question**. Explore the simulations and try varying the parameters.  In particular, try varying the population size *N*.  How does this affect the simulations?
+
+**Note.** Remember that *L* is the number of variants, *N* is the population size, and *G* is the number of generations.  (You can also specify *H*, the number of haplotypes we created at the simulation start, if you want to.)
 
 **Question**. Describe in general what happens to haplotypes and variants as the simulations proceed.
 
