@@ -105,6 +105,7 @@ In R/RStudio:
 
 ```
 loadings = read.table("chr19-clean.eigenvec.var")
+colnames(loadings)[1:4] = c( "chromosome", "rsid", "alleleA", "alleleB" )
 View(loadings)
 ```
 
