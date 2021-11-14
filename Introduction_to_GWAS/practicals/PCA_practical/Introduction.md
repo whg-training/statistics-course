@@ -15,5 +15,7 @@ In this practical we will do principal component analysis (PCA), which is one of
 * [An aside on the maths](the_maths.md)
 * [Analysing samples against a global panel](global_analysis.md)
 
+**Contributors**: Gavin Band, Luke Jostins
+
 ### Getting started
 When you're ready, [go and get the software and data you need](getting_setup.md).
