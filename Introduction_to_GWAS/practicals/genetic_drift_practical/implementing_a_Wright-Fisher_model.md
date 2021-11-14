@@ -73,6 +73,10 @@ Now we can plot what our population looks like:
 plot.haplotypes( haplotypes[population[1,],] )
 ```
 
+Which should show something like this:
+
+<img src="solutions/initial_population.png">
+
 #### Evolving the population
 
 In the Wright-Fisher model, in each generation, each individual samples its haplotype from a randomly chosen parent in the generation before.  Let's write a function to generate a new generation given the current one (a row of `population`):
@@ -90,7 +94,7 @@ for( generation in 2:G ) {
 }
 ```
 
-Let's look at the result before and after evolution:
+Look at the result before and after evolution:
 ```
 layout( matrix( 1:2, nrow = 2 ) )
 par( mar = c( 3, 3, 1, 1 ))
@@ -149,6 +153,7 @@ blank.plot <- function( xlim = c( 0, 1 ), ylim = c( 0, 1 ), xlab = "", ylab = ""
 }
 
 frequencies = compute.haplotype.frequencies( population, haplotypes )
+
 blank.plot( xlim = c( 1, G ), ylim = c( 0, 1 ), xlab = "Generations", ylab = "Haplotype frequencies")
 palette = rainbow( H )
 for( i in 1:H ) {
@@ -191,7 +196,9 @@ plot.ld <- function( haplotypes ) {
 plot.ld( haplotypes[population[1,],])
 ```
 
-Here we've plotted *r<sup>2</sup>*; the colour scale is set up so *red points* are variants in high LD (also seen on the diagonal); yellow & orange points have intermediate LD; and grey points have *r<sup>2</sup> < 0.1*.  And white points have missing values (which occurs if one or other of the variants was actually monomorphic.)
+Here we've plotted *r<sup>2</sup>*; the colour scale is set up so *red points* are variants in high LD (also seen on the diagonal); yellow & orange points have intermediate LD; and grey points have *r<sup>2</sup> < 0.1*.  And white points have missing values (which occurs if one or other of the variants was actually monomorphic.)  It should look something like this:
+
+<img href="solutions/ld.png">
 
 **Note.** As it turns out, even at this starting point in our simulation, there can be a bit of LD.
 It arises due to our finite set of starting haplotypes.
@@ -219,21 +226,25 @@ source( "simulation_and_visualisation.R" )
 
 You can run it like this:
 ```
-sim = simulate.population( L = 20, N = 100, G = 100, H = 50 )
+sim = simulate.population( L = 20, N = 100, G = 100 )
 plot.simulation(sim)
 ```
 
 or on one line:
 ```
-plot.simulation( simulate.population( L = 20, N = 100, G = 100, H = 50 ) )
+plot.simulation( simulate.population( L = 20, N = 100, G = 100 ) )
 ```
 
-**Note.** Remember that *L* is the number of variants, *N* is the population size, *H* is the number of initial haplotypes sampled from and *G* is the number of generations.
+It produces a plot like this:
 
-**Question**. Explore the simulations and try varying the parameters.  In particular, try varying the population size *N*.  Does this affect the simulations?
+<img src="solutions/simulation.png">
 
-**Question**. What in general happens to haplotypes and variants through the simulation?
+**Note.** Remember that *L* is the number of variants, *N* is the population size, and *G* is the number of generations.  (You can also specify *H*, the number of haplotypes we created at the simulation start, if you want to.)
 
-**Question**. What does this type of evolution through random inheritance do to LD?
+**Question**. Explore the simulations and try varying the parameters.  In particular, try varying the population size *N*.  How does this affect the simulations?
+
+**Question**. Describe in general what happens to haplotypes and variants as the simulations proceed.
+
+**Question**. What does genetic drift do to LD?
 
 
