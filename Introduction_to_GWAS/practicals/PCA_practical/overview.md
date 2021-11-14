@@ -1,4 +1,4 @@
-[Up to the table of contents](Introduction.md) - [Back to the previous page](getting_setup.md) - [Forward to the next page](ld_pruning.md)
+[Up to the table of contents](Introduction.md) - [Back to the setup page](getting_setup.md) - [Forward to the page on LD pruning](ld_pruning.md)
 
 ### Overview of the practical
 
