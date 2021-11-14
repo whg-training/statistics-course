@@ -1,4 +1,4 @@
-[Up to the table of contents](Introduction.md) - [Back to the previous page](relatedness_pruning.md) - [Forward to the next page](global_analysis.md).
+[Up to the table of contents](Introduction.md) - [Back to the relatedness pruning step](relatedness_pruning.md) - [Forward to the global analysis step](global_analysis.md).
 
 ### Computing principal components
 
