@@ -45,6 +45,26 @@ page](https://www.cog-genomics.org/plink2/ibd)?
 **Note.** The above is one way to compute relatedness estimates - many other methods are available.
 For example, [KING](https://www.kingrelatedness.com) is a popular choice.  More computationally demanding methods also exist that can [identify actual segments inherited IBD](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7553009/).
 
+#### Picking samples to exclude
+
+Before we compute PCs, we'll pick one sample from each closely-related pair and exclude it. For
+now we'll just do this simply by picking the second sample; a more refined approach might look at
+genotyping performance across the genome and exclude the sample with greater missingness. (Better
+yet, you could try to pick the fewest number of samples that remove all close relationships, as
+this can sometimes substantially improve the resulting sample size). We'll store the results in a
+file that we can tell plink about in later steps.
+
+In RStudio:
+
+```
+exclusions = ibd[ ibd$PI_HAT > 0.2, c('FID2','IID2') ]
+write.table( exclusions, file="related_samples.txt", col.names = F, row.names = F, quote = F )
+```
+
+Q. How many samples will be excluded?
+
+**Note**: the same sample might appear twice in the exclusions data frame.  This would happen if they are closely related to more than one other sample.  Are there any samples like that?  You can use `unique(exclusions)` to get a list of unique samples to exclude.
+
 #### Computing principal components
 
 When you're ready, go [here](computing_PCs.md) to start the principal component analysis proper.
