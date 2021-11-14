@@ -24,6 +24,7 @@ In R/RStudio:
 ```
 pcs = read.table( "merged.with.1000G.eigenvec" )
 colnames(pcs)[1:7] = c( "group", "ID", "PC1", "PC2", "PC3", "PC4", "PC5" )
+pcs$group = as.character( pcs$group ) # make sure to treat group as strings
 
 palette = c(
   CAN = "red2", FAN = "green2", JAN = "blue2", RAN = "yellow3",
@@ -53,7 +54,7 @@ legend(
 
 **Question**. Some of the 1000G samples labelled 'AFR' also cluster nearer to the Europeans than others.  Why is this?
 
-**Hint**: Population codes can be found in the file `resources/1000GP_Phase3.sample`.  Look up the codes for a couple of samples, and look at the population definitions on the 1000 Genomes website at `http://www.1000genomes.org/category/frequently-asked-questions/population`.
+**Hint**: Population codes can be found in the file [`resources/1000GP_Phase3.sample`.  Look up the codes for a couple of samples, and look at the population definitions on the 1000 Genomes website at `http://www.1000genomes.org/category/frequently-asked-questions/population`.
 
 #### Summary
 
