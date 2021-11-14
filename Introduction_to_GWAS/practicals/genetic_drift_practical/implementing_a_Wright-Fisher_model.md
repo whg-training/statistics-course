@@ -45,7 +45,7 @@ If you call it
 plot.haplotypes( haplotypes )
 ```
 You should see something like this:
-<img href="soluations/initial_haplotypes.png">
+<img src="solutions/initial_haplotypes.png">
 
 #### Generating a population
 
