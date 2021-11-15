@@ -9,7 +9,7 @@ The full name of this is *inverse variance weighted fixed-effect meta-analysis*.
 
 Here's how it works: form a weighted average of the effect estimates, weighted by the inverse of the variances:
 
-<img src="https://render.githubusercontent.com/render/math?math=b = \frac{\beta_1}{\text{se}_1^2} + \frac{\beta_2}{\text{se}_2^2}">
+<img src="https://render.githubusercontent.com/render/math?math=b = \frac{\beta_1}{\text{se}_1^2} \plus \frac{\beta_2}{\text{se}_2^2}">
 
 Compute also the sum of weights:
 
