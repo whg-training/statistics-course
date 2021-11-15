@@ -13,8 +13,8 @@ including those related to data organization, formatting, quality control, assoc
 population stratification and much more. Details about PLINK and its documentation are available at
 the reference section at the end of these practicals.
 
-We will use the chr19-example.vcf.gz/.samples files in the `4_Introduction_to_GWAS/GWAS_practical/`
-folder. These files have been simulated and do not represent any real data, but instead serve to
+We will use the `chr19-example.vcf.gz/.samples` files which can be downloaded [here](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Introduction_to_GWAS/practicals/GWAS_analysis_practical/`4_Introduction_to_GWAS/GWAS_practical/).
+ These files have been simulated and do not represent any real data, but instead serve to
 illustrate important points in working with GWAS data. We will use PLINK commands in the terminal
 to perform analyses. We can use the text editor, spreadsheet and R to help interpret results.
 
