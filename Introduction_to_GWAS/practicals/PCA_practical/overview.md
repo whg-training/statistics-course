@@ -42,6 +42,8 @@ less -S chr19-clean.vcf.gz
 
 **Note.** If you are using Mac OS X, you will need to use `zless` instead of `less` because the file is gzipped.
 
+**Note.** Press `q` when you want to quit `less`.
+
 The data consists of genotype calls at different sites (rows) for different samples (columns).  Feel free to look at the data by scrolling around using the arrow keys. When you've finished, press the 'q' key to quit back to the terminal prompt.
 
 **Note.** This is a [Variant Call Format](https://samtools.github.io/hts-specs/VCFv4.2.pdf) file.
