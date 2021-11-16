@@ -1,6 +1,6 @@
 [Up to the table of contents](README.md) - [Back to the meta-analysis section](Meta-analysis.md)
 
-### Using `FINEMAP` to fine-map associations
+## Using `FINEMAP` to fine-map associations
 
 If you followed the [meta-analysis section](Meta-analysis.md) you should now have a dataframe with meta-analysis results.  It looks something like this:
 
@@ -36,7 +36,7 @@ apparent strong effect.)
 In this part of the practical we will use the [`FINEMAP`](https:/www.finemap.me) tool to fit a model that allows for multiple possbile causal SNPs.
 
 
-#### Preparing FINEMAP input files
+### Preparing FINEMAP input files
 
 To run finemap, we need to set up some input files in [the particular format that FINEMAP needs](https:/www.finemap.me).  `FINEMAP` takes:
 
@@ -88,7 +88,7 @@ input files are we using? What output files have we specified? What's the number
 
 Now you are ready to run `FINEMAP`...
 
-#### Running `FINEMAP``
+### Running `FINEMAP``
 
 I'm going to assume you have downloaded and been able to run `FINEMAP` as described in the
 [Introduction](Introduction.md). (If not please go and download it now.) Hopefully you know where
@@ -143,7 +143,7 @@ In general it would need the raw genotype data to do this. However, because it a
 model (of genotypes on phenotype) it turns out that an approximation based on the SNP effects and
 ld is sufficient, which is how FINEMAP can run so fast.
 
-#### Interpreting FINEMAP output
+### Interpreting FINEMAP output
 
 Your run of FINEMAP should have produced several output files (the ones you named in your
 `finemap.master` file):
@@ -155,14 +155,98 @@ Your run of FINEMAP should have produced several output files (the ones you name
 * A 'SNP' file (`finemap_meta.snp`), listing the evidence that each SNP is one of the causal ones across configurations
 * And a log file (`finemap_meta.log`) telling you what it has done.
 
-Look at the log file now.  [TODO] Fix the above / interpret here.
+Let's look at these files now.
 
+#### The FINEMAP log file.
 
+Before you look at the output files, look at the results FINEMAP prints to stdout when you run it
+(and saves to the .log_sss file). Mine looks like this:
 
+    
+    |--------------------------------------|
+    | Welcome to FINEMAP v1.3.1            |
+    |                                      |
+    | (c) 2015-2018 University of Helsinki |
+    |                                      |
+    | Help :                               |
+    | - ./finemap --help                   |
+    | - www.finemap.me                     |
+    | - www.christianbenner.com            |
+    |                                      |
+    | Contact:                             |
+    | - christian.benner@helsinki.fi       |
+    | - matti.pirinen@helsinki.fi          |
+    |--------------------------------------|
+    
+    --------
+    SETTINGS
+    --------
+    - dataset         : all
+    - corr-config     : 0.95
+    - n-causal-snps   : 5
+    - n-configs-top   : 50000
+    - n-convergence   : 1000
+    - n-iterations    : 100000
+    - prior-k0        : 0
+    - prior-std       : 0.05 
+    - prob-tol        : 0.001
+    
+    ------------
+    FINE-MAPPING (1/1)
+    ------------
+    - GWAS summary stats               : combined_study.z
+    - SNP correlations                 : study_LD.ld
+    - Causal SNP stats                 : finemap_meta.snp
+    - Causal configurations            : finemap_meta.config
+    - Credible sets                    : finemap_meta.cred
+    - Log file                         : finemap_meta.log_sss
+    
+    - Number of GWAS samples           : 20000
+    - Number of SNPs                   : 730
+    - Prior-Pr(# of causal SNPs is k)  : 
+      (0 -> 0)
+       1 -> 0.583
+       2 -> 0.291
+       3 -> 0.097
+       4 -> 0.0242
+       5 -> 0.00482
+    - 757559 configurations evaluated (1.152/100%) : converged after 1152 iterations
+    - Regional SNP heritability        : 0.00486 (SD: 0.000961 ; 95% CI: [0.00316,0.00689])
+    - Log10-BF of >= one causal SNP    : 14.3
+    - Post-Pr(# of causal SNPs is k)   : 
+      (0 -> 0)
+       1 -> 0.00308
+       2 -> 0.923
+       3 -> 0.074
+       4 -> 0.000159
+       5 -> 0
+    - Run time                         : 0 hours, 0 minutes, 18 seconds
 
+There are two bits of information here that allow you to interpret the fine-mapping: the overall
+Bayes factor for the region, and the posterior distribution on the number of variants.
 
+First, look at the line starting "Log10-BF of >= one causal SNP". This tells us the overall Bayes
+factor (i.e. the Bayes factor that there is at least one causal variant in the region).
 
+    Log10-BF of >= one causal SNP : 14.3
 
+This Bayes factor is very large, and shows that FINEMAP sees clear evidence that there is signal in
+the region. (This is not surprising, of course, because we started with a region of strong
+association.)
 
+Second, let's look at the posterior distribution on the number of causal variants. These occur at
+the end of the log file on these lines:
+
+    - Post-Pr(# of causal SNPs is k)   : 
+      (0 -> 0)
+       1 -> 0.00308
+       2 -> 0.923
+       3 -> 0.074
+       4 -> 0.000159
+       5 -> 0
+
+FINEMAP is certain that there are at least two causal variants (as the posterior of k=1, i.e. there
+being one variant is very small). And it quite strongly believes (92% posterior) that k = 2, i.e.
+that there are exactly two causal variants.
 
 
