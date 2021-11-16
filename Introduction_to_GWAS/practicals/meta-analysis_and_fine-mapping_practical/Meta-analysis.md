@@ -256,7 +256,7 @@ forest.meta(
 )
 ```
 
-**Question.** What does this look like for the most-associated SNPs?
+**Question.** What does this look like for the most-associated SNPs?  Is there any evidence of differences in effect between studies?
 
 ### Fine-mapping the association
 
