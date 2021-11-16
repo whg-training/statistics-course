@@ -68,7 +68,7 @@ should always aim to **compute the allele frequency of a specific allele** inste
 
 Now let's write a FINEMAP input file:
 
-** In your R / RStudio session**:
+**Still in your R / RStudio session**:
 ```
 finemap.data = meta_analysis[, c( "rsid", "chromosome", "position", "allele1", "allele2", "maf", "meta.beta", "meta.se" )]
 colnames( finemap.data )[7:8] = c( "beta", "se" )
@@ -86,21 +86,22 @@ combined_study.z;study_LD.ld;finemap.snp;finemap.config;finemap.cred;finemap.log
 **Note.** The format of the file is [described here](http://www.christianbenner.com/#input). What
 input files are we using? What output files have we specified? What's the number `20000`?
 
-Now you are ready to run `FINEMAP`
+Now you are ready to run `FINEMAP`...
 
 #### Running `FINEMAP``
 
-I'm going to assuem you have downloaded and been able to run `FINEMAP` as described in the
+I'm going to assume you have downloaded and been able to run `FINEMAP` as described in the
 [Introduction](Introduction.md). (If not please go and download it now.) Hopefully you know where
 it is and can run it with a command of the following form. (**Note.** in this section we are back
-to working on the command-line - these are not R commands!)
+to working on the command-line - these are not R commands!)  Try this:
 
 ```
 $ /path/to/finemap_v[version]/finemap_v[version]
 ```
-On my older Mac OS system I had to use finemap v1.3, and running it looks like this:
 
-    $ ~/Projects/Software/3rd_party/finemap_v1.3.1_MacOSX/finemap_v1.3.1_MacOSX 
+For example, on my older Mac OS system I had to use finemap v1.3, so running it looks like this:
+
+    $ /path/to/finemap_v1.3.1_MacOSX/finemap_v1.3.1_MacOSX 
 
     |--------------------------------------|
     | Welcome to FINEMAP v1.3.1            |
@@ -119,12 +120,12 @@ On my older Mac OS system I had to use finemap v1.3, and running it looks like t
     
     Error : No flags detected!
 
-For ease of use, let's copy the finemap executable into this directory:
+For ease of use, I suggest to copy the finemap executable into the current directory:
 ```
 cp /path/to/finemap_v[version]/finemap_v[version] ./finemap
 ```
 
-Running finemap's is hopefully now easy:
+Running FINEMAP is hopefully now easy:
 ```
 $ ./finemap --sss --in-files finemap.master 
 ``` 
@@ -133,7 +134,7 @@ Be prepared for a bit of a wait as FINEMAP searches the space of possible causal
 
 **Note.** What *is* FINEMAP doing? Well, you can read the [FINEMAP
 paper](https://doi.org/10.1093/bioinformatics/btw018), but in short: finemap conducts a *shotgun
-stochastic search* arond the space of possible causal configurations (groups of SNPs that might be
+stochastic search* around the space of possible causal configurations (groups of SNPs that might be
 causal). It starts off with all single-SNP models, then it randomly tries a bunch of ways of adding
 a second SNP to the first (picking the best model).  Then it keeps going randomly trying to add or
 remove SNPs so that it explores the space of configurations that have high probability.
@@ -144,7 +145,8 @@ ld is sufficient, which is how FINEMAP can run so fast.
 
 #### Interpreting FINEMAP output
 
-You run of FINEMAP should have produced several output files (the ones you named in your `finemap.master` file):
+Your run of FINEMAP should have produced several output files (the ones you named in your
+`finemap.master` file):
 
 [TODO: improve this section].
 
