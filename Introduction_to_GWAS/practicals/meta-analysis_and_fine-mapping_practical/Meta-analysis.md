@@ -1,4 +1,6 @@
-### Meta-analysing the two studies.
+[Up to the table of contents](README.md) - [Back to the Introduction](Introduction.md) - [Forward to the fine-mapping section](Fine-mapping.md))
+
+### Meta-analysing two studies.
 
 #### Conducting fixed-effect meta-analysis
 The simplest way to perform meta-analysis is as follows.  We assume:
@@ -47,10 +49,18 @@ meta.analyse <- function( beta1, se1, beta2, se2 ) {
   # This formulation computes a two-tailed P-value
   # as discussed in lectures
   meta.P = pnorm( -abs( meta.beta ), sd = meta.se ) * 2
+  
+  # This formulation computes a Bayes factor under a N(0,0.2^2) prior
+  meta.BF = (
+    pnorm( meta.beta, mean = 0, sd = sqrt( meta.se^2 + 0.2 ) ) /
+    pnorm( meta.beta, mean = 0, sd = meta.se )
+  )
+
   return( list(
     meta.beta = meta.beta,
     meta.se = meta.se,
-    meta.P = meta.P
+    meta.P = meta.P,
+    log10_meta.BF = log10( meta.BF )
   ))
 }
 ```
@@ -71,7 +81,7 @@ Here is a way to run the above function across all the data in our study.
 **Note.** We will use the [`purrr`](https://purrr.tidyverse.org) function `map_dfr()` to run the above function across all rows and return a data frame.  If you don't have `purrr`, you could use a base R function like `lapply()` instead.
 
 ```
-meta_analysis_results = map_dfr(
+meta_analysis = map_dfr(
   1:nrow(study1),
   function( i ) {
     c(
@@ -80,10 +90,14 @@ meta_analysis_results = map_dfr(
       position = study1$position[i],
       allele1 = study1$allele1[i],
       allele2 = study1$allele2[i],
-      study1_beta = study1$beta[i],
-      study1_se = study1$se[i],
-      study2_beta = study2$beta[i],
-      study2_se = study2$se[i],
+      study1.beta = study1$beta[i],
+      study1.se = study1$se[i],
+      study1.P = study1$P[i],
+      log10_study1.BF = study1$log10_BF[i],
+      study2.beta = study2$beta[i],
+      study2.se = study2$se[i],
+      study2.P = study2$P[i],
+      log10_study2.BF = study2$log10_BF[i],
       meta.analyse(
         study1$beta[i], study1$se[i],
         study2$beta[i], study2$se[i]
@@ -92,6 +106,8 @@ meta_analysis_results = map_dfr(
   }
 )
 ```
+
+**Question.** What does the meta-analysis look like for the 'top' SNPs (e.g. those with the lowest P-values or highest Bayes factors) in study1 or 2?  Is the evidence stronger or weaker across studies?  Has the meta-analysis changed the SNP or SNPs with the strongest evidence?  Why?
 
 ### Making a forest plot
 
@@ -114,17 +130,17 @@ blank.plot <- function( xlim = c( 0, 1 ), ylim = c( 0, 1 ), xlab = "", ylab = ""
 }
 ```
 
-Now let's make a forest plot function:
+Now let's make a general forest plot function:
 ```
 
-forest.plot <- function(
+draw.forest.plot <- function(
   betas,
   ses,
-  names = c( "Study 1", "Study 2", "Meta-analysis" )
+  names
 ) {
-  # y axis locations for the lines.  We separate the meta-analysis line slightly.
-  # Note: we assume three betas here: study1, study2, meta-analysis!
-  y = c( 3, 2, 0.5 )
+  # y axis locations for the lines.
+  # We assume the meta-analysis will go on the last line, so we separate it slightly by putting it at 1/2
+  y = c( length(betas):2, 0.5 )
   
   # learn a good x axis range by going out 3 standard errors from each estimate:
   xlim = c( min( betas - 3 * ses ), max( betas + 3 * ses ))
@@ -184,27 +200,34 @@ forest.plot <- function(
 
 For example, we could now make a forest plot for the first SNP:
 ```
-  meta = meta.analyse( study1$beta[1], study1$se[1], study2$beta[1], study2$se[1] )
-  betas = c( study1$beta[1], study2$beta[1], meta$meta.beta )
-  ses = c( study1$se[1], study2$se[1], meta$meta.se )
-  forest.plot( betas, ses )
+  forest.plot <- function( row ) {
+    betas = c( row$study1.beta, row$study2.beta, row$meta.beta )
+    ses = c( row$study1.se, row$study2.se, row$meta.se )
+    names = c( "Study 1", "Study 2", "Meta-analysis" )
+    draw.forest.plot( betas, ses, names )
+  }
+  
+  forest.plot( meta_analysis[1,] )
 ```
 
 <img src="solutions/forest_plot_1st_SNP.png">
 
-**Question.** What does the forest plot look like for the 'top' SNPs, i.e. for those with the lowest P-values.  (Or Bayes factors)?  Plot a few of them and look at them.
+**Question.** What does the forest plot look like for the 'top' SNPs, i.e. for those with the lowest P-values (or highest Bayes factors)?  Plot a few of them and look at them.  Make sure you understand how the data in the meta-analysis file corresponds to the data on the plot.
 
-**Note.** Forest plots are deceptively simple and you can spend a lot of time tweaking them.  Can you add text to the plot listing the numerical values (estimate, 95% confidence interval, and P-vale?)  E.g. this code:
+**Note.** Forest plots are deceptively simple - they don't look like there's much going on, but whenever I try to draw one I find it takes quite a bit of code.  (Like the `draw.forest.plot()` function above, which already has ~40 lines of code).  This is typical of visualisation in general - the code always gets lengthy - and I think it is not really surprising.  It is because in a visualistion you are trying to convey a great deal of information clearly in a small space: this often takes great deal of careful tweaking to get right.  Don't skimp on this!
+
+**Challenge.** For a "working" plot, one thing it might be good to add to the plot would be more text listing the numerical values (i.e. the estimate and 95% confidence intervals)  E.g. this code:
 
 ```
-pvalues = pnorm( abs( betas ), sd = ses ) * 2
 labels = sprintf(
-  "%.2f (%.2f - %.2f) P = %.3g",
+  "%.2f (%.2f - %.2f)",
   betas,
   betas - 1.96 * ses,
-  betas + 1.96 * ses,
-  pvalues
+  betas + 1.96 * ses
 )
 ```
 produces the right kind of text.  Then you can add it to the plot in the right place.
 
+### Fine-mapping the association
+
+By now you should have a good sense of which SNPs have lots of evidence for association in the two studies - and maybe these are the 'causal' SNPs.  However, an obvious possibility (if the gene is relevant for the disease) is that there could be multiple causal SNPs.  In the [next section](Fine-mapping.md) we will see one way to try to discover how many causal SNPs there are - and what they are.
