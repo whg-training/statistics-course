@@ -64,7 +64,7 @@ compute.bf <- function( beta, se, prior.variance ) {
 }
 
 study1$log10_BF = log10( compute.bf( study1$beta, study1$se ))
-study2$log10_BF = log10( compute.bf( study1$beta, study1$se ))
+study2$log10_BF = log10( compute.bf( study2$beta, study2$se ))
 ```
 
 **Question.** How much evidence is there in the two studies? Are any of the most-associated SNPs
