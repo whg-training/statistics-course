@@ -42,7 +42,7 @@ Here is a function to run the meta-analysis from our two studies:
 meta.analyse <- function( beta1, se1, beta2, se2 ) {
   inverse.variances = c( 1/se1^2, 1/se2^2 )
   b = c( beta1, beta2 ) * inverse.variances
-  meta.inverse.variance = sum( weights )
+  meta.inverse.variance = sum( inverse.variances )
   meta.beta = sum( b ) / meta.inverse.variance
   meta.se = sqrt( 1 / meta.inverse.variance )
   
