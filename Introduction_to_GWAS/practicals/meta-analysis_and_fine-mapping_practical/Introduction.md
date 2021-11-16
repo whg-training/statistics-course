@@ -45,6 +45,7 @@ practical earlier you will know how to compute them:
 
 ```
   study1$P = pnorm( -abs(study1$beta), sd = study1$se ) * 2
+  study2$P = pnorm( -abs(study2$beta), sd = study2$se ) * 2
 ```
 
 and similarly for study2. The expression above computes the mass under the two tails with effect >=
@@ -54,13 +55,17 @@ P-value using the effect size estimate as a test statistic.
 **Note.** We could also compute a Bayes factor.  For example, suppose we believe in relatively small effects, so choose a *N(0,0.2<sup>2</sup>)* prior.  The calculation is:
 
 ```
-study1$log10_BF = log10(
-  pnorm( study1$beta, mean = 0, sd = sqrt( study1$se^2 + 0.2 ) ) /
-  pnorm( study1$beta, mean = 0, sd = study1$se )
-)
-```
+compute.bf <- function( beta, se, prior.variance ) {
+  (
+    pnorm( beta, mean = 0, sd = sqrt( se^2 + 0.2 ) )
+    /
+    pnorm( beta, mean = 0, sd = se )
+  )
+}
 
-See [more here]().
+study1$log10_BF = log10( compute.bf( study1$beta, study1$se ))
+study2$log10_BF = log10( compute.bf( study1$beta, study1$se ))
+```
 
 **Question.** How much evidence is there in the two studies? Are any of the most-associated SNPs
 shared between the two studies?
