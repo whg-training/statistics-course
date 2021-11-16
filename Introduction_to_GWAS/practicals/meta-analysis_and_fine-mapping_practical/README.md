@@ -10,6 +10,6 @@ When you're ready, head to the [Introduction](Introduction.md).
 
 * [Introduction](Introduction.md)
 * [Meta-analysing association test results in R](Meta-analysis.md)
-* [Fine-mapping association test results](Fine-mapping.md)
+* [Fine-mapping association test results using `FINEMAP`](Fine-mapping.md)
 
 
