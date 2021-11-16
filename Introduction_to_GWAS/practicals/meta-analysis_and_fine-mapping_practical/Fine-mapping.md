@@ -1,4 +1,4 @@
-[Up to the table of contents](README.md) - [Back to the meta-analysis section](meta-analysis.md)
+[Up to the table of contents](README.md) - [Back to the meta-analysis section](Meta-analysis.md)
 
 ### Using `FINEMAP` to fine-map associations
 
