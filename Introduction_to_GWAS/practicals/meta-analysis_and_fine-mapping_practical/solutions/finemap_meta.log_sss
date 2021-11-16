@@ -1,0 +1,60 @@
+
+|--------------------------------------|
+| Welcome to FINEMAP v1.3.1            |
+|                                      |
+| (c) 2015-2018 University of Helsinki |
+|                                      |
+| Help :                               |
+| - ./finemap --help                   |
+| - www.finemap.me                     |
+| - www.christianbenner.com            |
+|                                      |
+| Contact:                             |
+| - christian.benner@helsinki.fi       |
+| - matti.pirinen@helsinki.fi          |
+|--------------------------------------|
+
+--------
+SETTINGS
+--------
+- dataset         : all
+- corr-config     : 0.95
+- n-causal-snps   : 5
+- n-configs-top   : 50000
+- n-convergence   : 1000
+- n-iterations    : 100000
+- prior-k0        : 0
+- prior-std       : 0.05 
+- prob-tol        : 0.001
+
+------------
+FINE-MAPPING (1/1)
+------------
+- GWAS summary stats               : combined_study.z
+- SNP correlations                 : study_LD.ld
+- Causal SNP stats                 : finemap_meta.snp
+- Causal configurations            : finemap_meta.config
+- Credible sets                    : finemap_meta.cred
+- Log file                         : finemap_meta.log_sss
+
+- Number of GWAS samples           : 20000
+- Number of SNPs                   : 730
+- Prior-Pr(# of causal SNPs is k)  : 
+  (0 -> 0)
+   1 -> 0.583
+   2 -> 0.291
+   3 -> 0.097
+   4 -> 0.0242
+   5 -> 0.00482
+- 757559 configurations evaluated (1.152/100%) : converged after 1152 iterations
+- Regional SNP heritability        : 0.00486 (SD: 0.000961 ; 95% CI: [0.00316,0.00689])
+- Log10-BF of >= one causal SNP    : 14.3
+- Post-Pr(# of causal SNPs is k)   : 
+  (0 -> 0)
+   1 -> 0.00308
+   2 -> 0.923
+   3 -> 0.074
+   4 -> 0.000159
+   5 -> 0
+- Run time                         : 0 hours, 0 minutes, 18 seconds
+

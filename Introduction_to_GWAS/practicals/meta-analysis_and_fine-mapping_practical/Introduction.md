@@ -13,7 +13,7 @@ to the possible causal variants. In the first of these, we will take data from t
 * There might be more than one causal variant.
 * The P-values reflect a mixture of *effect size* and *allele frequency*.  They might not be the best way to identify the underlying variants.
 
-#### Getting the data
+### Getting the data
 
 The data for this practical is in two files, `study1.z` and `study2.z`.  Load them now and take a look:
 
