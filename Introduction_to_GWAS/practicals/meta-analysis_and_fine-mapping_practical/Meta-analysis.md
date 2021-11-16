@@ -78,7 +78,9 @@ Try a few different input values.  You should see:
 
 Here is a way to run the above function across all the data in our study.
 
-**Note.** We will use the [`purrr`](https://purrr.tidyverse.org) function `map_dfr()` to run the above function across all rows and return a data frame.  If you don't have `purrr`, you could use a base R function like `lapply()` instead.
+**Note.** We will use the [`purrr`](https://purrr.tidyverse.org) function `map_dfr()` to run the
+above function across all rows and return a data frame. If you don't have `purrr`, you could use a
+base R function like `lapply()` instead.
 
 ```
 meta_analysis = map_dfr(
@@ -107,7 +109,16 @@ meta_analysis = map_dfr(
 )
 ```
 
-**Question.** What does the meta-analysis look like for the 'top' SNPs (e.g. those with the lowest P-values or highest Bayes factors) in study1 or 2?  Is the evidence stronger or weaker across studies?  Has the meta-analysis changed the SNP or SNPs with the strongest evidence?  Why?
+**Question.** What does the meta-analysis look like for the 'top' SNPs (e.g. those with the lowest
+P-values or highest Bayes factors) in study1 or 2? Is the evidence stronger or weaker across
+studies? Has the meta-analysis changed the SNP or SNPs with the strongest evidence? Why?
+
+**Hint.** One way to pull out the 'top' SNps is to use the `order()` function. For example to pull
+out the results for the ten SNPs with the lowest P-values in study 1, in order:
+
+```
+meta_analysis[ order( meta_analysis$study1.P )[1:10], ]
+```
 
 ### Making a forest plot
 
