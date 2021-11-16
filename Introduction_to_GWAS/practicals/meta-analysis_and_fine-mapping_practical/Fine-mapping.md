@@ -1,4 +1,4 @@
-[Up to the table of contents](README.md) - [Back to the meta-analysis section](meta-analysis.md)
+[Up to the table of contents](README.md) - [Back to the meta-analysis section](Meta-analysis.md)
 
 ### Using `FINEMAP` to fine-map associations
 
@@ -80,7 +80,7 @@ and output files are. This one is a bit weird: it is a *semi-colon delimited* te
 new file called `finemap.master` and put this in:
 ```
 z;ld;snp;config;cred;log;n_samples
-combined_study.z;study_LD.ld;finemap.snp;finemap.config;finemap.cred;finemap.log;20000
+combined_study.z;study_LD.ld;finemap_meta.snp;finemap_meta.config;finemap_meta.cred;finemap_meta.log;20000
 ```
 
 **Note.** The format of the file is [described here](http://www.christianbenner.com/#input). What
@@ -127,7 +127,7 @@ cp /path/to/finemap_v[version]/finemap_v[version] ./finemap
 
 Running FINEMAP is hopefully now easy:
 ```
-$ ./finemap --sss --in-files finemap.master 
+$ ./finemap --sss --in-files finemap.master
 ``` 
 
 Be prepared for a bit of a wait as FINEMAP searches the space of possible causal configurations.
@@ -150,13 +150,12 @@ Your run of FINEMAP should have produced several output files (the ones you name
 
 [TODO: improve this section].
 
-* A 'configurations' file (`finemap.config`), listing the causal configurations that FINEMAP thinks are plausible.
-* A 'credible intervals' file, listing variants wiht high probabilty of being the causal SNP for each signal in the top configuration.
-* A 'SNP' file, listing the evidence that each SNP is one of the causal ones across configurations
+* A 'configurations' file (`finemap_meta.config`), listing the causal configurations that FINEMAP thinks are plausible.
+* A 'credible intervals' file, (`finemap_meta.cred`) listing variants wiht high probabilty of being the causal SNP for each signal in the top configuration.
+* A 'SNP' file (`finemap_meta.snp`), listing the evidence that each SNP is one of the causal ones across configurations
+* And a log file (`finemap_meta.log`) telling you what it has done.
 
-
-
-[TODO] Fix the above / interpret here.
+Look at the log file now.  [TODO] Fix the above / interpret here.
 
 
 
