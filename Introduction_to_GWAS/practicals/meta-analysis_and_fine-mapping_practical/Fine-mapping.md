@@ -230,7 +230,7 @@ factor (i.e. the Bayes factor that there is at least one causal variant in the r
 
     Log10-BF of >= one causal SNP : 14.3
 
-This Bayes factor is very large, and shows that FINEMAP sees clear evidence that there is signal in
+This Bayes factor is very large (over 10<sup>14</sup>), and shows that FINEMAP sees clear evidence that there is signal in
 the region. (This is not surprising, of course, because we started with a region of strong
 association.)
 
