@@ -239,6 +239,25 @@ labels = sprintf(
 ```
 produces the right kind of text.  Then you can add it to the plot in the right place.
 
+### Other meta-analysis models
+
+The above is a simple meta-analysis that assumes that the true effect is the same in both studies.
+However, as we saw in the lecture, more complex models are also possible, including a 'random' effects analysis (that assumes that true effects are normally distributed around some mean) and include a heterogeneity test.  Here is a way to do this
+
+**Note.** You will need the `meta` library installed first - run `install.packages("meta")` or use the `Tools` -> `Install Packages` menu in Rstudio.
+
+```
+library(meta)
+forest.meta(
+  metagen(
+    c( study1$beta[1], study2$beta[1] ),
+    c( study1$se[1],study2$se[1] )
+  )
+)
+```
+
+**Question.** What does this look like for the most-associated SNPs?
+
 ### Fine-mapping the association
 
 By now you should have a good sense of which SNPs have lots of evidence for association in the two studies - and maybe these are the 'causal' SNPs.  However, an obvious possibility (if the gene is relevant for the disease) is that there could be multiple causal SNPs.  In the [next section](Fine-mapping.md) we will see one way to try to discover how many causal SNPs there are - and what they are.
