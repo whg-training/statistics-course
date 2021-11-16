@@ -1,4 +1,4 @@
-[Up to the table of contents](README.md) - [Back to the Introduction](Introduction.md) - [Forward to the fine-mapping section](Fine-mapping.md))
+[Up to the table of contents](README.md) - [Back to the Introduction](Introduction.md) - [Forward to the fine-mapping section](Fine-mapping.md)
 
 ### Meta-analysing two studies.
 
