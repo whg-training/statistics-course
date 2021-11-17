@@ -1,25 +1,3 @@
-load.genes <- function( condense = TRUE ) {
-    # Load genes
-    gene <- read.delim(
-        "resources/refGene_chr19.txt",
-        header=TRUE,
-        as.is=TRUE
-    );
-	gene <- gene[ -grep( "hap", gene$chrom ), ]
-	
-	if( condense ) {
-	    gene <- gene[order(gene$txEnd - gene$txStart,decreasing=TRUE),];  #Get just longest transcript
-	    gene <- gene[ !duplicated( gene$name2 ), ];
-	}
-    gene <- gene[ !is.na(gene$txStart), ];
-	
-    chromosome =  gsub( "^chr", "", gene$chrom )
-    w1 = which( nchar( chromosome ) == 1 )
-    chromosome[ w1 ] = sprintf( "0%s", chromosome[w1] )
-    gene$chromosome = chromosome
-    return( gene ) ;
-}
-
 plot.genes <- function( genes, region, height_in_inches = 1, exons = get.exons( genes ), vertical = FALSE, ... ) {
 	get.exons <- function( genes ) {
 		result = data.frame()
