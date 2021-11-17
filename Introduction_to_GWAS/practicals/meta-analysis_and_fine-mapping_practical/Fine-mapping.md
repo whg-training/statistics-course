@@ -148,14 +148,15 @@ ld is sufficient, which is how FINEMAP can run so fast.
 Your run of FINEMAP should have produced several output files (the ones you named in your
 `finemap.master` file):
 
-[TODO: improve this section].
-
 * A 'configurations' file (`finemap_meta.config`), listing the causal configurations that FINEMAP thinks are plausible.
 * A 'credible intervals' file, (`finemap_meta.cred`) listing variants wiht high probabilty of being the causal SNP for each signal in the top configuration.
 * A 'SNP' file (`finemap_meta.snp`), listing the evidence that each SNP is one of the causal ones across configurations
 * And a log file (`finemap_meta.log`) telling you what it has done.
 
 Let's look at these files now.
+
+**Note.** If for whatever reason you couldn't get FINEMAP to run, you can use my output files which
+are in the [`solutions`](solutions/) folder.
 
 #### The FINEMAP log file.
 
@@ -249,4 +250,187 @@ FINEMAP is certain that there are at least two causal variants (as the posterior
 being one variant is very small). And it quite strongly believes (92% posterior) that k = 2, i.e.
 that there are exactly two causal variants.
 
+#### The causal configurations output file
+
+Let's look next at the `finemap_meta.config` file, which list gives the best 50,000 causal
+configurations that FINEMAP found in its stochastic search. Load this file into your R session now:
+
+```
+configurations = read_delim( "finemap_meta.config", delim = " " )
+```
+
+We will look at the ones that have at least a 10% posterior:
+
+```
+configurations[ configurations$prob > 0.1, ]
+```
+
+**Note.** To print the full details here without truncating columns, I found I had to use `print()`
+like this:
+
+```
+print( configurations[ configurations$prob > 0.1, ], width = 100 )
+````
+
+As we would expect from the posterior distribution on `k`, all of the higher posterior
+configurations include just two variants. In fact all three of them include the variant at position
+`49208368`, but they vary a bit by swapping out the second variant in the pair. Note also that the
+sum of the posterior for three causal configurations is only 64%, so while these are the most
+likely it is also perfectly plausible that the true configuration lies somewhere further down the
+list.
+
+The configuration files can be a bit hard to interpret (and are mostly useful as input for
+downstream analyses), so we will move on to some slightly easier files to read.
+
+#### The SNP file
+
+FINEMAP also outputs the evidence for each individual SNP being causal (regardless of the
+configuration).  Let's see how many SNPs have an posterior greater than 10%:
+
+```
+snps = read_delim( "finemap_meta.snp", delim = " " )
+print( snps[ snps$prob > 0.1, ], width = 100 )
+```
+
+The SNP at position `49208368` has a high posterior (85%), so is quite likely to be causal and you
+would be quite confident taking this forward for follow-up experiments or further analyses. The
+other variants have posteriors between 19% and 40%, so are reasonable candidates but you wouldn't
+bet the house on any one individually. Instead, if you were designing follow-up experiments based
+on this, you would need to consider these variants as a group.
+
+#### The credible sets file
+
+To group variants, FINEMAP also provides credible sets for each of the two signals:
+
+```
+credible = read_delim( "finemap_meta.cred", delim = " " )
+print( credible, width = 100 )
+```
+
+Also make sure look at the column names:
+```
+> 
+colnames( credible )
+[1] "index" "cred_set_19:49208368:C:T" "prob_set_19:49208368:C:T" "cred_set_19:49208380:T:C" "prob_set_19:49208380:T:C"
+```
+
+**Note.** My version of the file has trailing spaces at the end of each line - so R warns about
+missing column names when I load it.  You can safely ignore that.
+
+The data in this file shows:
+
+* that the signal that contains the variant at `49208368` has a credible set size of 12 variants
+  (the possible variants are listed in the 2nd column).
+
+* and also that the signal that includes the variant at 49208380 has a credible set size of 4
+  variants (listed in the 4th column).
+
+This illustrates a counter-intuitive point: even though 49208368 itself has a high posterior, it is
+in LD with a "long tail" of 11 other variants that are in tight LD with each other. The signal that
+includes 49208380 is not well fine-mapped to a single causal variant, but it does localize well to
+a small number of variants (4). So, if you are looking for a single variant that is reasonably
+likely to be causal, you'd pick 49208368. But if you were looking for a small set of variants that,
+overall, cover most of the possible causal posterior space, you would pick the second signal.
+
+*Question* Using genome browsers, investigate the location and function of these variants. Based on
+the genetic and the functional information, which variant do you think is most likely to be cauasal
+in each group?
+
+### Plotting FINEMAP output.
+
+In statistics we are never done until the ink is dry on our plot. Let's make a hitplot that (like
+our GWAS practical hitplot) shows the marginal evidence at each SNP, but colours the SNPs according
+to what credible set they fall in.  First let's define the colours:
+
+```
+colours = c( "chocolate1", "deepskyblue4" )
+snps$colour <- "grey"
+snps$colour[ snps$rsid %in% credible[['cred_set_19:49208368:C:T' ]] ] <- colours[1]
+snps$colour[ snps$rsid %in% credible[['cred_set_19:49208380:T:C' ]] ] <- colours[2]
+```
+
+Also let's load genes using the same data / code from the [GWAS
+practical](../GWAS_analysis_practical):
+
+```
+genes <- read.table( "resources/refGene_chr19.txt.gz", header=T, as.is=T )
+```
+
+Here's a function that makes the plot:
+
+```
+plot.finemap.output <- function( snps, credible, xrange = NULL ) {
+  # Two big panels and a small one for genes
+  layout( matrix( 1:3, ncol = 1 ), heights = c( 1, 0.75, 0.75 ))
+
+  if( is.null( xrange )) {
+    xrange = range( snps$position )
+  }
+  # Plot the per-SNP evidence
+  par( mar = c( 0.1, 4, 1, 1 ))
+  plot(
+    snps$position,
+    snps$log10bf,
+    xlab = "Position",
+    ylab = "log10(Bayes factor)",
+    col = snps$colour,
+    pch = 19,
+    xaxt = 'n',
+    xlim = xrange,
+    bty = 'n'            # no box, because I think they're ugly!
+  )
+  grid()
+  legend( "topleft", col = colours, pch = 19, legend = sprintf( "Credible set %d", 1:2 ))
+
+  # Plot the posteriors
+  par( mar = c( 0.1, 4, 0.1, 1 ))
+  plot(
+    snps$position,
+    snps$prob,
+    ylab = "Posterior",
+    col = snps$colour,
+    type = "h",          # to plot vertical lines.  See `?plot`.
+    xlim = xrange,
+    xaxt = 'n',
+    bty = 'n'            # no box
+  )
+  grid()
+
+  par( mar = c( 4, 4, 0.1, 1 ))
+  plot.genes( genes, xrange, bty = 'n' )
+  grid()
+}
+```
+
+Run it like this:
+
+```
+plot.finemap.output( snps, credible )
+```
+
+and inspect it.  You can also zoom in to see how the evidence stacks up over the genes:
+```
+plot.finemap.output( snps, credible, xrange = c( 49190000, 49229999 ) )
+```
+
+It should look something like this:
+
+<img src="finemap_plot_zoom.png">
+
+**Note.** In the above function we plotted the *log<sub>10</sub> Bayes factor* rather than the
+P-value. The Bayes factor is a direct measure of the evidence in the data that the SNP is
+associated - it behaves a lot like the the P-value. If you want to plot the P-value, you can of
+course do that instead, but because FINEMAP doesn't output this you will first have to reconstruct
+it from the z score or beta and standard error in the usual way:
+
+```
+snps$pvalue = 2 * pnorm( -abs(snps$z ))
+```
+
+or:
+```
+snps$pvalue = 2 * pnorm( -abs(snps$beta), sd = snps$se )
+```
+
+At this point you can adjust the function to plot `-log10(snps$pvalue)` instead.
 
