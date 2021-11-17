@@ -340,7 +340,16 @@ in each group?
 
 In statistics we are never done until the ink is dry on our plot. Let's make a hitplot that (like
 our GWAS practical hitplot) shows the marginal evidence at each SNP, but colours the SNPs according
-to what credible set they fall in.  First let's define the colours:
+to what credible set they fall in.  
+
+First we have to reconstruct the marginal SNP P-value from the effect size and standard error (or z-score),
+since FINEMAP doesn't output the P-value:
+
+```
+snps$pvalue = 2 * pnorm( -abs(snps$z ))
+```
+
+Next let's define the colours for our credible sets:
 
 ```
 colours = c( "chocolate1", "deepskyblue4" )
@@ -356,7 +365,7 @@ practical](../GWAS_analysis_practical):
 genes <- read.table( "resources/refGene_chr19.txt.gz", header=T, as.is=T )
 ```
 
-Here's a function that makes the plot:
+Now here's a function that makes the plot:
 
 ```
 plot.finemap.output <- function( snps, credible, xrange = NULL ) {
@@ -370,7 +379,7 @@ plot.finemap.output <- function( snps, credible, xrange = NULL ) {
   par( mar = c( 0.1, 4, 1, 1 ))
   plot(
     snps$position,
-    snps$log10bf,
+    -log10( snps$pvalue ),
     xlab = "Position",
     ylab = "log10(Bayes factor)",
     col = snps$colour,
@@ -416,21 +425,6 @@ plot.finemap.output( snps, credible, xrange = c( 49190000, 49229999 ) )
 It should look something like this:
 
 <img src="solutions/finemap_plot_zoom.png">
-
-**Note.** In the above function we plotted the *log<sub>10</sub> Bayes factor* rather than the
-P-value. The Bayes factor is a direct measure of the evidence in the data that the SNP is
-associated - it behaves a lot like the the P-value. If you want to plot the P-value, you can of
-course do that instead, but because FINEMAP doesn't output this you will first have to reconstruct
-it from the z score or beta and standard error in the usual way:
-
-```
-snps$pvalue = 2 * pnorm( -abs(snps$z ))
-```
-
-or:
-```
-snps$pvalue = 2 * pnorm( -abs(snps$beta), sd = snps$se )
-```
 
 At this point you can adjust the function to plot `-log10(snps$pvalue)` instead.
 
