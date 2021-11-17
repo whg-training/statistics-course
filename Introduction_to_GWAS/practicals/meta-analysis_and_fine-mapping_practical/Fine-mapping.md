@@ -415,7 +415,7 @@ plot.finemap.output( snps, credible, xrange = c( 49190000, 49229999 ) )
 
 It should look something like this:
 
-<img src="finemap_plot_zoom.png">
+<img src="solutions/finemap_plot_zoom.png">
 
 **Note.** In the above function we plotted the *log<sub>10</sub> Bayes factor* rather than the
 P-value. The Bayes factor is a direct measure of the evidence in the data that the SNP is
