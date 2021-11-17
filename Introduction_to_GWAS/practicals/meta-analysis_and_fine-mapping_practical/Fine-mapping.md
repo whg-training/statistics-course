@@ -381,7 +381,7 @@ plot.finemap.output <- function( snps, credible, xrange = NULL ) {
     snps$position,
     -log10( snps$pvalue ),
     xlab = "Position",
-    ylab = "log10(Bayes factor)",
+    ylab = "-log10(P-value)",
     col = snps$colour,
     pch = 19,
     xaxt = 'n',
@@ -426,5 +426,6 @@ It should look something like this:
 
 <img src="solutions/finemap_plot_zoom.png">
 
-At this point you can adjust the function to plot `-log10(snps$pvalue)` instead.
+## Conclusion
 
+Congratulations!  You have fine-mapped your GWAS signal!
