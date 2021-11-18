@@ -26,3 +26,4 @@ We are grateful to the following people who have contributed to the material on 
 * Ron Schwessinger
 * Justin Whalley
 * Laura Wittemans
+* Nicky Whiffin
