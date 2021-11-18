@@ -1,0 +1,70 @@
+## ENSEMBL VARIANT EFFECT PREDICTOR v103.1
+## Output produced at 2021-11-18 11:07:29
+## Using cache in /well/whiffin/projects/vep/homo_sapiens/103_GRCh38
+## Using API version 103, DB version ?
+## ensembl-io version 103.353f93a
+## ensembl-variation version 103.06320c4
+## ensembl version 103.4c8d44a
+## ensembl-funcgen version 103.b53bef4
+## gencode version GENCODE 37
+## HGMD-PUBLIC version 20194
+## polyphen version 2.2.2
+## sift version sift5.2.2
+## 1000genomes version phase3
+## gnomAD version r2.1
+## genebuild version 2014-07
+## COSMIC version 92
+## ESP version V2-SSA137
+## dbSNP version 154
+## ClinVar version 202008
+## regbuild version 1.0
+## assembly version GRCh38.p13
+## Column descriptions:
+## Uploaded_variation : Identifier of uploaded variant
+## Location : Location of variant in standard coordinate format (chr:start or chr:start-end)
+## Allele : The variant allele used to calculate the consequence
+## Gene : Stable ID of affected gene
+## Feature : Stable ID of feature
+## Feature_type : Type of feature - Transcript, RegulatoryFeature or MotifFeature
+## Consequence : Consequence type
+## cDNA_position : Relative position of base pair in cDNA sequence
+## CDS_position : Relative position of base pair in coding sequence
+## Protein_position : Relative position of amino acid in protein
+## Amino_acids : Reference and variant amino acids
+## Codons : Reference and variant codon sequence
+## Existing_variation : Identifier(s) of co-located known variants
+## IMPACT : Subjective impact classification of consequence type
+## DISTANCE : Shortest distance from variant to transcript
+## STRAND : Strand of the feature (1/-1)
+## FLAGS : Transcript quality flags
+## CANONICAL : Indicates if transcript is canonical for this gene
+## MANE_SELECT : MANE Select (Matched Annotation from NCBI and EMBL-EBI) Transcript
+## MANE_PLUS_CLINICAL : MANE Plus Clinical (Matched Annotation from NCBI and EMBL-EBI) Transcript
+#Uploaded_variation	Location	Allele	Gene	Feature	Feature_type	Consequence	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	IMPACT	DISTANCE	STRAND	FLAGS	CANONICAL	MANE_SELECT	MANE_PLUS_CLINICAL
+14_23415410_C/T	14:23415410	T	ENSG00000092054	ENST00000355349	Transcript	missense_variant	5359	5254	1752	E/K	Gag/Aag	-	MODERATE	-	-1	-	YES	NM_000257.4	-
+14_23415410_C/T	14:23415410	T	ENSG00000215991	ENST00000401172	Transcript	downstream_gene_variant	-	-	-	-	-	-	MODIFIER	2577	-1	-	YES	-	-
+14_23415410_C/T	14:23415410	T	ENSG00000258444	ENST00000557368	Transcript	non_coding_transcript_exon_variant	72	-	-	-	-	-	MODIFIER	-	1	-	YES	-	-
+3_8745574_G/T	3:8745574	T	ENSG00000180914	ENST00000316793	Transcript	downstream_gene_variant	-	-	-	-	-	-	MODIFIER	4807	-1	-	YES	NM_000916.4	-
+3_8745574_G/T	3:8745574	T	ENSG00000182533	ENST00000343849	Transcript	missense_variant	238	163	55	D/Y	Gac/Tac	-	MODERATE	-	1	-	YES	NM_033337.3	-
+3_8745574_G/T	3:8745574	T	ENSG00000182533	ENST00000397368	Transcript	missense_variant	174	163	55	D/Y	Gac/Tac	-	MODERATE	-	1	-	-	-	-
+3_8745574_G/T	3:8745574	T	ENSG00000125046	ENST00000435138	Transcript	upstream_gene_variant	-	-	-	-	-	-	MODIFIER	538	-1	-	-	-	-
+3_8745574_G/T	3:8745574	T	ENSG00000182533	ENST00000472766	Transcript	intron_variant,non_coding_transcript_variant	-	-	-	-	-	-	MODIFIER	-	1	-	-	-	-
+3_8745574_G/T	3:8745574	T	ENSG00000125046	ENST00000478513	Transcript	upstream_gene_variant	-	-	-	-	-	-	MODIFIER	534	-1	-	-	-	-
+11_47352671_C/T	11:47352671	T	ENSG00000066336	ENST00000227163	Transcript	downstream_gene_variant	-	-	-	-	-	-	MODIFIER	2242	-1	-	YES	-	-
+11_47352671_C/T	11:47352671	T	ENSG00000134571	ENST00000256993	Transcript	5_prime_UTR_variant	32	-	-	-	-	-	MODIFIER	-	-1	-	YES	-	-
+11_47352671_C/T	11:47352671	T	ENSG00000066336	ENST00000378538	Transcript	downstream_gene_variant	-	-	-	-	-	-	MODIFIER	2189	-1	-	-	NM_003120.3	-
+11_47352671_C/T	11:47352671	T	ENSG00000134571	ENST00000399249	Transcript	5_prime_UTR_variant	32	-	-	-	-	-	MODIFIER	-	-1	-	-	-	-
+11_47352671_C/T	11:47352671	T	ENSG00000066336	ENST00000533030	Transcript	downstream_gene_variant	-	-	-	-	-	-	MODIFIER	2430	-1	-	-	-	-
+11_47352671_C/T	11:47352671	T	ENSG00000134571	ENST00000544791	Transcript	5_prime_UTR_variant,NMD_transcript_variant	32	-	-	-	-	-	MODIFIER	-	-1	-	-	-	-
+11_47352671_C/T	11:47352671	T	ENSG00000134571	ENST00000545968	Transcript	5_prime_UTR_variant	32	-	-	-	-	-	MODIFIER	-	-1	-	-	NM_000256.3	-
+11_47342576_T/A	11:47342576	A	ENSG00000134571	ENST00000256993	Transcript	splice_donor_variant	-	-	-	-	-	-	HIGH	-	-1	-	YES	-	-
+11_47342576_T/A	11:47342576	A	ENSG00000134571	ENST00000399249	Transcript	splice_donor_variant	-	-	-	-	-	-	HIGH	-	-1	-	-	-	-
+11_47342576_T/A	11:47342576	A	ENSG00000134571	ENST00000544791	Transcript	splice_donor_variant,NMD_transcript_variant	-	-	-	-	-	-	HIGH	-	-1	-	-	-	-
+11_47342576_T/A	11:47342576	A	ENSG00000134571	ENST00000545968	Transcript	splice_donor_variant	-	-	-	-	-	-	HIGH	-	-1	-	-	NM_000256.3	-
+11_47339650_CCTGCGTGATAG/-	11:47339650-47339661	-	ENSG00000134571	ENST00000256993	Transcript	splice_donor_variant,coding_sequence_variant	2112-?	2057-?	686-?	-	-	-	HIGH	-	-1	-	YES	-	-
+11_47339650_CCTGCGTGATAG/-	11:47339650-47339661	-	ENSG00000134571	ENST00000399249	Transcript	splice_donor_variant,coding_sequence_variant	2112-?	2057-?	686-?	-	-	-	HIGH	-	-1	-	-	-	-
+11_47339650_CCTGCGTGATAG/-	11:47339650-47339661	-	ENSG00000134571	ENST00000544791	Transcript	splice_donor_variant,coding_sequence_variant,NMD_transcript_variant	2112-?	2057-?	686-?	-	-	-	HIGH	-	-1	-	-	-	-
+11_47339650_CCTGCGTGATAG/-	11:47339650-47339661	-	ENSG00000134571	ENST00000545968	Transcript	splice_donor_variant,coding_sequence_variant	2112-?	2057-?	686-?	-	-	-	HIGH	-	-1	-	-	NM_000256.3	-
+14_23415225_C/T	14:23415225	T	ENSG00000092054	ENST00000355349	Transcript	missense_variant	5434	5329	1777	A/T	Gcc/Acc	-	MODERATE	-	-1	-	YES	NM_000257.4	-
+14_23415225_C/T	14:23415225	T	ENSG00000215991	ENST00000401172	Transcript	downstream_gene_variant	-	-	-	-	-	-	MODIFIER	2762	-1	-	YES	-	-
+14_23415225_C/T	14:23415225	T	ENSG00000258444	ENST00000557368	Transcript	upstream_gene_variant	-	-	-	-	-	-	MODIFIER	114	1	-	YES	-	-
