@@ -22,8 +22,7 @@ Timetable
 |          | 15 - 16     | Ron Schwessinger | Appl:                                |
 | Tue 7/12 | 10 - 12     | Edward Sanders & | CNN tutorial                         |
 |          | 12 - 13     |                  | Lunch                                |
-|          | 13 - 14     |                  |                                      |
-|          | 14 - 16     |                  |                                      |
+|          | 13 - 14     | Edward Sanders   | Appl: CNNs & Decision Trees for splicing|
 |          | 14 - 16     | Edward  Sanders  | Finalise tutorial and wrap-up        |
 
 
