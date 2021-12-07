@@ -6,13 +6,17 @@ Lecture slides
 
 Slides from the presentations can be found [in this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Machine_learning_applications/slides/).
 
+Practicals
+----------
+
+See [the practicals folder](practicals/) for the practicals.
+
 Suggested Software
 ----------------------
 
-The tutorials will run in Google Colab.  Only requirements are a browser and a Google account.
+The tutorials will run in Google Colab.  The only requirements are a browser and a Google account.
 
-
-Timetable
+Outline timetable
 ---------
 
 | Day      | Time        | Who              | What                                 |
