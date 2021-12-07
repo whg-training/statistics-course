@@ -25,9 +25,9 @@ Timetable
 |          | 13 - 14     |                  | Neural networks in genomics          |
 |          | 14 - 15     | Lance Hentges    | Appl: CNNs for peak classification   |
 |          | 15 - 16     | Ron Schwessinger | Appl:                                |
-| Day two  | 10 - 12     | Edward Sanders & | CNN tutorial                         |
+| Day two  | 10 - 12     | Edward Sanders   | CNN tutorial                         |
 |          | 12 - 13     |                  | Lunch                                |
 |          | 13 - 14     | Edward Sanders   | Appl: CNNs & Decision Trees for splicing|
-|          | 14 - 16     | Edward  Sanders  | Finalise tutorial and wrap-up        |
+|          | 14 - 16     | Edward Sanders   | Finalise tutorial and wrap-up        |
 
 
