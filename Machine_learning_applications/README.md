@@ -17,7 +17,7 @@ Timetable
 
 | Day      | Time        | Who              | What                                 |
 | -------- | ----------- | ---------------- | ------------------------------------ |
-| Mon 6/12 | 10:00-      | Edward Sanders   | Welcome                              |
+| Day one  | 10:00-      | Edward Sanders   | Welcome                              |
 |          |             |                  | Introduction to ML in genomics       |
 |          |             |                  | A tour of ML algorithms              |
 |          |    - 12     |                  | Introduction to deep neural networks |
@@ -25,7 +25,7 @@ Timetable
 |          | 13 - 14     |                  | Neural networks in genomics          |
 |          | 14 - 15     | Lance Hentges    | Appl: CNNs for peak classification   |
 |          | 15 - 16     | Ron Schwessinger | Appl:                                |
-| Tue 7/12 | 10 - 12     | Edward Sanders & | CNN tutorial                         |
+| Day two  | 10 - 12     | Edward Sanders & | CNN tutorial                         |
 |          | 12 - 13     |                  | Lunch                                |
 |          | 13 - 14     | Edward Sanders   | Appl: CNNs & Decision Trees for splicing|
 |          | 14 - 16     | Edward  Sanders  | Finalise tutorial and wrap-up        |
