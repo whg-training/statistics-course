@@ -1,6 +1,11 @@
 GMS Machine Learning Applications
 =================================
 
+Lecture slides
+----------------------
+
+Slides from the presentations can be found [in this folder](https://www.well.ox.ac.uk/~gav/projects/gms/statistics-course/Machine_learning_applications/slides/).
+
 Suggested Software
 ----------------------
 
